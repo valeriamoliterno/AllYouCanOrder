@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+</head>
+
+<body>
+<!--
+    Piatto Schema {
+
+    idPiatto: Number,
+    nome: String,  
+    prezzo: Number,
+    descrizione: String, 
+    foto: String, //percorso  
+    stato: String, 
+
+    }
+-->
+
+<h1>Aggiungi un piatto</h1>
+
+<form action="api/v1/piattos" method="post" name="aggiungiPiatto" id="aggiungiPiatto">
+  <b>Nome piatto:</b>
+  <input name="nomePiatto" id="nomePiatto"/>
+  </br>
+  <b>Numero piatto:</b>
+  <input name="idPiatto" id="idPiatto"/>
+  </br>
+  <b>Prezzo:</b>
+  <input name="prezzo" id="prezzo"/>
+  </br>
+  <b>Breve descrizione:</b>
+  <input name="descrizione" id="descrizione"/>
+  </br>
+  <b>Foto (link):</b>
+  <input name="foto" id="foto"/>
+  </br>
+
+  <button value="aggiungiPiatto" id="aggiungi" type="button" onclick="aggiungiPiatto()">Aggiungi</button>
+</form>
+
+<!--src="aggiungiPiatto.js"-->
+<script src="aggiungiPiatto.js"></script>
+    
+</body>
+
+</html>

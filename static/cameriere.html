@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body {
+          margin: 0;
+          background-color: #F8FBFF;
+        }
+        
+        ul.nav {
+          list-style-type: none;
+          margin: 0;
+          padding: 0;
+          width: 15%;
+          background-color: #f1f1f1;
+          position: fixed;
+          height: 100%;
+          overflow: auto;
+        }
+        
+        li.navi a {
+          display: block;
+          color: #000;
+          padding: 8px 16px;
+          text-decoration: none;
+        }
+        
+        li.navi a.active {
+          background-image: linear-gradient(to right, #F9881F , #FF774C);
+          color: white;
+        }
+        
+        li.navi a:hover:not(.active) {
+          background-color: #555;
+          color: white;
+        }
+
+        div.page{
+            margin-left:15%;
+            padding:1px 16px;
+            height:1000px;
+        }
+
+        div.tablelist {
+            overflow: auto;
+            white-space: nowrap;
+        }
+
+        div.table {
+          display: inline-block;
+          color: rgb(0, 0, 0);
+          width: 30%;
+          text-align: center;
+          margin: 20px;
+          padding: 20px;
+          border-radius: 20px;
+          background-color: white;
+          box-shadow: 0px 20px 20px #aaaaaa18 ;
+        }
+
+        ul.platelist {
+          list-style-type: none;
+          margin: 0;
+          padding: 0;
+        }
+
+        .plate{
+          box-shadow: 0px 8px 15px #58585873 ;
+          padding: 15px 10px;
+          border-radius: 20px;
+        }
+
+        .plate img{
+          display: inline-block;
+          right: 0;
+          width: 20%;
+          height: auto;
+          float: left;
+          border-style: solid;
+          border-color: #F9881F;
+          border-width: 2px;
+          border-radius: 20px;
+        }
+
+        .plate h4{
+          display: inline-block;
+          text-align: left;
+          float: left;
+          margin: 5% 10px;
+        }
+
+        .plate .button{
+          float: right;
+          background-image: linear-gradient(to right, #F9881F , #FF774C);
+          border: none;
+          border-radius: 15px;
+          color: white;
+          padding: 10px 25px;
+          text-align: center;
+          text-decoration: none;
+          display: inline-block;
+          font-size: 16px;
+          cursor: pointer;
+          margin: 3% 10px;
+        }
+
+        .clearfix::after {
+          content: "";
+          clear: both;
+          display: table;
+        }
+        </style>
+</head>
+<body>
+  <ul class="nav">
+      <li class="navi"><a class="active" href="">Camerieri</a></li>
+      <li class="navi"><a href="">Cuochi</a></li>
+      <li class="navi"><a href="">Manager</a></li>
+  </ul>
+    
+  <div class="page">
+    <div class="tablelist">
+      <div class="table">
+        <h2>Table 1</h2>
+        <ul class="platelist">
+          <li class="plate clearfix">
+            <img src="img/nigirisalmone.png">
+            <h4>13 nigiri salmone</h4>
+            <a href="#" class="button">Consegnato</a>
+          </li>
+        </ul>
+      </div>
+      <div class="table">
+        <h2>Table 2</h2>
+        <ul class="platelist">
+          <li class="plate clearfix">
+            <img src="img/nigirisalmone.png">
+            <h4>13 nigiri salmone</h4>
+            <a href="#" class="button">Consegnato</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <script>
+    
+    function loadOrders(){
+      const tableList = document.getElementsByClassName("tablelist");
+      var html;
+
+      fetch('../api/v1/tavoli')
+      .then((resp) => resp.json()) 
+      .then(function(data) {
+        console.log(data);
+      
+        return data.map(function(tavolo) { 
+          html=html+'<div class="table">';
+          html=html+'<h2>'+tavolo.nome+'</h2><ul class="platelist">';
+          
+          fetch('../api/v1/piatti/ordineTavolo', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify( { id: tavolo.id } ),
+          }) 
+          .then((resp)=> resp.json())
+          .then(function(data) {
+            console.log(data);
+
+            return data.map(function(piatto){
+              if(piatto.stato == 'in consegna'){
+                html=html+'<li class="plate clearfix"><img src="'+piatto.foto+'"><h4>'+piatto.nome+'</h4><a href="#" class="button">Consegnato</a></li>';
+              }
+            })
+          })
+          .catch(error => console.error(error));
+
+          html=html+'</ul></div>';
+        })
+      })
+      .catch( error => console.error(error) );
+
+      tableList.innerHTML=html;
+      return;
+    }
+    loadOrders();
+  </script>
+
+</body>
+</html>

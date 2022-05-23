@@ -26,11 +26,18 @@ const express = require('express');
 const router = express.Router();
 const Tavolo = require('./models/tavolo');
 const Piatto = require('./models/piatto');
+const Ristorante = require ('./models/ristorante'); 
 
-
+/********************************************************************
+ * NOTA PER CHI VEDE IL CODICE: 
+ * 
+ * Ho inserito una variabile locale chiamata ilMioTavolo all'interno della quale
+ * ho salvato il tavolo di cui voglio vedere il menu ecc!
+ */
 router.get('', async(req,res)=> {  
-//per non impicciarmi in questo primo sprint, mostro soltanto le cose di tav1, in un secondo momento probabilmente dovrò fare findById o qualcosa del genere
-    let tavolo= await Tavolo.findOne({nome: 'tav1'}).exec();
+
+   console.log("Sono in carrel. Nome tavolo = "+ilMioTavolo); 
+    let tavolo= await Tavolo.findOne({_id: ilMioTavoloID}).exec();
     tavolo.carrello.forEach(element => {
     return{
         self: '/api/v1/mostraCarrello/',
@@ -42,7 +49,8 @@ router.get('', async(req,res)=> {
 
 
 router.post('', async (req, res) => { //prima era post
-    let tavolo= await Tavolo.findOne({nome: 'tav1'}).exec(); ///tav1/i
+    let ristorante = await Ristorante.findOne({_id: ilMioRistoranteID}).exec(); 
+    let tavolo= await Tavolo.findOne({_id: ilMioTavoloID}).exec(); ///tav1/i
     //salvo nella variabile piatto gli elementi 
     let piatto = new Piatto({
         nome: req.body.nome,
@@ -53,14 +61,17 @@ router.post('', async (req, res) => { //prima era post
     });
     tavolo.carrello.push(piatto); 
     await tavolo.save();
+    await ristorante.save(); 
    res.location("/api/v1/mostraCarrello/aggiungiPiatto" + piatto._id).status(201).send();
 });
 
 
 router.delete('', async (req, res) => {
-    let tavolo= await Tavolo.findOne({nome: 'tav1'}).exec();    
+    let ristorante = await Ristorante.findOne({_id: ilMioRistoranteID}).exec(); 
+    let tavolo= await Tavolo.findOne({_id: ilMioTavoloID}).exec();    
     tavolo.carrello.pull(req.body.id); 
     await tavolo.save();  
+    await ristorante.save(); 
     res.location("/api/v1/mostraCarrello/eliminaPiatto" + req.body.id).status(201).send();
 })
 
@@ -68,3 +79,4 @@ router.delete('', async (req, res) => {
 
 
 module.exports = router;
+

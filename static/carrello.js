@@ -1,7 +1,7 @@
 /*************************************************
  *   FUNZIONE PER VEDERE I PIATTI NEL CARRELLO   *
  *************************************************/
-
+var nomeTavolo = 'tav1'; //indica il tavolo a cui modifico tutto 
  function mostraCarrello(){
     const ul = document.getElementById('carrello'); // Get the list 
     ul.textContent = '';
@@ -143,7 +143,7 @@ mostraCarrello();
  function svuotaCarrello(tav){
 
     var name= tav.name; 
-    fetch('../api/v1/tavolos/', {
+    fetch('../api/v1/svuotaCarrello/', {
         method: 'DELETE',   
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify( { name: name} ),

@@ -81,10 +81,11 @@ function aggiungiPiatto(ilMioPiatto){
     var prezzo= ilMioPiatto.prezzo;
     var descrizione= ilMioPiatto.descrizione; 
     var foto= ilMioPiatto.foto; 
+   // console.log("Nome del tavolo: "+ nomeTavolo); 
     fetch('../api/v1/mostraCarrello/', {
         method: 'POST', 
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify( { nome: nomePiatto, prezzo: prezzo, descrizione: descrizione, foto: foto } ),
+        body: JSON.stringify( { nome: nomePiatto, prezzo: prezzo, descrizione: descrizione, foto: foto} ),
     })
     .then((resp) => {
         console.log(resp);

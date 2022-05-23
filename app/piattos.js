@@ -29,11 +29,13 @@
 
 const express = require('express');
 const router = express.Router();
-const Piatto = require('./models/piatto'); // prendo il modello mongoose. 
+const Ristorante = require('./models/ristorante'); // prendo il modello mongoose. 
 
 router.get('', async(req,res)=> {
-    let piattos = await Piatto.find({}); 
-    piattos = piattos.map( (piatto)=>{ 
+  //  console.log("Sono in piattos. Nome tavolo = ", ilMioTavolo); 
+    let ristorantes = await Ristorante.findOne({ _id: ilMioRistoranteID}); 
+    let menu = await ristorantes.menu; 
+    menu.forEach(piatto => {
         return{
             self: '/api/v1/piattos/'+ piatto.id,
             nome: piatto.nome, 
@@ -43,54 +45,11 @@ router.get('', async(req,res)=> {
             stato: piatto.stato,
             quantita: piatto.quantita,
         };
-    }); 
-    res.status(200).json(piattos);  
+    });
+   
+    res.status(200).json(menu);  
 })
 
-//utile quando ricerca piatto con id
-router.get('/:id', async (req, res) => {
-    let piatto= await Piatto.findById(req.params.id); 
-    res.status(200).json({
-        self: '/api/v1/piattos/'+ piatto.id,
-        nome: piatto.nome,
-        prezzo: piatto.prezzo,
-        descrizione: piatto.descrizione,
-        foto: piatto.foto,
-        stato: piatto.stato,
-        quantita: piatto.quantita
-    }); 
-}); 
-   
-//utile quando sarà necessario eliminare un piatto da parte di un manager
-router.delete('/:id', async (req, res) => {
-    let piatto= await Piatto.findById(req.params.id).exec(); 
-    if(!piatto){
-        res.status(404).send()
-        console.log('piatto non trovato')
-        return; 
-    }
-    
-    await piatto.deleteOne(); 
-    
-    console.log('piatto eliminato'); 
-    res.status(204).send()
-});
-
-router.post('', async (req, res) => {
-
-	let piatto = new Piatto({
-        nome: req.body.nome,
-        prezzo: req.body.prezzo,
-        descrizione: req.body.descrizione, 
-        foto: req.body.foto, //percorso  
-        stato: '',
-    });
-  
-	piatto = await piatto.save();
-    let piattoId = piatto.id;
-    console.log('Piatto Salvato');
-    res.location("/api/v1/piattos/" + piattoId).status(201).send();
-});
 
 
 

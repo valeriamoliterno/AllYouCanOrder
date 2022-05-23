@@ -1,32 +1,19 @@
 const express = require('express');
-
 const router = express.Router();
-const Tavolo = require('./models/tavolo'); // prendo il modello mongoose. 
+const Ristorante = require('./models/ristorante');
+const Tavolo = require('./models/tavolo'); // get our mongoose model
 
-
-/**
- * In questo file, gestisco i piatti e mi creo una base per poi riuscire a mostrarli nel menu. 
- */
-
-//utile stampa piatto
-router.get('', async(req,res)=> {
-    let tavolos = await Tavolo.find({nome: /Tav1/i}); 
-   tavolos = tavolos.map( (tavolo)=>{
-        return{
-            self: '/api/v1/tavolos/'+ tavolo.id,
-            ordine: tavolo.ordine,// dopo aver inviato ordine;  
-            chiamato: tavolo.chiamato,  
-            carrello: tavolo.carrello, //prima di inviare ordine          
+router.get('/', async (req, res) => {
+    let ristorante = await Ristorante.findOne({_id: ilMioRistoranteID});
+    let tavol = await ristorante.tavoli;
+    tavol.forEach(tavolo => {
+        return {
+            self: '/api/v1/tavoli/'+ tavolo.id,
+            id: tavolo._id,
+            nome: tavolo.nome
         };
-    }); 
-    res.status(200).json(tavolos);  
-})
-
-
-router.delete('', async (req, res) => { 
-  let tavolo= Tavolo.update({name: 'tav1'}, { $set: { carrello: [] }}, function(err, affected){
-        console.log('affected: ', affected);
     });
-    res.location("/api/v1/tavolos/").status(201).send();
-})
+   
+    res.status(200).json(tavol);
+});
 module.exports = router;

@@ -1,0 +1,87 @@
+a:link, a:visited {
+  font-family: Arial, Helvetica, sans-serif;
+  background-color: white;
+  color: black;
+  border: 2px solid orange;
+  padding: 10px 20px;
+  font-size: 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  text-decoration: none;
+}
+
+a:hover, a:active {
+  
+  background-color: orange;
+  color: white;
+}
+
+li {
+  list-style-type: none;
+}
+
+nome { 
+  font-family: Arial, Helvetica, sans-serif;
+  display: block;
+  font-size: 1em;
+  margin-top: 0.67em;
+  margin-bottom: 0.67em;
+  margin-left: 0;
+  margin-right: 0;
+  font-weight: bold;
+  color: orange; 
+  text-decoration: none;
+}
+
+stato { 
+  font-family: Arial, Helvetica, sans-serif;
+  display: block;
+  font-size: 0.9em;
+  margin-top: 0.67em;
+  margin-bottom: 0.67em;
+  margin-left: 0;
+  margin-right: 0;
+  font-weight: bold;
+  color: rgb(67, 44, 0);
+  text-decoration: none;
+  
+}
+button {
+  font-family: Arial, Helvetica, sans-serif;
+  background-color: rgb(255, 166, 0); /* Green */
+  border: none;
+  color: white;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: block;
+  font-size: 16px;
+  margin: 4px 2px;
+  transition-duration: 0.4s;
+  cursor: pointer;
+}
+button {
+  background-color: white; 
+  color: black; 
+  border: 2px solid rgb(255, 166, 0);
+}
+
+button:hover {
+  background-color: rgb(255, 166, 0);
+  color: white;
+}
+
+h5 { 
+  font-family: Arial, Helvetica, sans-serif;
+  display: block;
+  font-size: 0.5em;
+  margin-top: 0.67em;
+  margin-bottom: 0.67em;
+  margin-left: 0;
+  margin-right: 0;
+  font-weight: bold;
+  color: rgb(67, 44, 0);
+  text-decoration: none;
+  
+}

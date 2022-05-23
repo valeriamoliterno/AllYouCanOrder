@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const Tavolo = require('./models/tavolo');
+const Tavolo = require('./models/tavolo'); //prendo il modello mongoose
 
 
 

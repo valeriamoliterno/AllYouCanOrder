@@ -21,4 +21,15 @@ router.get('/ordineTavolo/:id', async (req, res) => {
     res.status(200).json(ordine); // trasforma in json
 });
 
+router.post('/cambiaStato', async (req, res) =>{
+    let idP= req.body.id;
+    let stato = req.body.stato;
+    console.log('id: '+idP+' stato: '+stato);
+    let piatto=await Piatto.findById(idP);
+    piatto.stato=stato;
+    piatto= await piatto.save();
+
+    res.location("/api/v1/piatti/cambiaStato" + piatto._id).status(201).send();
+});
+
 module.exports = router;

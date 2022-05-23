@@ -1,4 +1,5 @@
 var mongoose = require('mongoose');
+const Piatto = require('./piatto');
 var Schema = mongoose.Schema;
 const piatto= require('./piatto'); 
 const Tavolo = require('./tavolo');
@@ -26,11 +27,15 @@ Ristorante.deleteMany({});
 /*
 const nuovoTav= new Tavolo({
     nome: 'Tavolo n',
-    ordine: {
+    ordine: [{
         nome: 'Nigiri sal',
         foto: '../img/nigirisalmone.png',
-        stato: 'in condegna' 
-    }
+        stato: 'in consegna' 
+    },
+    {
+        nome: 'Nigiri gam',
+        stato: 'in preparazione'
+    }]
 }); 
 const nuovoRistorante = new Ristorante({
     tavoli: nuovoTav
@@ -38,6 +43,4 @@ const nuovoRistorante = new Ristorante({
 nuovoTav.save();
 nuovoRistorante.save().then(() => console.log(nuovoRistorante + nuovoRistorante.tavoli[0].ordine));
 */
-//nuovoTav.save().then(()=> console.log('Ho inserito', nuovoTav.nome)); 
-
 module.exports = Ristorante;

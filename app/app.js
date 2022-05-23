@@ -10,8 +10,9 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 
-app.use('/',express.static(process.env.FRONTEND || 'static'));
 app.use('/',express.static('static'));
+app.use('/',express.static('img'));
+
 
 app.use((req,res,next) => {
     console.log(req.method + ' ' + req.url)

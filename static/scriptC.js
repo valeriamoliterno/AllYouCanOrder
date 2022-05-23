@@ -1,14 +1,18 @@
 // if per controllare se ci troviamo nella pagina del cameriere o del cuoco e cambia lo stato da visualizzare
 var stato;
-var btn;
+var btnT;
+var statoF;
 if(document.body.id=='cameriere'){ // se è un cameriere visualizza i piatti in stato di consegna
-  stato='in condegna';
-  btn='Consegnato';
+  stato='in consegna';
+  btnT='Consegnato';
+  statoF='conseganto';
 }
 else if(document.body.id=='cuoco'){ // se è un cuoco visualizza i piatti in stato di preparazione
   stato='in preparazione';
-  btn='Pronto';
+  btnT='Pronto';
+  statoF='in consegna';
 }
+console.log('stato: '+stato+' stato futuro: '+statoF);
 
 /**
  * Questa funzione carica i piatti per tavolo nello stato desiderato
@@ -34,7 +38,7 @@ function loadOrders(){
         datap.map(function(piatto){
           
           if(piatto.stato.localeCompare(stato) == 0){ // se il piatto è nello stato interessato alla pagina viene mostrato
-            html=html+'<li class="plate clearfix"><img src="'+piatto.foto+'"><h4>'+piatto.nome+'</h4><a href="#" class="button">'+btn+'</a></li>';
+            html=html+'<li class="plate clearfix"><img src="'+piatto.foto+'"><h4>'+piatto.nome+'</h4><a onclick="changeState(this)" id="'+piatto.id+'" class="button">'+btnT+'</a></li>';
           }
         })
         plateList.innerHTML=html; // Stampo i piatti
@@ -50,3 +54,21 @@ function loadOrders(){
 }
 
 loadOrders();
+
+function changeState(btn){
+  const idP=btn.id;
+
+  fetch('../api/v1/piatti/cambiaStato',{
+    method: 'POST',
+    headers:{ 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      id: idP,
+      stato: statoF
+    })
+  })
+  .then((resp) => {
+    loadOrders();
+    return;
+  })
+  .catch( error => console.error(error) );
+}

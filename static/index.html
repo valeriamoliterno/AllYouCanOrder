@@ -1,8 +1,4 @@
-<!--
-    Per questo primo sprint, ho preferito dedicarmi al codice e fare in modo che le cose funzionino più che all'aspetto. Per il secondo sprint 
-    cercherò di migliorare anche l'aspetto, per esempio mettendo menu, carrello e ordine non uno sotto l'altro come ora ma in modo più carino. 
-    A. 
--->
+
 
 <!DOCTYPE html>
 <html>
@@ -19,19 +15,14 @@
            
 
 <h1>AllYouCanOrder</h1>
-<tr>
-   
-    <td> <a href="index.html">Menu</a></td>
-    <td> <a href="carrello.html">Carrello</a></td>
-    <td><a href="ordine.html">Ordine</a></td>
+<div class="sticky">
+    <tr>
+        <td> <a href="menu.html" class="menu">Sezione Cliente</a></td>
+        <td> <a href="carrello.html" class="menu">sSezione Ristorante</a></td> <!--Per chi ha Risto, modifica qui!-->
+    </tr>
+    </div>
 
-</tr>
 
-
-<h2 id="alMenu">Menu:</h2>
-<ul id="piattos"></ul>
-
-<script src="script.js"></script> 
 </body>
 
 </html>

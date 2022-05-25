@@ -32,34 +32,56 @@ var nomeTavolo = 'tav1'; //indica il tavolo a cui modifico tutto
             descrizione: piatto.descrizione, 
             foto: piatto.foto,
         }; 
-            let li = document.createElement('li');
-            let span = document.createElement('span');
-            let nome = document.createElement('nome');
-            nome.href = piatto.self;
-            nome.textContent = piatto.nome; 
-            let img = document.createElement('img'); 
-            img.height=50; 
-            img.width=50; 
-            img.src=piatto.foto;
-            let desc = document.createElement('p'); 
-            desc.herf = piatto.self; 
-            desc.textContent= piatto.descrizione; 
-            let pr=document.createElement('h5'); 
-            pr.herf=piatto.self; 
-            pr.textContent= 'prezzo: '+ piatto.prezzo + ' euro'; 
-             //cliccando questo bottone, il piatto viene rimosso dal carrello
+        //CREO LA TABELLA IN CUI SALVARE DA UNA PARTE L'IMMAGINE DEL PIATTO E DALL'ALTRA LE SUE CARATTERISTICHE
+        let li = document.createElement('li');
+        let tabella = document.createElement('table');
+        tabella.className='piatti'; 
+        let tblBody = document.createElement("tbody")
+        var row = document.createElement("tr");
+        var cellsx = document.createElement("td");
+        var celldx = document.createElement("td");
+        cellsx.className='sinistra'; 
+        celldx.className='destra'; 
+        let contenutoTab = document.createElement('span');
+
+        //CARATTERISTICHE DEL PIATTO
+        let nome = document.createElement('nome');
+        nome.href = piatto.self;
+        nome.textContent = piatto.nome; 
+        let img = document.createElement('img'); 
+        img.className='piatto'
+        img.src=piatto.foto;
+        let desc = document.createElement('descrizione'); 
+        desc.herf = piatto.self; 
+        desc.textContent= piatto.descrizione; 
+        let pr=document.createElement('prezzo'); 
+         pr.herf=piatto.self; 
+         pr.textContent= piatto.prezzo + ' €';
+
+          //BOTTONE PER RIMUOVERE ELEMENTI DAL CARRELLO
              let rimuovi = document.createElement('button');
              rimuovi.type = 'button'
              rimuovi.value = 'rimuovi'
              rimuovi.onclick = () => rimuoviPiatto(piattoDaRimuovere);
              rimuovi.textContent = 'elimina';           
-            // Append all our elements
-            span.append(img); 
-            span.appendChild(nome);   
-            span.appendChild(desc);
-            span.appendChild(pr); 
-            span.appendChild(rimuovi);  
-            li.appendChild(span);
+            
+               //CREO PLATE, CHE SOSTANZIALMENTE RACCHIUDE TUTTI GLI ELEMENTI DI PIATTO, INCLUSO STATO E LA TABELLA SOPRASTANTE
+            let plate= document.createElement('div');
+            plate.className ='piatto'; 
+
+            cellsx.appendChild(img);
+            contenutoTab.appendChild(nome);
+            contenutoTab.appendChild(desc);
+            contenutoTab.appendChild(pr); 
+            celldx.appendChild(contenutoTab);
+            row.appendChild(cellsx);
+            row.appendChild(celldx); 
+            tblBody.appendChild(row); 
+            tabella.appendChild(tblBody); 
+            plate.appendChild(tabella);
+            plate.appendChild(rimuovi);
+            //PER MENU E CARRELLO, ELIMINO STATO E FACCIO PLATE.APPENDCHILD(BOTTONE)
+            li.appendChild(plate);
             ul.appendChild(li);
      });        
     })

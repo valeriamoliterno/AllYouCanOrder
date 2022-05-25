@@ -1,55 +1,92 @@
+*{
+
+  font-family: "Open Sans",sans-serif;
+
+}
+
 a:link, a:visited {
-  font-family: Arial, Helvetica, sans-serif;
+  
   background-color: white;
   color: black;
-  border: 2px solid orange;
-  padding: 10px 20px;
+  border: 2px solid #FF7617;
+  padding: 10px 40px;
   font-size: 20px;
   text-align: center;
   text-decoration: none;
   display: inline-block;
   text-decoration: none;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2)
 }
 
 a:hover, a:active {
   
-  background-color: orange;
+  background-color: #FF7617;
   color: white;
 }
 
+a.chiamaCameriere{
+  font-size:25px; 
+  padding: 8px 8px;
+  border-radius: 50px 50px 50px 50px;
+  background-color: white;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2)
+}
+a.chiamaCameriere:hover, a.chiamaCameriere:active {
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2)
+}
+a.chiamaCameriere:after, a.chiamaCameriere:active{
+  font-size:25px; 
+  padding: 8px 8px;
+  border-radius: 50px 50px 50px 50px;
+  background-color: #eeeeee;
+  border: 1px solid #dfdfdf;
+  opacity: 1;
+  transition: 0s
+
+}
 li {
   list-style-type: none;
+  padding-top: 20px;
 }
 
 nome { 
-  font-family: Arial, Helvetica, sans-serif;
+
   display: block;
-  font-size: 1em;
-  margin-top: 0.67em;
-  margin-bottom: 0.67em;
+  font-size: 20 px;
+  margin: 4px 2px;
   margin-left: 0;
   margin-right: 0;
   font-weight: bold;
-  color: orange; 
+  color: #FF7617; 
   text-decoration: none;
 }
 
 stato { 
-  font-family: Arial, Helvetica, sans-serif;
+  padding-top: 15px; 
+  padding-left: 50px;
   display: block;
-  font-size: 0.9em;
-  margin-top: 0.67em;
-  margin-bottom: 0.67em;
-  margin-left: 0;
-  margin-right: 0;
+  font-size: 20px;
+  margin: 20px 2px;
   font-weight: bold;
   color: rgb(67, 44, 0);
   text-decoration: none;
   
 }
+
+stato.inPreparazione{
+ 
+  color: #F8CF00;
+}
+stato.inConsegna{
+  color: #FF9300; 
+}
+stato.consegnato{
+  color: #00DE00; 
+}
+
 button {
-  font-family: Arial, Helvetica, sans-serif;
-  background-color: rgb(255, 166, 0); /* Green */
+
+  background-color: #FF7617; /* Green */
   border: none;
   color: white;
   padding: 10px 20px;
@@ -60,28 +97,108 @@ button {
   margin: 4px 2px;
   transition-duration: 0.4s;
   cursor: pointer;
+  border-radius: 10px 10px 10px 10px;
+  font-weight: bold;
 }
 button {
   background-color: white; 
-  color: black; 
-  border: 2px solid rgb(255, 166, 0);
+  color: #FF7617; 
+  border: 2px solid #FF7617;
+  font-family: Arial, Helvetica, sans-serif;
+
 }
 
 button:hover {
-  background-color: rgb(255, 166, 0);
+  background-color: #FF7617;
   color: white;
 }
 
-h5 { 
-  font-family: Arial, Helvetica, sans-serif;
+prezzo { 
   display: block;
-  font-size: 0.5em;
-  margin-top: 0.67em;
-  margin-bottom: 0.67em;
+  font-size: 14 px;
+  margin: 4px 2px;
   margin-left: 0;
   margin-right: 0;
-  font-weight: bold;
-  color: rgb(67, 44, 0);
+  color: #FF7617; 
   text-decoration: none;
-  
+  color: #8a8a8a; 
+}
+
+div.sticky {
+  position: -webkit-sticky; /* Safari */
+  position: sticky;
+  top: 0;
+ 
+}
+
+
+body {
+  background-color: #F7FBFF;
+ align-self: center;
+ align-items: center;
+}
+
+div.piatto{
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  background-color: white;
+  border-radius: 10px 10px 10px 10px;
+  width: 600px;
+  height: 180px;
+}
+
+div.piatto.consegnato{
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  text-align: center;
+  background-color: rgba(215, 215, 215, 0.646);
+  border: 2px solid #00DE00; 
+  border-radius: 10px 10px 10px 10px;
+
+}
+
+img.piatto{
+  width: 100px; 
+  height: 100px;
+  border-radius: 10px 10px 10px 10px;
+}
+
+table.piatti{
+  width: 100%;
+  height: 100px;
+  border-collapse: collapse;
+ 
+}
+
+td.destra{
+  width: 65%
+}
+td.sinistra{
+  margin:0%; 
+  width: 35%;
+  text-align: center;
+}
+
+table.barraMenu{
+  padding-left: 90px;
+}
+img.logo{
+  padding-bottom: 20px;
+  padding-left: 30px;
+}
+
+h2.luogo{
+  padding-left: 40px; 
+  color:#FF7617;
+  font-weight: normal;
+
+}
+
+div.stato.inPreparazione{
+  font-size:25px; 
+  padding: 8px 8px;
+  border-radius: 50px 50px 50px 50px;
+  background-color: white;
+}
+
+button.aggiungi{
+ 
 }

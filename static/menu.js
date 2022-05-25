@@ -26,37 +26,59 @@
                 descrizione: piatto.descrizione, 
                 foto: piatto.foto,  
             };        
-            //ciò che viene mostrato
+            //CREO LA TABELLA IN CUI SALVARE DA UNA PARTE L'IMMAGINE DEL PIATTO E DALL'ALTRA LE SUE CARATTERISTICHE
             let li = document.createElement('li');
-            let span = document.createElement('span'); 
+            let tabella = document.createElement('table');
+            tabella.className='piatti'; 
+            let tblBody = document.createElement("tbody")
+            var row = document.createElement("tr");
+            var cellsx = document.createElement("td");
+            var celldx = document.createElement("td");
+            cellsx.className='sinistra'; 
+            celldx.className='destra'; 
+            let contenutoTab = document.createElement('span');
+
+            //CARATTERISTICHE DEL PIATTO
             let nome = document.createElement('nome');
             nome.href = piatto.self;
             nome.textContent = piatto.nome; 
-            
             let img = document.createElement('img'); 
-            img.height=50; 
-            img.width=50; 
+            img.className='piatto'
             img.src=piatto.foto;
-            let desc = document.createElement('p'); 
+            let desc = document.createElement('descrizione'); 
             desc.herf = piatto.self; 
             desc.textContent= piatto.descrizione; 
-            let pr=document.createElement('h5'); 
-            pr.herf=piatto.self; 
-            pr.textContent= 'prezzo: '+ piatto.prezzo + ' euro'; 
-            //cliccando questo bottone, il piatto viene aggiunto al carrello
+            let pr=document.createElement('prezzo'); 
+             pr.herf=piatto.self; 
+             pr.textContent= piatto.prezzo + ' €'; 
+
+            //BOTTONE PER AGGIUNGERE ELEMENTI AL CARRELLO
             let aggiungi = document.createElement('button');
             aggiungi.type = 'button'
             aggiungi.value='aggiungi'
+            aggiungi.className='aggiungi';
             aggiungi.onclick =  ()=> aggiungiPiatto(ilMioPiatto);
             aggiungi.textContent = 'aggiungi al carrello';          
-            // Append all our elements
-            span.appendChild(img); 
-            span.appendChild(nome);   
-            span.appendChild(desc);
-            span.appendChild(pr);  
-            span.appendChild(aggiungi);
-            li.appendChild(span);
+           
+            //CREO PLATE, CHE SOSTANZIALMENTE RACCHIUDE TUTTI GLI ELEMENTI DI PIATTO, INCLUSO STATO E LA TABELLA SOPRASTANTE
+            let plate= document.createElement('div');
+            plate.className ='piatto'; 
+
+            cellsx.appendChild(img);
+            contenutoTab.appendChild(nome);
+            contenutoTab.appendChild(desc);
+            contenutoTab.appendChild(pr); 
+            celldx.appendChild(contenutoTab);
+            row.appendChild(cellsx);
+            row.appendChild(celldx); 
+            tblBody.appendChild(row); 
+            tabella.appendChild(tblBody); 
+            plate.appendChild(tabella);
+            plate.appendChild(aggiungi);
+            //PER MENU E CARRELLO, ELIMINO STATO E FACCIO PLATE.APPENDCHILD(BOTTONE)
+            li.appendChild(plate);
             ul.appendChild(li);
+            
         })
     })
     .catch( error => console.error(error) );// If there is any error you will catch them here

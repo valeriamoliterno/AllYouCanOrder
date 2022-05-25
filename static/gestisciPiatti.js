@@ -26,6 +26,7 @@
         return data.map(function(piatto) { 
             //Stampa di controllo
             console.log(piatto.nome);
+            console.log(piatto._id);
 
             let li = document.createElement('li');
             let span = document.createElement('span');
@@ -49,12 +50,14 @@
            
             let elimina = document.createElement('button');
             elimina.onclick = function elimina(){ 
-                var PiattoId = piatto.self.substring(piatto.self.lastIndexOf('/') + 1);
+             let PiattoId = piatto._id; 
+            
+                                //piatto.self.substring(piatto.self.lastIndexOf('/') + 1);
 
                 //stampa di controllo
-                console.log("Sto eliminando + " + PiattoId);
+                console.log("Sto eliminando + " + piatto._id);
 
-                deletePiatto(PiattoId);
+                deletePiatto(piatto._id);
 
                 function delay(time) {
                     return new Promise(resolve => setTimeout(resolve, time));
@@ -84,6 +87,8 @@
  * per il modello Piatto 
  */
 async function deletePiatto(idPiatto){
+    console.log("deletePiatto ID")
+    console.log(idPiatto); 
     var uriAPI = '../api/v1/piattos/'
     fetch(uriAPI, {
         method: 'DELETE',

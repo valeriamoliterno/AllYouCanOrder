@@ -35,8 +35,6 @@ const Ristorante = require ('./models/ristorante');
  * ho salvato il tavolo di cui voglio vedere il menu ecc!
  */
 router.get('', async(req,res)=> {  
-
-   console.log("Sono in carrel. Nome tavolo = "+ilMioTavolo); 
     let tavolo= await Tavolo.findOne({_id: ilMioTavoloID}).exec();
     tavolo.carrello.forEach(element => {
     return{

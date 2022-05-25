@@ -56,18 +56,20 @@ function loadOrders(){
 loadOrders();
 
 function changeState(btn){
-  const idP=btn.id;
+  const idP=btn.id; // Trovo l'id del piatto nell'id del bottone
+  const idT=btn.parentElement.parentElement.id.substring(3); // Trovo l'id del Tavolo dell'id del elemento UL che è il secondo parent del bottone
 
-  fetch('../api/v1/piatti/cambiaStato',{
+  fetch('../api/v1/piatti/cambiaStato',{ // Effettuo una chiamata API per cambiare lo stato del piatto
     method: 'POST',
     headers:{ 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      id: idP,
-      stato: statoF
+    body: JSON.stringify({ // passo bel body 
+      idP: idP, // id Piatto
+      idT: idT, // id Tavolo
+      stato: statoF // Stato in cui cambiare
     })
   })
   .then((resp) => {
-    loadOrders();
+    loadOrders(); // alla fine ricarico gli ordini
     return;
   })
   .catch( error => console.error(error) );

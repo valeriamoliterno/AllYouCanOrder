@@ -21,15 +21,23 @@ router.get('/ordineTavolo/:id', async (req, res) => {
     res.status(200).json(ordine); // trasforma in json
 });
 
+/**
+ * Chiamata API in POST che dato nel body l'id del tavolo e del piatto e lo stato cambia lo stato del piatto in quello desiderato
+ */
 router.post('/cambiaStato', async (req, res) =>{
-    let idP= req.body.id;
-    let stato = req.body.stato;
-    console.log('id: '+idP+' stato: '+stato);
-    let piatto=await Piatto.findById(idP);
-    piatto.stato=stato;
-    piatto= await piatto.save();
+    let idP= req.body.idP; // Recupero dal body l'id del Piatto
+    let idT=req.body.idT; // Recupero dal body l'id del Tavolo
+    let stato = req.body.stato; // Recupero dal body lo stato in cui cambiare
+    let tavolo = await Tavolo.findOne({_id: idT}); // Trovo il tavolo 
+    let ordine = await tavolo.ordine; // Trovo l'ordine
+    ordine = ordine.map( (piatto) => {
+        if(idP.localeCompare(piatto._id) == 0){ // Se l'id del piatto è uguale
+            piatto.stato=stato; // Cambio lo stato
+        }
+    });
+    tavolo.save(); // Salvo il tavolo
 
-    res.location("/api/v1/piatti/cambiaStato" + piatto._id).status(201).send();
+    res.location("/api/v1/piatti/cambiaStato" + idP).status(201).send();
 });
 
 module.exports = router;

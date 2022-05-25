@@ -18,9 +18,5 @@ const Tavolo = mongoose.model('Tavolo', tavolo);
 
 tavolo.path('_id'); 
 
-/*
-const nuovoTav= new Tavolo({nome: 'Tavolo 1'}); 
-nuovoTav.save().then(()=> console.log('Ho inserito', nuovoTav.nome)); */
-
 module.exports = Tavolo;
 

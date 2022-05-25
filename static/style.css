@@ -1,0 +1,107 @@
+body {
+    margin: 0;
+    background-color: #F8FBFF;
+  }
+  
+  ul.nav {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    width: 15%;
+    background-color: #f1f1f1;
+    position: fixed;
+    height: 100%;
+    overflow: auto;
+  }
+  
+  li.navi a {
+    display: block;
+    color: #000;
+    padding: 8px 16px;
+    text-decoration: none;
+  }
+  
+  li.navi a.active {
+    background-image: linear-gradient(to right, #F9881F , #FF774C);
+    color: white;
+  }
+  
+  li.navi a:hover:not(.active) {
+    background-color: #555;
+    color: white;
+  }
+
+  div.page{
+      margin-left:15%;
+      padding:1px 16px;
+      height:1000px;
+  }
+
+  div.tablelist {
+      overflow: auto;
+      white-space: nowrap;
+  }
+
+  div.table {
+    display: inline-block;
+    color: rgb(0, 0, 0);
+    width: 30%;
+    text-align: center;
+    margin: 20px;
+    padding: 20px;
+    border-radius: 20px;
+    background-color: white;
+    box-shadow: 0px 20px 20px #aaaaaa18 ;
+  }
+
+  ul.platelist {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .plate{
+    box-shadow: 0px 8px 15px #58585873 ;
+    padding: 15px 10px;
+    border-radius: 20px;
+  }
+
+  .plate img{
+    display: inline-block;
+    right: 0;
+    width: 20%;
+    height: auto;
+    float: left;
+    border-style: solid;
+    border-color: #F9881F;
+    border-width: 2px;
+    border-radius: 20px;
+  }
+
+  .plate h4{
+    display: inline-block;
+    text-align: left;
+    float: left;
+    margin: 5% 10px;
+  }
+
+  .plate .button{
+    float: right;
+    background-image: linear-gradient(to right, #F9881F , #FF774C);
+    border: none;
+    border-radius: 15px;
+    color: white;
+    padding: 10px 25px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    cursor: pointer;
+    margin: 3% 10px;
+  }
+
+  .clearfix::after {
+    content: "";
+    clear: both;
+    display: table;
+  }

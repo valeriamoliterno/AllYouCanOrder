@@ -10,7 +10,11 @@
  * Funzione per mostrare a video i piatti presenti nel menu, che richiama le API del metodo GET 
  * per il modello Piatto 
  */
- mostraMenu();
+ function delay(time) {
+    return new Promise(resolve => setTimeout(resolve, time));
+}
+delay(500).then(() => mostraMenu());
+
  function mostraMenu() {
      
     const ul = document.getElementById('piatti'); 

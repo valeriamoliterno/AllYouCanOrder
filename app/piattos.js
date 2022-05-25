@@ -32,7 +32,6 @@ const router = express.Router();
 const Ristorante = require('./models/ristorante'); // prendo il modello mongoose. 
 
 router.get('', async(req,res)=> {
-  //  console.log("Sono in piattos. Nome tavolo = ", ilMioTavolo); 
     let ristorantes = await Ristorante.findOne({ _id: ilMioRistoranteID}); 
     let menu = await ristorantes.menu; 
     menu.forEach(piatto => {

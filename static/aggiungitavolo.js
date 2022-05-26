@@ -1,9 +1,7 @@
-
-
-
 /**
  * Questa funzione viene chiamata cliccando sul bottone "Inserisci".
  * Crea un nuovo tavolo e gli conferisce un nome
+ * Richiamata nel file aggiungitavolo.html
  */
  function inserisciTavolo()
  {
@@ -17,9 +15,10 @@
          body: JSON.stringify( { nome: tableName } ),
      })
      .then((resp) => {
+         //stampa controllo response
          console.log(resp);
          return;
      })
-     .catch( error => {  console.error(error) }   ); 
+     .catch( error => { console.error(error) }  ); 
  
  };

@@ -3,18 +3,23 @@ const router = express.Router();
 const Ristorante = require('./models/ristorante');
 const Tavolo = require('./models/tavolo'); // get our mongoose model
 
+/**
+ * Chiamata API in GET che restituisce la lista dei tavoli del ristorante mostrando id e nome per ogni tavolo
+ */
 router.get('', async (req, res) => {
     let ristorante = await Ristorante.findOne({_id: ilMioRistoranteID});
-    let tavol = await ristorante.tavoli;
-    tavol.forEach(tavolo => {
-        return {
-            self: '/api/v1/tavoli/'+ tavolo.id,
+    let tavoli = await ristorante.tavoli;
+   await Promise.all(tavoli.map( async (t) => {
+        var tavolo = await Tavolo.findOne({_id: t._id});
+        return { // Ritorna l'id e il nome per ogni tavolo
+            self: '/api/v1/tavoli/'+ tavolo._id,
             id: tavolo._id,
             nome: tavolo.nome
         };
-    });
-   
-    res.status(200).json(tavol);
+    }))
+    .then(function(tavol) {
+        res.status(200).json(tavol);
+    })
 });
 
 

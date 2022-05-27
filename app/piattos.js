@@ -135,10 +135,18 @@ router.post('/cambiaStato', async (req, res) =>{
     let idP= req.body.idP; // Recupero dal body l'id del Piatto
     let idT=req.body.idT; // Recupero dal body l'id del Tavolo
     let stato = req.body.stato; // Recupero dal body lo stato in cui cambiare
+    console.log("----- idP: "+idP+" ----- idT: "+idT+"------ Stato: "+stato+"---------------");
     let tavolo = await Tavolo.findOne({_id: idT}); // Trovo il tavolo 
+    console.log("----- Tavolo --------------------------");
+    console.log(tavolo);
     let ordine = await tavolo.ordine; // Trovo l'ordine
+    console.log("----- Ordine --------------------------");
+    console.log(ordine);
     ordine = ordine.map( (piatto) => {
+        console.log("----- Piatto --------------------------");
+        console.log(piatto);
         if(idP.localeCompare(piatto._id) == 0){ // Se l'id del piatto è uguale
+            console.log("||||||||||||||||  SI  ||||||||||||||||||||");
             piatto.stato=stato; // Cambio lo stato
         }
     });

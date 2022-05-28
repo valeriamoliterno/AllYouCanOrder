@@ -8,7 +8,7 @@
    const tvNum= document.getElementById('tvNum');
   const ul = document.getElementById('ordine'); // Get the list 
   ul.textContent = '';
-     fetch('../api/v1/mostraOrdine')
+     fetch('../api/v1/tavoli/ordine')
      .then((resp) => resp.json()) // Transform the data into json
      .then(function(data) { // Here you get the data to modify as you please
      var ordine= data.ordine;       

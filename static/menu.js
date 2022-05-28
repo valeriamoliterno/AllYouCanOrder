@@ -13,10 +13,13 @@
  function creaMenu() {
     const ul = document.getElementById('piattos'); // Get the list 
     ul.textContent = '';
+    const chiamaCameriere= document.getElementById('chiamaCameriere');
+    chiamaCameriere.onclick= ()=> chiamaCameriere(); 
     fetch('../api/v1/piattos') //perndo i piatti dal db
     .then((resp) => resp.json()) // trasformo i dati in json
     .then(function(data) { //prendo tutti i dati per poterli poi modificare
-        
+    
+     console.log(data);    
     return data.map(function(piatto) { // creo una mappa e per ogni piatto faccio andare il codice sottostante
 
     //Creo una variabile all'interno della quale salvo i valori del piatto in questione. Questa variabile verrà passata alla funzione aggiungiPiatto()
@@ -36,14 +39,14 @@
             var celldx = document.createElement("td");
             cellsx.className='sinistra'; 
             celldx.className='destra'; 
-            let contenutoTab = document.createElement('span');
+            let contenutoTab = document.createElement('span'); //contenuto cella dx
 
             //CARATTERISTICHE DEL PIATTO
             let nome = document.createElement('nome');
             nome.href = piatto.self;
             nome.textContent = piatto.nome; 
             let img = document.createElement('img'); 
-            img.className='piatto'
+            img.className='piattoMenu'
             img.src=piatto.foto;
             let desc = document.createElement('descrizione'); 
             desc.herf = piatto.self; 
@@ -68,13 +71,13 @@
             contenutoTab.appendChild(nome);
             contenutoTab.appendChild(desc);
             contenutoTab.appendChild(pr); 
+            contenutoTab.appendChild(aggiungi); 
             celldx.appendChild(contenutoTab);
             row.appendChild(cellsx);
             row.appendChild(celldx); 
             tblBody.appendChild(row); 
             tabella.appendChild(tblBody); 
             plate.appendChild(tabella);
-            plate.appendChild(aggiungi);
             //PER MENU E CARRELLO, ELIMINO STATO E FACCIO PLATE.APPENDCHILD(BOTTONE)
             li.appendChild(plate);
             ul.appendChild(li);
@@ -122,5 +125,6 @@ function aggiungiPiatto(ilMioPiatto){
 
 
 
+function chiamaCameriere(){
 
-
+}

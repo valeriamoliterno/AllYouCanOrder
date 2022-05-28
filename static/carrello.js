@@ -15,7 +15,7 @@ var nomeTavolo = 'tav1'; //indica il tavolo a cui modifico tutto
     span1.append(inviaOrdine);
     li1.appendChild(span1);
     ul.appendChild(li1);
-    fetch('../api/v1/mostraCarrello')
+    fetch('../api/v1/tavoli/mostraCarrello')
     .then((resp) => resp.json()) // Transform the data into json
     .then(function(data) { // Here you get the data to modify as you please
 
@@ -52,10 +52,10 @@ var nomeTavolo = 'tav1'; //indica il tavolo a cui modifico tutto
         img.className='piatto'
         img.src=piatto.foto;
         let desc = document.createElement('descrizione'); 
-        desc.herf = piatto.self; 
+        desc.href = piatto.self; 
         desc.textContent= piatto.descrizione; 
         let pr=document.createElement('prezzo'); 
-         pr.herf=piatto.self; 
+         pr.href=piatto.self; 
          pr.textContent= piatto.prezzo + ' €';
 
           //BOTTONE PER RIMUOVERE ELEMENTI DAL CARRELLO
@@ -95,7 +95,7 @@ mostraCarrello();
  **************************************************/
  function rimuoviPiatto(piattoDaRimuovere){
     var id= piattoDaRimuovere.id; 
-    fetch('../api/v1/mostraCarrello/', {
+    fetch('../api/v1/tavoli/mostraCarrello/', {
         method: 'DELETE',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify( { id: id} ),
@@ -111,7 +111,7 @@ mostraCarrello();
  *   FUNZIONE PER SPOSTARE I PIATTI DAL CARRELLO ALL'ORDINE   *
  **************************************************************/
  function daMenuAOrdine(){
-    fetch('../api/v1/mostraCarrello')
+    fetch('../api/v1/tavoli/mostraCarrello')
     .then((resp) => resp.json()) // Transform the data into json
     .then(function(data) { // Here you get the data to modify as you please
     
@@ -143,7 +143,7 @@ mostraCarrello();
     var prezzo= ilMioOrdine.prezzo;
     var descrizione= ilMioOrdine.descrizione; 
     var foto= ilMioOrdine.foto;  
-    fetch('../api/v1/mostraOrdine/', {
+    fetch('../api/v1/tavoli/ordine', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify( { nome: nomePiatto, prezzo: prezzo, descrizione: descrizione, foto: foto , id:id} ),
@@ -165,7 +165,7 @@ mostraCarrello();
  function svuotaCarrello(tav){
 
     var name= tav.name; 
-    fetch('../api/v1/svuotaCarrello/', {
+    fetch('../api/v1/tavoli/svuotaCarrello', {
         method: 'DELETE',   
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify( { name: name} ),

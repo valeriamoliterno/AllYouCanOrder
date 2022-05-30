@@ -42,7 +42,7 @@ function aggiungi()
     console.log(descrizione);
     console.log(foto);
 
-    fetch('../api/v1/piattos/', {
+    fetch('../api/v1/piattosRisto/aggiungiPiatto/', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'x-access-token': loggedUser.token}, //facciamo il controllo del token
         body: JSON.stringify({ 

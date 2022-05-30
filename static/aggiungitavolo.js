@@ -11,7 +11,7 @@
  
      console.log(tableName);
  
-     fetch("../api/v1/tavolos", {
+     fetch("../api/v1/tavoliRisto", {
          method: 'POST',
          headers: { 'Content-Type': 'application/json' },
          body: JSON.stringify( { nome: tableName } ),

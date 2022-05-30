@@ -15,7 +15,7 @@ function login(){
     fetch('../api/v1/auth', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify( { mail: mail, password: password } ),
+        body: JSON.stringify( { mail: mail, password: stringToHash(password) } ), //salviamo la password in hash per maggiore sicurezza
     })
     .then((resp) => resp.json()).then((data) => {
         if(data.successo === true){  //controllo che l'operazione sia riuscita con successo
@@ -38,3 +38,22 @@ function login(){
     })
     .catch( error => console.error("errorino: "+ error) ); //Stampo il messaggio di errore per capire meglio dove si verifica
 };
+
+
+/**
+ * Ritorna il valore hash della stringa passata
+ */
+function stringToHash(string) {
+                  
+    var hash = 0;
+      
+    if (string.length == 0) return hash;
+      
+    for (i = 0; i < string.length; i++) {
+        char = string.charCodeAt(i);
+        hash = ((hash << 5) - hash) + char;
+        hash = hash & hash;
+    }
+      
+    return hash;
+}

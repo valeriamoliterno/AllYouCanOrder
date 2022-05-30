@@ -9,11 +9,19 @@ const app = express();
  */
 global.ilMioRistoranteID= '628a612bbe71304869cfb0fc'
 global.ilMioTavoloID= '628a612bbe71304869cfb0fb'
-const piattos= require('./piattos');
-const carrelli= require('./svuotaCarrello'); 
-const carrell= require('./carrell'); 
-const ordine = require('./ordine');
-const tavol = require ('./tavolos');
+
+//variabile globale in cui salviamo i dati dell'utente che ha fatto login con successo
+global.loggedUser = {
+    token: String,
+    mail: String,
+ };
+
+const piattosRisto= require('./piattosRisto.js');
+const piattosCliente= require('./piattosCliente.js');
+const tavolosCliente = require ('./tavolosCliente.js');
+const tavolosRisto = require ('./tavolosRisto.js');
+const auth = require ('./authentication.js');
+const tokenChecker = require ('./tokenChecker.js');
 /**
  * Servono per poter leggere il body delle response
  */
@@ -24,6 +32,8 @@ app.use(express.urlencoded({ extended: true }));
  * Carica la pagina index.html all'apertura
  */
 app.use('/', express.static('static'));
+app.use('/',express.static('img'));
+
 
 app.use((req,res,next) => {
     console.log(req.method + ' ' + req.url)
@@ -33,11 +43,19 @@ app.use((req,res,next) => {
 /**
  *  le API utilizzate
  */
-app.use('/api/v1/piattos', piattos);
-app.use('/api/v1/svuotaCarrello',carrelli); 
-app.use('/api/v1/mostraCarrello', carrell);
-app.use('/api/v1/mostraOrdine', ordine);
-app.use('/api/v1/tavoli', tavol);
+
+//queste API sono libere da vincolo di login
+app.use('/api/v1/auth', auth);
+app.use('/api/v1/token', auth);
+app.use('/api/v1/tavoliCliente', tavolosCliente);
+app.use('/api/v1/piattosCliente/', piattosCliente);
+
+//tutte le API dichiarate sotto questa riga avranno bisogno di un login effettuato con successo per poter essere chiamate
+app.use('', tokenChecker);
+
+app.use('/api/v1/piattosRisto/', piattosRisto);
+app.use('/api/v1/tavoliRisto', tavolosRisto);
+
 
 /**
  * gestisce i casi di errore

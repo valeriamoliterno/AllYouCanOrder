@@ -10,23 +10,64 @@
  * Funzione per mostrare a video i piatti presenti nel menu, che richiama le API del metodo GET 
  * per il modello Piatto 
  */
- function delay(time) {
-    return new Promise(resolve => setTimeout(resolve, time));
-}
-delay(500).then(() => mostraMenu());
 
- function mostraMenu() {
+//variabile in cui salviamo i dati dell'utente loggato (se lo è)
+ var loggedUser={}
+ salvaToken();
+ 
+ //Con questa funzione prendiamo i dati dell'utente loggato, 
+ //tra cui il token che ci serve per avere accesso alle risorse protette
+ function salvaToken(){
+     fetch('../api/v1/token/')
+     .then((resp) => resp.json()) // trasformo i dati in json
+     .then(function(user){
+         loggedUser.token=user.token;
+         loggedUser.mail=user.ristoMail;
+         loggedUser.id= user.ristoId;
+         loggedUser.self=user.ristoSelf;  
+         //stampe di controllo 
+         console.log('Chiamata salvaToken() ***********************');
+         console.log('Token: '+ loggedUser.token);
+         
+     })
+     .then(()=>mostraMenu())//dopo aver preso i dati dell'utente, chiama la funzione per stampare il menu sullo schermo
+     .catch( error => console.error(error) );
+}
+
+/**
+ * Questa funzione stampa il menu del ristorante
+ */
+async function mostraMenu() {
      
     const ul = document.getElementById('piatti'); 
-
     ul.textContent = '';
-
-    fetch('../api/v1/piattos/')
-    .then((resp) => resp.json()) 
+    var stato;
+    fetch('../api/v1/piattosRisto/', {
+        method: 'GET', 
+        headers: { 'Content-Type': 'application/json' , 'x-access-token': loggedUser.token}})  //facciamo il controllo del token
+    .then((resp) => {
+        stato=resp.status;//salviamo lo stato della reponse per un controllo successivo
+        return resp.json()
+    }) 
     .then(function(data) { 
-        
-    console.log(data); //controllo
-        
+        //console.log(loggedUser.mail)
+        if (stato===403 || stato===401){ //in caso ci sia un errore in autenticazione, si verrà riportati alla pagina d login
+            window.open('/unlogged.html', '_self');
+            return data;
+        }  
+
+        console.log("data: " + data); //controllo
+       
+        let titolo = document.getElementById('titolo');
+        titolo.textContent="All You Can Order";
+        let div = document.getElementById('div');
+        let aggiungi = document.createElement('a');
+        aggiungi.href="./aggiungiPiatto.html";
+        aggiungi.textContent="Aggiungi un Piatto al menu";
+        div.append(aggiungi);
+        let labelMenu = document.getElementById('labelMenu');
+        labelMenu.textContent="Menu:";
+
         return data.map(function(piatto) { 
             //Stampa di controllo
             console.log(piatto.nome);
@@ -54,10 +95,6 @@ delay(500).then(() => mostraMenu());
            
             let elimina = document.createElement('button');
             elimina.onclick = function elimina(){ 
-             let PiattoId = piatto._id; 
-            
-                                //piatto.self.substring(piatto.self.lastIndexOf('/') + 1);
-
                 //stampa di controllo
                 console.log("Sto eliminando + " + piatto._id);
 
@@ -66,7 +103,7 @@ delay(500).then(() => mostraMenu());
                 function delay(time) {
                     return new Promise(resolve => setTimeout(resolve, time));
                 }
-                delay(500).then(() => mostraMenu());            
+                delay(500).then(() => location.reload());            
             }
             elimina.textContent = 'Elimina'; 
             
@@ -93,10 +130,10 @@ delay(500).then(() => mostraMenu());
 async function deletePiatto(idPiatto){
     console.log("deletePiatto ID")
     console.log(idPiatto); 
-    var uriAPI = '../api/v1/piattos/'
+    var uriAPI = '../api/v1/piattosRisto/eliminaPiatto'
     fetch(uriAPI, {
         method: 'DELETE',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', 'x-access-token': loggedUser.token},//passiamo il token al metodo
         body: JSON.stringify( { id : idPiatto } ),
     })
     .then((resp) => {

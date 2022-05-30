@@ -8,8 +8,9 @@ router.post('', async (req, res) => {
     
 	let ristorante = new Ristorante({
         mail: req.body.mail,
-        passwordHash: req.body.password,
-        passwordManagerHash: req.body.passwordManager
+        passwordHash: stringToHash(req.body.password),
+        passwordManagerHash: stringToHash(req.body.passwordManager),
+        tavoli: []
     });
 
     console.log('------ API POST Ristorante ------');
@@ -29,10 +30,23 @@ router.post('', async (req, res) => {
 
 
 function validateEmail(email) 
-    {
-        var re = /\S+@\S+\.\S+/;
-        return re.test(email);
+{
+    var re = /\S+@\S+\.\S+/;
+    return re.test(email);
+}
+
+function stringToHash(string) {
+                  
+    var hash = 0;
+      
+    if (string.length == 0) return hash;
+      
+    for (i = 0; i < string.length; i++) {
+        char = string.charCodeAt(i);
+        hash = ((hash << 5) - hash) + char;
+        hash = hash & hash;
     }
-
-
+      
+    return hash;
+}
 module.exports = router;

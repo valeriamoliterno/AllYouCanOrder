@@ -20,7 +20,17 @@ router.get('', async (req, res) => {
     })
 });
 
+router.delete('/eliminaTavolo', async (req, res) => {
+    const  id  = req.body.id;
+    let ristorante = await Ristorante.findOne({_id: ilMioRistoranteID}).exec(); 
+    let tavolo= await Tavolo.findById(req.body.id).exec(); 
+   
+    ristorante.tavoli.pull(req.body.id); 
+    await Tavolo.deleteOne(tavolo).exec()
+    await ristorante.save(); 
 
+    res.location("/api/v1/tavoliRisto/eliminaTavolo/" + id).status(204).send();
+});
 
 router.post('', async (req, res) => {
     let ristorante = await Ristorante.findOne({_id: ilMioRistoranteID});

@@ -20,6 +20,7 @@ const piattosRisto= require('./piattosRisto.js');
 const piattosCliente= require('./piattosCliente.js');
 const tavolosCliente = require ('./tavolosCliente.js');
 const tavolosRisto = require ('./tavolosRisto.js');
+const rist = require('./ristorantes')
 const auth = require ('./authentication.js');
 const tokenChecker = require ('./tokenChecker.js');
 /**
@@ -49,6 +50,7 @@ app.use('/api/v1/auth', auth);
 app.use('/api/v1/token', auth);
 app.use('/api/v1/tavoliCliente', tavolosCliente);
 app.use('/api/v1/piattosCliente/', piattosCliente);
+app.use('/api/v1/ristoranti', rist);
 
 //tutte le API dichiarate sotto questa riga avranno bisogno di un login effettuato con successo per poter essere chiamate
 app.use('', tokenChecker);

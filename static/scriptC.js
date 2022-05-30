@@ -1,3 +1,11 @@
+/**
+ * Script richiamato dai file camerieri.html e cuochi.html
+ * 
+ * 
+ **/
+
+
+
 // if per controllare se ci troviamo nella pagina del cameriere o del cuoco e cambia lo stato da visualizzare
 var stato;
 var btnT;
@@ -42,6 +50,7 @@ var loggedUser={}
  */
 function loadOrders(){
   const tableList = document.getElementById("tl"); // Trovo la parte dove verranno mostrati i tavoli
+  tableList.innerHTML="";
   var html=''; // buffer per poi mostrare i piatti
 
   var status;
@@ -62,8 +71,7 @@ function loadOrders(){
     return data.map(function(tavolo) { 
       html=''; // resetto il buffer per aggiungere i piatti per ogni tavolo
       console.log(tavolo.id);
-      console.log('***********************************')
-      tableList.innerHTML='<div class="table"><h2>'+tavolo.nome+'</h2><ul class="platelist" id="pl:'+tavolo.id+'"></ul></div>';
+      tableList.innerHTML=tableList.innerHTML + '<div class="table box"><h2>'+tavolo.nome+'</h2><ul class="platelist" id="pl:'+tavolo.id+'"></ul></div>';
       var plateList = document.getElementById("pl:"+tavolo.id);// Trovo la parte dove verranno mostrati i piatti del tavolo attuale
       
     
@@ -93,6 +101,10 @@ function loadOrders(){
   return;
 }
 
+
+/**
+ * Questa funzione cambia lo stato di un piatto 
+ */
 function changeState(btn){
   const idP=btn.id; // Trovo l'id del piatto nell'id del bottone
   const idT=btn.parentElement.parentElement.id.substring(3); // Trovo l'id del Tavolo dell'id del elemento UL che è il secondo parent del bottone

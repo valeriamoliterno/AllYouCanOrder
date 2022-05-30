@@ -14,6 +14,7 @@ const tavol = require ('./tavolosRisto.js');
 const piattosCliente= require('./piattosCliente.js');
 const tavolosCliente = require ('./tavolosCliente.js');
 const idTav=require('./impostoTavolo');
+const impostaRistorante = require('./impostoRistorante')
 /**
  * Servono per poter leggere il body delle response
  */
@@ -33,6 +34,7 @@ app.use((req,res,next) => {
 /**
  *  le API utilizzate
  */
+app.use('/api/v1/impostaRistorante', impostaRistorante);
 app.use('/api/v1/impostaTavolo', idTav);
 app.use('/api/v1/piattos/', piattos);
 app.use('/api/v1/tavoliRisto', tavol);

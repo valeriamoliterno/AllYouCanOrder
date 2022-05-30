@@ -4,9 +4,11 @@ function mostraTavoli(){
     
     const ul = document.getElementById('tavoli'); 
     ul.textContent = '';
+    var stato; 
     fetch('../api/v1/tavoliCliente/listaTavoli') 
-    .then((resp) => resp.json()) 
+    .then((resp) => { return resp.json()}) 
     .then(function(dat) { 
+        
    
         const tavolo=dat.tavoli; 
 

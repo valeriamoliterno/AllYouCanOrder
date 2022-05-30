@@ -88,7 +88,7 @@ router.post('/ordine', async (req, res) => {
 
     router.get('/mostraCarrello', async(req,res)=> {  
         let tavolo= await Tavolo.findOne({_id: ilMioTavoloID}).exec();
-       
+        console.log("get mostraCarrello: "+ilMioTavoloID);
         tavolo.carrello.forEach(element => {
         return{
             self: '/api/v1/tavoliCliente/mostraCarrello/',
@@ -170,12 +170,18 @@ router.post('/ordine', async (req, res) => {
  *************************************************************************************************************/
     router.get('/listaTavoli', async(req,res)=> {  
         let ristorante = await Ristorante.findOne({_id: ilMioRistoranteID}).exec(); 
+        console.log("Il mio ristorante id= "+ilMioRistoranteID);
+        console.log(ristorante);
+        if(ristorante.tavoli===null){
+            console.log("NON CI SONO TAVOLI");
+            res.status(404).json(); 
+        }else{
        ristorante.tavoli.forEach(element => {
         return{
             self: '/api/v1/tavoliCliente/listaTavoli',
             tavolo: element,
         };    
-       });
+       });}
         res.status(200).json(ristorante);  
     })
     

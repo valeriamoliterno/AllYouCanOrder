@@ -25,6 +25,7 @@
       }
 
   })
+  chiama.onclick =  ()=> chiamaCameriere(chiama);
      fetch('../api/v1/tavoliCliente/ordine')
      .then((resp) => resp.json()) 
      .then(function(data) {

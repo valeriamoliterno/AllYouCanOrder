@@ -5,14 +5,37 @@ var statoF;
 if(document.body.id=='cameriere'){ // se è un cameriere visualizza i piatti in stato di consegna
   stato='in consegna';
   btnT='Consegnato';
-  statoF='conseganto';
+  statoF='consegnato';
 }
 else if(document.body.id=='cuoco'){ // se è un cuoco visualizza i piatti in stato di preparazione
   stato='in preparazione';
   btnT='Pronto';
   statoF='in consegna';
 }
-console.log('stato: '+stato+' stato futuro: '+statoF);
+
+//variabile in cui salviamo i dati dell'utente loggato (se lo è)
+var loggedUser={}
+ salvaToken();
+
+//Con questa funzione prendiamo i dati dell'utente loggato, tra cui il token che ci serve per avere accesso alle risorse protette
+ function salvaToken(){
+     fetch('../api/v1/token/')
+     .then((resp) => resp.json()) // trasformo i dati in json
+     .then(function(user){
+         loggedUser.token=user.token;
+         loggedUser.mail=user.ristoMail;
+         loggedUser.id= user.ristoId;
+         loggedUser.self=user.ristoSelf; 
+         //stampe di controllo 
+         console.log('Chiamata salvaToken() ***********************');
+         console.log('Token: '+ loggedUser.token);
+         
+     })
+     .then(()=>loadOrders()) //dopo aver preso i dati dell'utente, chiama la funzione per stampare i tavoli e gli ordini sullo schermo
+     .catch( error => console.error(error) );
+}
+
+
 
 /**
  * Questa funzione carica i piatti per tavolo nello stato desiderato
@@ -21,16 +44,35 @@ function loadOrders(){
   const tableList = document.getElementById("tl"); // Trovo la parte dove verranno mostrati i tavoli
   var html=''; // buffer per poi mostrare i piatti
 
-  fetch('../api/v1/tavoli') // Effettuo una chiamata API per trovare la lista dei tavoli
-  .then((resp) => resp.json()) 
+  var status;
+    fetch('../api/v1/tavoliRisto/', {
+        method: 'GET', 
+        headers: { 'Content-Type': 'application/json' , 'x-access-token': loggedUser.token}}) //facciamo il controllo del token
+    .then((resp) => {
+      status=resp.status; //salviamo lo stato della reponse per un controllo successivo
+       return resp.json()
+    }) 
   .then(function(data) {
-  
+    console.log(data);
+
+    if (status===403 || status===401){ //in caso ci sia un errore in autenticazione, si verrà riportati alla pagina di login
+      window.open('/unlogged.html', '_self');
+      return data;
+    }
     return data.map(function(tavolo) { 
       html=''; // resetto il buffer per aggiungere i piatti per ogni tavolo
+      console.log(tavolo.id);
+      console.log('***********************************')
       tableList.innerHTML='<div class="table"><h2>'+tavolo.nome+'</h2><ul class="platelist" id="pl:'+tavolo.id+'"></ul></div>';
       var plateList = document.getElementById("pl:"+tavolo.id);// Trovo la parte dove verranno mostrati i piatti del tavolo attuale
-
-      fetch('../api/v1/piatti/ordineTavolo/'+tavolo.id) // Effettuo una chiamata API per trovare i piatti nell'ordine di un determinato tavolo
+      
+    
+      fetch('../api/v1/piattosRisto/ordineTavolo/'+tavolo.id, {
+        method: 'GET', 
+        /**Effettuo una chiamata API per trovare i piatti nell'ordine di un determinato tavolo
+         * e passo il token nell'header 
+         */
+        headers: { 'Content-Type': 'application/json' , 'x-access-token': loggedUser.token}})
       .then((resp)=> resp.json())
       .then(function(datap) {
         console.log(datap);
@@ -48,20 +90,17 @@ function loadOrders(){
     })
   })
   .catch( error => console.error(error) );
-
   
   return;
 }
-
-loadOrders();
 
 function changeState(btn){
   const idP=btn.id; // Trovo l'id del piatto nell'id del bottone
   const idT=btn.parentElement.parentElement.id.substring(3); // Trovo l'id del Tavolo dell'id del elemento UL che è il secondo parent del bottone
 
-  fetch('../api/v1/piatti/cambiaStato',{ // Effettuo una chiamata API per cambiare lo stato del piatto
+  fetch('../api/v1/piattosRisto/cambiaStato',{ // Effettuo una chiamata API per cambiare lo stato del piatto
     method: 'POST',
-    headers:{ 'Content-Type': 'application/json' },
+    headers:{ 'Content-Type': 'application/json' , 'x-access-token': loggedUser.token}, //passiamo il token al metodo
     body: JSON.stringify({ // passo bel body 
       idP: idP, // id Piatto
       idT: idT, // id Tavolo

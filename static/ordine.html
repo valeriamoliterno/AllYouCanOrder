@@ -7,15 +7,18 @@
 
 
 <body>
-    
-<table>
+    <!--Questa parte è uguale per tutte le sezioni cliente, e sostanzialmente è una barra che ti permette di cambiare sezione (ordine, carrello e menu)
+Inoltre, in alto a destra viene mostrato il numero di tavolo corrente e in tutte le sezioni c'è anche il pulsante per chiamare il cameriere -->
+ <div class="sticky">
+<table class="header">
 
 <tr>
-<td><img class="logo" src="/img/AllYouCanOrder_logo.png" width="128" height="80"></td>
-<td><p id="tvNum"></p></td>
+<td class="sinistraHeader"><img class="logo" src="/img/AllYouCanOrder_logo.png" width="128" height="80"></td>
+<td class="centroHeader"><h2 id="allOrdine" class="luogo">Ordine</h2></td>
+<td class="destraHeader"><tvNum id="tvNum"></tvNum></td>
 </tr>
 </table>  
-<div class="sticky">
+
 <table class="barraMenu">
 <tr>
    
@@ -26,15 +29,22 @@
     <td> <p> </p></td>
     <td> <p> </p></td>
     <td> <p> </p></td>
-    <td><a id="chiamaCameriere" class="chiamaCameriere">&#128276</a></td>
+    <td><button id="chiamaCameriere" class="chiamaCameriere">&#128276</button></td>
+    <td><frase id="fraseCameriere">il cameriere è stato chiamato</frase></td>
 
 </tr>
 </table>
 </div>
 
-<h2 id="allOrdine" class="luogo">Il mio ordine </h2>
-<ul id="ordine"></ul>
 
+
+
+<stato class="inConsegna">In consegna</stato>
+<ul class= 'ordine' id="inConsegna"></ul>
+<stato class="inPreparazione">In preparazione</stato>
+<ul class= 'ordine' id="inPreparazione"></ul>
+<stato class="consegnato">i tuoi ordini consegnati</stato>
+<ul class= 'ordine' id="consegnato"></ul>
 <script src="ordine.js"></script> 
 </body>
 

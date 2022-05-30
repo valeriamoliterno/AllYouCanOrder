@@ -8,30 +8,35 @@
 
 
 <body>
-    
-   
-           
-
-    <img class="logo" src="/img/AllYouCanOrder_logo.png" width="128" height="80">
-
+<!--Questa parte è uguale per tutte le sezioni cliente, e sostanzialmente è una barra che ti permette di cambiare sezione (ordine, carrello e menu)
+Inoltre, in alto a destra viene mostrato il numero di tavolo corrente e in tutte le sezioni c'è anche il pulsante per chiamare il cameriere -->
     <div class="sticky">
-    <table class="barraMenu">
-    <tr>
-       
-        <td> <a href="menu.html" class="menu">Menu</a></td>
-        <td> <a href="carrello.html" class="menu">Carrello</a></td>
-        <td><a href="ordine.html" class="menu">Ordine</a></td>
-        <td> <p> </p></td>
-        <td> <p> </p></td>
-        <td> <p> </p></td>
-        <td> <p> </p></td>
-        <td><a id="chiamaCameriere" class="chiamaCameriere">&#128276</a></td>
-    
-    </tr>
-    </table>
-    <h2 class="luogo">Il mio carrello</h2>
-    </div>
-    
+        <table class="header">
+        
+        <tr>
+        <td class="sinistraHeader"><img class="logo" src="/img/AllYouCanOrder_logo.png" width="128" height="80"></td>
+        <td class="centroHeader"><h2 id="allOrdine" class="luogo">Carrello</h2></td>
+        <td class="destraHeader"><tvNum id="tvNum"></tvNum></td>
+        </tr>
+        </table>  
+        
+        <table class="barraMenu">
+        <tr>
+           
+            <td> <a href="menu.html" class="menu">Menu</a></td>
+            <td> <a href="carrello.html" class="menu">Carrello</a></td>
+            <td><a href="ordine.html" class="menu">Ordine</a></td>
+            <td> <p> </p></td>
+            <td> <p> </p></td>
+            <td> <p> </p></td>
+            <td> <p> </p></td>
+            <td><button id="chiamaCameriere" class="chiamaCameriere">&#128276</button></td> 
+            <td><frase id="fraseCameriere">il cameriere è stato chiamato</frase></td>
+        
+        </tr>
+        </table>
+        </div>
+        
     
 <ul id="carrello"></ul>
 

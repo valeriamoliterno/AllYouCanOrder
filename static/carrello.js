@@ -12,15 +12,31 @@ var nomeTavolo = 'tav1'; //indica il tavolo a cui modifico tutto
     inviaOrdine.value = 'inviaOrd'
     inviaOrdine.onclick = () => daMenuAOrdine();
     inviaOrdine.textContent = 'INVIA ORDINE ALLA CUCINA';   
+    const chiama= document.getElementById('chiamaCameriere');
+    var x = document.getElementById("fraseCameriere");
+    fetch('../api/v1/tavoliCliente/ilMioTavolo') //perndo i piatti dal db
+    .then((resp) => resp.json()) // trasformo i dati in json
+    .then(function(dataC) {
+        const tvNum= document.getElementById('tvNum');
+        tvNum.textContent=dataC.nome;  //segno il nome del tavolo ch uso
+          if(dataC.chiamato==true){
+            chiama.disabled='true'; 
+            x.style.display = "block";
+         
+        }else{
+            chiama.enable='true';
+            x.style.display = "none";
+        }
+
+    })
     span1.append(inviaOrdine);
     li1.appendChild(span1);
     ul.appendChild(li1);
-    fetch('../api/v1/mostraCarrello')
+    fetch('../api/v1/tavoliCliente/mostraCarrello')
     .then((resp) => resp.json()) // Transform the data into json
     .then(function(data) { // Here you get the data to modify as you please
 
-    var carrello= data.carrello;       
-    
+    var carrello= data.carrello;  
     //per ogni elemento in carrello eseguo la seguente funzione, che è simile a quella di mostraMenu(). 
     
      return carrello.forEach(piatto => {
@@ -32,57 +48,63 @@ var nomeTavolo = 'tav1'; //indica il tavolo a cui modifico tutto
             descrizione: piatto.descrizione, 
             foto: piatto.foto,
         }; 
-        //CREO LA TABELLA IN CUI SALVARE DA UNA PARTE L'IMMAGINE DEL PIATTO E DALL'ALTRA LE SUE CARATTERISTICHE
-        let li = document.createElement('li');
-        let tabella = document.createElement('table');
-        tabella.className='piatti'; 
-        let tblBody = document.createElement("tbody")
-        var row = document.createElement("tr");
-        var cellsx = document.createElement("td");
-        var celldx = document.createElement("td");
-        cellsx.className='sinistra'; 
-        celldx.className='destra'; 
-        let contenutoTab = document.createElement('span');
 
-        //CARATTERISTICHE DEL PIATTO
-        let nome = document.createElement('nome');
-        nome.href = piatto.self;
-        nome.textContent = piatto.nome; 
-        let img = document.createElement('img'); 
-        img.className='piatto'
-        img.src=piatto.foto;
-        let desc = document.createElement('descrizione'); 
-        desc.herf = piatto.self; 
-        desc.textContent= piatto.descrizione; 
-        let pr=document.createElement('prezzo'); 
-         pr.herf=piatto.self; 
-         pr.textContent= piatto.prezzo + ' €';
 
-          //BOTTONE PER RIMUOVERE ELEMENTI DAL CARRELLO
-             let rimuovi = document.createElement('button');
-             rimuovi.type = 'button'
-             rimuovi.value = 'rimuovi'
-             rimuovi.onclick = () => rimuoviPiatto(piattoDaRimuovere);
-             rimuovi.textContent = 'elimina';           
-            
-               //CREO PLATE, CHE SOSTANZIALMENTE RACCHIUDE TUTTI GLI ELEMENTI DI PIATTO, INCLUSO STATO E LA TABELLA SOPRASTANTE
-            let plate= document.createElement('div');
-            plate.className ='piatto'; 
 
-            cellsx.appendChild(img);
-            contenutoTab.appendChild(nome);
-            contenutoTab.appendChild(desc);
-            contenutoTab.appendChild(pr); 
-            celldx.appendChild(contenutoTab);
-            row.appendChild(cellsx);
-            row.appendChild(celldx); 
-            tblBody.appendChild(row); 
-            tabella.appendChild(tblBody); 
-            plate.appendChild(tabella);
-            plate.appendChild(rimuovi);
-            //PER MENU E CARRELLO, ELIMINO STATO E FACCIO PLATE.APPENDCHILD(BOTTONE)
-            li.appendChild(plate);
-            ul.appendChild(li);
+
+         //CREO LA TABELLA IN CUI SALVARE DA UNA PARTE L'IMMAGINE DEL PIATTO E DALL'ALTRA LE SUE CARATTERISTICHE
+         let li = document.createElement('li');
+         let tabella = document.createElement('table');
+         tabella.className='piatti'; 
+         let tblBody = document.createElement("tbody")
+         var row = document.createElement("tr");
+         var cellsx = document.createElement("td");
+         var celldx = document.createElement("td");
+         cellsx.className='sinistra'; 
+         celldx.className='destra'; 
+         let contenutoTab = document.createElement('span'); //contenuto cella dx
+
+         //CARATTERISTICHE DEL PIATTO
+         let nome = document.createElement('nome');
+         nome.href = piatto.self;
+         nome.textContent = piatto.nome; 
+         let img = document.createElement('img'); 
+         img.className='piattoMenu'
+         img.src=piatto.foto;
+         let desc = document.createElement('descrizione'); 
+         desc.herf = piatto.self; 
+         desc.textContent= piatto.descrizione; 
+         let pr=document.createElement('prezzo'); 
+          pr.herf=piatto.self; 
+          pr.textContent= piatto.prezzo + ' €'; 
+
+         //BOTTONE PER AGGIUNGERE ELEMENTI AL CARRELLO
+         let aggiungi = document.createElement('button');
+         aggiungi.type = 'button'
+         aggiungi.value='aggiungi'
+         aggiungi.className='aggiungi';
+         aggiungi.onclick =  ()=> rimuoviPiatto(piattoDaRimuovere);
+         aggiungi.textContent = 'rimuovi dal carrello';          
+        
+         //CREO PLATE, CHE SOSTANZIALMENTE RACCHIUDE TUTTI GLI ELEMENTI DI PIATTO, INCLUSO STATO E LA TABELLA SOPRASTANTE
+         let plate= document.createElement('div');
+         plate.className ='piatto'; 
+
+         cellsx.appendChild(img);
+         contenutoTab.appendChild(nome);
+         contenutoTab.appendChild(desc);
+         contenutoTab.appendChild(pr); 
+         contenutoTab.appendChild(aggiungi); 
+         celldx.appendChild(contenutoTab);
+         row.appendChild(cellsx);
+         row.appendChild(celldx); 
+         tblBody.appendChild(row); 
+         tabella.appendChild(tblBody); 
+         plate.appendChild(tabella);
+         //PER MENU E CARRELLO, ELIMINO STATO E FACCIO PLATE.APPENDCHILD(BOTTONE)
+         li.appendChild(plate);
+         ul.appendChild(li);
+ 
      });        
     })
     .catch( error => console.error(error) );// If there is any error you will catch them here
@@ -95,7 +117,7 @@ mostraCarrello();
  **************************************************/
  function rimuoviPiatto(piattoDaRimuovere){
     var id= piattoDaRimuovere.id; 
-    fetch('../api/v1/mostraCarrello/', {
+    fetch('../api/v1/tavoliCliente/mostraCarrello', {
         method: 'DELETE',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify( { id: id} ),
@@ -111,7 +133,7 @@ mostraCarrello();
  *   FUNZIONE PER SPOSTARE I PIATTI DAL CARRELLO ALL'ORDINE   *
  **************************************************************/
  function daMenuAOrdine(){
-    fetch('../api/v1/mostraCarrello')
+    fetch('../api/v1/tavoliCliente/mostraCarrello')
     .then((resp) => resp.json()) // Transform the data into json
     .then(function(data) { // Here you get the data to modify as you please
     
@@ -143,19 +165,17 @@ mostraCarrello();
     var prezzo= ilMioOrdine.prezzo;
     var descrizione= ilMioOrdine.descrizione; 
     var foto= ilMioOrdine.foto;  
-    fetch('../api/v1/mostraOrdine/', {
+    fetch('../api/v1/tavoliCliente/ordine', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify( { nome: nomePiatto, prezzo: prezzo, descrizione: descrizione, foto: foto , id:id} ),
     })
     .then((resp) => {
-        console.log(resp);
-        console.log("Mostra ordine in aggiungiPiattoOrdine")
-        
+        console.log(resp);       
         return;
         
     })
-    .catch( error => console.error(error) ); // If there is any error you will catch them here
+    .catch( error => console.error(error) ); 
 }
 
 /**************************************************
@@ -165,7 +185,7 @@ mostraCarrello();
  function svuotaCarrello(tav){
 
     var name= tav.name; 
-    fetch('../api/v1/svuotaCarrello/', {
+    fetch('../api/v1/tavoliCliente/svuotaCarrello', {
         method: 'DELETE',   
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify( { name: name} ),
@@ -181,3 +201,34 @@ mostraCarrello();
     .catch( error => console.error(error) );
 
 }
+
+
+
+
+
+
+/**************************************************
+ *   FUNZIONE PER CHIAMARE IL CAMERIERE           *
+ **************************************************/
+
+
+ function chiamaCameriere(btn){
+    btn.disabled='true'; 
+    var x = document.getElementById("fraseCameriere");
+   
+      x.style.display = "block";
+   
+    fetch('../api/v1/tavoliCliente/chiamaCameriere/', {
+        method: 'POST', 
+        headers: { 'Content-Type': 'application/json' },
+       
+    })
+    .then((resp) => {
+        console.log(resp);
+        return;
+        
+    })
+    .catch( error => console.error(error) ); 
+   
+}
+

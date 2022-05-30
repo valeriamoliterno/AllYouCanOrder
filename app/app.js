@@ -23,6 +23,8 @@ const tavolosRisto = require ('./tavolosRisto.js');
 const rist = require('./ristorantes')
 const auth = require ('./authentication.js');
 const tokenChecker = require ('./tokenChecker.js');
+const idTav=require('./impostoTavolo');
+const impostaRistorante = require('./impostoRistorante')
 /**
  * Servono per poter leggere il body delle response
  */
@@ -48,16 +50,17 @@ app.use((req,res,next) => {
 //queste API sono libere da vincolo di login
 app.use('/api/v1/auth', auth);
 app.use('/api/v1/token', auth);
-app.use('/api/v1/tavoliCliente', tavolosCliente);
+app.use('/api/v1/tavoliCliente/', tavolosCliente);
 app.use('/api/v1/piattosCliente/', piattosCliente);
 app.use('/api/v1/ristoranti', rist);
+app.use('/api/v1/impostaRistorante', impostaRistorante);
+app.use('/api/v1/impostaTavolo', idTav);
 
 //tutte le API dichiarate sotto questa riga avranno bisogno di un login effettuato con successo per poter essere chiamate
 app.use('', tokenChecker);
 
 app.use('/api/v1/piattosRisto/', piattosRisto);
 app.use('/api/v1/tavoliRisto', tavolosRisto);
-
 
 /**
  * gestisce i casi di errore

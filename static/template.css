@@ -4,6 +4,15 @@
 
 }
 
+body {
+  background-color: #F7FBFF;
+ align-self: center;
+ align-items: center;
+}
+/**************************************************
+   GESTIONE A
+***************************************************/
+
 a:link, a:visited {
   
   background-color: white;
@@ -24,31 +33,32 @@ a:hover, a:active {
   color: white;
 }
 
-a.chiamaCameriere{
-  font-size:25px; 
-  padding: 8px 8px;
-  border-radius: 50px 50px 50px 50px;
-  background-color: white;
-  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2)
+a.tavolo{
+  padding: 0px; 
 }
-a.chiamaCameriere:hover, a.chiamaCameriere:active {
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2)
-}
-a.chiamaCameriere:after, a.chiamaCameriere:active{
-  font-size:25px; 
-  padding: 8px 8px;
-  border-radius: 50px 50px 50px 50px;
-  background-color: #eeeeee;
-  border: 1px solid #dfdfdf;
-  opacity: 1;
-  transition: 0s
 
-}
+/**************************************************
+   GESTIONE LISTE
+***************************************************/
+
 li {
+  list-style-type: none;
+  padding-bottom: 20px;
+}
+
+li.ordine {
   list-style-type: none;
   padding-top: 20px;
 }
+li.tavolo{
+  padding-left: 0%;
+}
 
+
+
+/**************************************************
+   GESTIONE ELEMENTI DI TESTO COME NOME STATO ECC
+***************************************************/
 nome { 
 
   display: block;
@@ -61,8 +71,88 @@ nome {
   text-decoration: none;
 }
 
+prezzo { 
+  display: block;
+  font-size: 14px;
+  margin: 4px 2px;
+  margin-left: 0;
+  margin-right: 0;
+  color: #FF7617; 
+  text-decoration: none;
+  color: #8a8a8a; 
+}
+num { 
+  display: block;
+  font-size: 25px;
+  margin: 4px 2px;
+  margin-left: 0;
+  margin-right: 0;
+  color: #FF7617; 
+  text-decoration: none;
+  color: #8a8a8a; 
+}
+
+frase { 
+  display: block;
+  font-size: 9px;
+  margin: 4px 2px;
+  margin-left: 0;
+  margin-right: 0;
+  color: #FF7617; 
+  text-decoration: none;
+  width: 100px;
+  height: auto;
+}
+
+intro { 
+  display: block;
+  font-size: 12px;
+  margin: 4px 2px;
+  margin-left: 0;
+  margin-right: 0;
+  color: gray; 
+  text-decoration: none;
+  width: 600px;
+  height: auto;
+  text-align: center;
+}
+tavoliIntro{
+  display: block;
+  font-size: 16px;
+  margin: 4px 2px;
+  margin-left: 0;
+  margin-right: 0;
+  color: gray; 
+  text-decoration: none;
+  width: 600px;
+  height: auto;
+  text-align: center;
+  font-weight: bold;
+}
+ul.tavoliIntro{
+  display: block;
+  font-size: 16px;
+  /*margin: 4px 2px;*/
+  margin-left: 0;
+  margin-right: 0;
+  color: gray; 
+  text-decoration: none;
+  width: 600px;
+  height: auto;
+  text-align: center;
+  font-weight: bold;
+  padding-left: 0%;
+}
+
+
+
+/*
+STATI DEI PIATTI
+
+*/
+
 stato { 
-  padding-top: 15px; 
+  padding-top: 0 px; 
   padding-left: 50px;
   display: block;
   font-size: 20px;
@@ -70,19 +160,27 @@ stato {
   font-weight: bold;
   color: rgb(67, 44, 0);
   text-decoration: none;
-  
 }
 
 stato.inPreparazione{
- 
   color: #F8CF00;
+  padding-bottom: 0px;
 }
 stato.inConsegna{
   color: #FF9300; 
+  padding-bottom: 0px;
 }
 stato.consegnato{
-  color: #00DE00; 
+  color: #00DE00;
+  
 }
+
+
+
+
+/**************************************************
+   GESTIONE BOTTONI
+***************************************************/
 
 button {
 
@@ -113,30 +211,54 @@ button:hover {
   color: white;
 }
 
-prezzo { 
-  display: block;
-  font-size: 14 px;
-  margin: 4px 2px;
-  margin-left: 0;
-  margin-right: 0;
-  color: #FF7617; 
-  text-decoration: none;
-  color: #8a8a8a; 
+
+
+button.chiamaCameriere{
+  font-size:25px; 
+  padding: 8px 8px;
+  border-radius: 50px 50px 50px 50px;
+  background-color: white;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2)
 }
+button.chiamaCameriere:hover, button.chiamaCameriere:active {
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2)
+}
+button.chiamaCameriere:after, button.chiamaCameriere:active{
+  font-size:25px; 
+  padding: 8px 8px;
+  border-radius: 50px 50px 50px 50px;
+  background-color: #eeeeee;
+  border: 1px solid #dfdfdf;
+  opacity: 1;
+  transition: 0s
+
+}
+
+button.chiamaCameriere:disabled,
+button[disabled]{
+  border: 1px solid #999999;
+  background-color: #cccccc;
+  color: #666666;
+  opacity: 0.5;
+}
+
+
+
+/**************************************************
+   GESTIONE DIV
+***************************************************/
 
 div.sticky {
   position: -webkit-sticky; /* Safari */
   position: sticky;
   top: 0;
- 
-}
-
-
-body {
   background-color: #F7FBFF;
- align-self: center;
- align-items: center;
+  opacity: 1;
+
 }
+
+
+
 
 div.piatto{
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
@@ -144,61 +266,162 @@ div.piatto{
   border-radius: 10px 10px 10px 10px;
   width: 600px;
   height: 180px;
+  
 }
-
-div.piatto.consegnato{
+div.piattoOrdine{
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-  text-align: center;
-  background-color: rgba(215, 215, 215, 0.646);
-  border: 2px solid #00DE00; 
+  background-color: white;
   border-radius: 10px 10px 10px 10px;
-
+  width: 600px;
+  height: 90px;
+  
 }
 
+div.piattoConsegnato{
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  background-color: white;
+  border-radius: 10px 10px 10px 10px;
+  width: 600px;
+  height: 90px;
+  opacity: 0.5;
+}
+
+
+/**************************************************
+   GESTIONE IMG
+***************************************************/
 img.piatto{
   width: 100px; 
   height: 100px;
   border-radius: 10px 10px 10px 10px;
 }
 
+img.piattoMenu{
+  width: 170px; 
+  height: 170px;
+  border-radius: 10px 10px 10px 10px;
+  padding: 4px; 
+}
+img.piattoOrdine{
+  width: 85px; 
+  height: 85px;
+  border-radius: 10px 10px 10px 10px;
+  padding: 2px; 
+}
+
+
+/**************************************************
+   GESTIONE TABELLE
+***************************************************/
 table.piatti{
   width: 100%;
   height: 100px;
   border-collapse: collapse;
- 
 }
 
+table.bottoni{
+  width: 100%;
+  height: 20px;
+  border-collapse: collapse;
+}
+
+
+
 td.destra{
-  width: 65%
+  width: 70%;
+  padding-left: 20px; 
+  padding-right: 20px;
 }
 td.sinistra{
   margin:0%; 
-  width: 35%;
+  width: 20%;
+  text-align: center;
+
+}
+td.valore{
+  width: 10%;
   text-align: center;
 }
 
 table.barraMenu{
   padding-left: 90px;
 }
+
+
+
 img.logo{
-  padding-bottom: 20px;
-  padding-left: 30px;
+ height: 100;
+ width: 100;
 }
 
 h2.luogo{
-  padding-left: 40px; 
+  padding-left: 43px; 
+  padding-top: 2px; 
   color:#FF7617;
-  font-weight: normal;
+  font-weight: bold;
+  
 
 }
 
-div.stato.inPreparazione{
-  font-size:25px; 
-  padding: 8px 8px;
-  border-radius: 50px 50px 50px 50px;
-  background-color: white;
+
+table.piattiOrdine{
+  width: 100%;
+  height: 90px;
+  border-collapse: collapse;
 }
 
-button.aggiungi{
+
+
+td.destraOrdine{
+  width: 90%;
+  padding-left: 30px; 
+  padding-right: 30px;
+}
+td.sinistraOrdine{
+  margin:0%; 
+  width: 10%;
+  text-align: center;
+
+}
+
+
+
+ul.Ordine{
+  padding-top: 0px; 
+}
+
+td.destraHeader{
+  width: 30%;
+}
+td.sinistraHeader{
+  margin:0%; 
+  width: 30%;
+  padding-left: 30px;
+
+}
+td.centroHeader{
+  margin:0%; 
+  width: 40%;
  
+}
+
+table.header{
+  margin:0%; 
+  width: 800px;
+  height: 100px;
+  border-collapse: collapse;
+ 
+}
+
+tvNum{
+  background-color: white;
+  color: black;
+  padding: 10px 10px;
+  font-size: 10px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  text-decoration: none;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2);
+  border-radius: 10px 10px 10px 10px;
 }

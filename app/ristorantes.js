@@ -20,7 +20,16 @@ router.post('', async (req, res) => {
         res.status(400).json({ error: 'The field "mail" must be a non-empty string, in mail format' });
         return;
     }
-    
+
+    let ristoranti= await Ristorante.find({});
+    ristoranti.map((r) => {
+        if(r.mail==ristorante.mail){
+            console.log('|||||||||| Mail Error |||||||||');
+            res.status(400).json({ error: 'Esiste già un ristorante con questa mail' });
+            return;
+        }
+    })
+
 	ristorante = await ristorante.save();
     
     let ristoId = ristorante.id;
@@ -49,4 +58,5 @@ function stringToHash(string) {
       
     return hash;
 }
+
 module.exports = router;

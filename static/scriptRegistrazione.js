@@ -32,15 +32,35 @@
         console.log(resp);
         
 
-         if(resp.status=='400'){
+         if(resp.status===400){
              document.getElementById('error').innerHTML=resp.json().error;
              return false;
          }
          else{
-             window.open('index.html');
-             return true;
+            fetch('../api/v1/auth', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify( { mail: email, password: stringToHash(password) } ), //salviamo la password in hash per maggiore sicurezza
+            })
+            window.open('index.html', '_self');
+            return true;
          }
      })
      .catch( error => console.error(error) );
  
  };
+
+ function stringToHash(string) {
+                  
+    var hash = 0;
+      
+    if (string.length == 0) return hash;
+      
+    for (i = 0; i < string.length; i++) {
+        char = string.charCodeAt(i);
+        hash = ((hash << 5) - hash) + char;
+        hash = hash & hash;
+    }
+      
+    return hash;
+}

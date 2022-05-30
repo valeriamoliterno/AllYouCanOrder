@@ -14,6 +14,7 @@ const carrelli= require('./svuotaCarrello');
 const carrell= require('./carrell'); 
 const ordine = require('./ordine');
 const tavol = require ('./tavolos');
+const rist = require ('./ristorantes');
 /**
  * Servono per poter leggere il body delle response
  */
@@ -38,6 +39,7 @@ app.use('/api/v1/svuotaCarrello',carrelli);
 app.use('/api/v1/mostraCarrello', carrell);
 app.use('/api/v1/mostraOrdine', ordine);
 app.use('/api/v1/tavoli', tavol);
+app.use('/api/v1/ristoranti', rist);
 
 /**
  * gestisce i casi di errore

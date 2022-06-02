@@ -30,8 +30,13 @@
          console.log('Token: '+ loggedUser.token);
          
      })
-     .then(()=>mostraMenu())//dopo aver preso i dati dell'utente, chiama la funzione per stampare il menu sullo schermo
-     .catch( error => console.error(error) );
+    .then(()=>{
+         function delay(time) {
+            return new Promise(resolve => setTimeout(resolve, time));
+        }
+        delay(500).then(() => mostraMenu())
+    })//dopo aver preso i dati dell'utente, chiama la funzione per stampare il menu sullo schermo
+    .catch( error => console.error(error) );
 }
 
 /**

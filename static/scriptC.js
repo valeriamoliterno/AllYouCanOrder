@@ -39,7 +39,9 @@ var loggedUser={}
          console.log('Token: '+ loggedUser.token);
          
      })
-     .then(()=>loadOrders()) //dopo aver preso i dati dell'utente, chiama la funzione per stampare i tavoli e gli ordini sullo schermo
+     .then(()=>{
+       const interval = setInterval(loadOrders(), 30000);
+      }) //dopo aver preso i dati dell'utente, chiama la funzione per stampare i tavoli e gli ordini sullo schermo
      .catch( error => console.error(error) );
 }
 
@@ -69,10 +71,13 @@ function loadOrders(){
       return data;
     }
     return data.map(function(tavolo) { 
-      html=''; // resetto il buffer per aggiungere i piatti per ogni tavolo
+      chiamato=''; 
       console.log(tavolo.id);
-      tableList.innerHTML=tableList.innerHTML + '<div class="table box"><h2>'+tavolo.nome+'</h2><ul class="platelist" id="pl:'+tavolo.id+'"></ul></div>';
-      var plateList = document.getElementById("pl:"+tavolo.id);// Trovo la parte dove verranno mostrati i piatti del tavolo attuale
+      if(stato=='in consegna' && tavolo.chiamato){
+        chiamato='<button id="rispondiChiamata" class="rispondiChiamata" onclick="rispondiChiamata(this)">&#128276</button>';
+      }
+      tableList.innerHTML=tableList.innerHTML + '<div class="table box" id="t:'+tavolo.id+'"><h2>'+tavolo.nome+'</h2>'+chiamato+'<ul class="platelist"></ul></div>';
+      var plateList = document.getElementById("t:"+tavolo.id).lastChild;// Trovo la parte dove verranno mostrati i piatti del tavolo attuale
       
     
       fetch('../api/v1/piattosRisto/ordineTavolo/'+tavolo.id, {
@@ -87,10 +92,11 @@ function loadOrders(){
         console.log(datap);
         datap.map(function(piatto){
           if(piatto.stato.localeCompare(stato) == 0){ // se il piatto è nello stato interessato alla pagina viene mostrato
-            html=html+'<li class="plate clearfix"><img src="'+piatto.foto+'"><h4>'+piatto.nome+'</h4><a onclick="changeState(this)" id="'+piatto.id+'" class="button">'+btnT+'</a></li>';
+            
+            var plateList = document.getElementById("t:"+tavolo.id).lastChild;// Trovo la parte dove verranno mostrati i piatti del tavolo attuale
+            plateList.innerHTML=plateList.innerHTML+'<li class="plate clearfix"><img src="'+piatto.foto+'"><h4>'+piatto.nome+'</h4><a onclick="changeState(this)" id="'+piatto.id+'" class="button">'+btnT+'</a></li>';
           }
         })
-        plateList.innerHTML=html; // Stampo i piatti
         return;
       })
       .catch(error => console.error(error));
@@ -107,11 +113,11 @@ function loadOrders(){
  */
 function changeState(btn){
   const idP=btn.id; // Trovo l'id del piatto nell'id del bottone
-  const idT=btn.parentElement.parentElement.id.substring(3); // Trovo l'id del Tavolo dell'id del elemento UL che è il secondo parent del bottone
+  const idT=btn.parentElement.parentElement.parentElement.id.substring(2); // Trovo l'id del Tavolo dell'id del elemento UL che è il secondo parent del bottone
 
   fetch('../api/v1/piattosRisto/cambiaStato',{ // Effettuo una chiamata API per cambiare lo stato del piatto
     method: 'POST',
-    headers:{ 'Content-Type': 'application/json' , 'x-access-token': loggedUser.token}, //passiamo il token al metodo
+    headers:{ 'Content-Type': 'application/json' , 'x-access-token': loggedUser.token}, // passiamo il token al metodo
     body: JSON.stringify({ // passo bel body 
       idP: idP, // id Piatto
       idT: idT, // id Tavolo
@@ -123,4 +129,25 @@ function changeState(btn){
     return;
   })
   .catch( error => console.error(error) );
+}
+
+function rispondiChiamata(btn){
+  let idT=btn.parentElement.id.substring(2);
+  console.log('----------- rispondi chiamata id tavolo --------------');
+  console.log(idT);
+  fetch('../api/v1/tavoliRisto/rispondiChiamata', {
+      method: 'POST', 
+      headers: { 'Content-Type': 'application/json' , 'x-access-token': loggedUser.token },
+     body: JSON.stringify({
+       id: idT
+     })
+  })
+  .then((resp) => {
+      console.log(resp);
+      loadOrders();
+      return;
+      
+  })
+  .catch( error => console.error(error) ); 
+ 
 }

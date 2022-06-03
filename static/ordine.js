@@ -26,10 +26,14 @@
 
   })
   chiama.onclick =  ()=> chiamaCameriere(chiama);
+  var costo= document.getElementById('costo');
+  costo.style="margin: 0; margin-left: 50px; padding: 10px; width: auto; color: #FE554A;";
+  costo.classList="box";
+  var cost = 0;
      fetch('../api/v1/tavoliCliente/ordine')
      .then((resp) => resp.json()) 
      .then(function(data) {
-     var ordine= data.ordine;       
+     var ordine= data.ordine;
      const tvNum= document.getElementById('tvNum');
      tvNum.textContent=data.nome;
      
@@ -93,6 +97,8 @@
               piattiConsegnati.appendChild(li);
             }
              
+            cost=cost+piatto.prezzo;
+            costo.innerHTML="Il totale dell'ordine è : "+cost+" €";
       });  
       
      

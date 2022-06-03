@@ -54,16 +54,23 @@ body {
     box-shadow: 0px 20px 20px #aaaaaa18 ;
   }
 
+  .table{
+    padding: 0;
+  }
+
+
   ul.platelist {
     list-style-type: none;
     margin: 0;
-    padding: 0;
+    padding: 20px;
+    overflow: scroll;
   }
 
   .plate{
     box-shadow: 0px 8px 15px #58585873 ;
     padding: 15px 10px;
     border-radius: 20px;
+    margin: 15px 0;
   }
 
   .plate img{
@@ -116,4 +123,20 @@ body {
     box-sizing: border-box;
   }
   
+  button.rispondiChiamata{
+    background-color: white; 
+    color: #FF7617; 
+    border: 2px solid #FF7617;
+    font-size:25px; 
+    padding: 8px 8px;
+    border-radius: 50px;
+    background-color: white;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2)
+  }
+  button.rispondiChiamata:hover {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2)
+  }
   
+  button.rispondiChiamata:active{
+    background-color: #FF7617;
+  }

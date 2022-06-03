@@ -11,6 +11,8 @@ const jwt = require('jsonwebtoken');
  */
 router.get('', async(req,res)=> { 
 	console.log('get Token: '+ loggedUser.token)
+	console.log("*************************************"+loggedUser.self)
+	console.log("*************************************"+loggedUser.id)
     res.status(200).json({
 		self: '/api/v1/token/',
 		token: loggedUser.token,
@@ -32,17 +34,18 @@ router.post('', async function(req, res) {
 		mail: req.body.mail
 	}).exec();
 	//stampa di controllo
-	console.log("Ristorante: " + ristorante)
+	//console.log("Ristorante: " + ristorante)
 
 	// caso in cui il ristorante non esiste nel database
 	if (ristorante===null) {
-		//console.log("notRistorante: ------------------------------------------------")
-		res.json({ successo: false, messaggio: "L'email che hai inserito non è corretta" });
+		res.status(404).json({ successo: false, messaggio: "L'email che hai inserito non è corretta" }); //404 perchè il ristorane cercato non esiste
 	} else { //caso in cui la mail inserita è presente nel database
 
 		//controllo che la password sia corretta
 		if (ristorante.passwordHash != req.body.password) { //se la password è errata, manda un messaggio di errore
-		res.json({ successo: false, messaggio: 'La password che hai inserito non è corretta' });
+
+		//200 nonostante il fallimento del login perchè la richiesta è andata a buon fine anche se le credenziali erano errate
+		res.status(200).json({ successo: false, messaggio: 'La password che hai inserito non è corretta' }); 
 		} else { //se la password è corretta  genera un token
 			var payload = {
 			mail: ristorante.mail,
@@ -51,17 +54,16 @@ router.post('', async function(req, res) {
 			var options = {
 			expiresIn: 86400 // scade dopo 24 ore
 			}
-			var token = jwt.sign(payload, "process.env.CODIFICA", options);
+			var token = jwt.sign(payload, "ChiaveDiCodifica", options);
 
 			//salvo nella variabile locale logggedUser i dati associati al ristorante
 			loggedUser.mail= ristorante.mail;
 			loggedUser.token = token;
 			loggedUser.id = ristorante._id;
-        	loggedUser.self = "api/v1/auth" + ristorante._id
+        	loggedUser.self = "api/v1/auth/" + ristorante._id
 
 			//stampe di controllo del token
-			console.log('Dalla post: '+token)
-			console.log('Dalla post loggedUser token: '+loggedUser.token)
+			console.log('Dalla post auth: '+token)
 
 			res.location('/api/v1/auth/' + ristorante._id).status(201).json({
 				successo: true,

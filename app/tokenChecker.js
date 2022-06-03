@@ -14,7 +14,7 @@ const tokenChecker = function(req, res, next) {
 		});
 	} else {
 		
-		jwt.verify(token, "process.env.CODIFICA", function(err, decoded) {			
+		jwt.verify(token, "ChiaveDiCodifica", function(err, decoded) {			
 			if (err) { // se il token è presente ma errato, mandiamo uno stato 403 con messaggio di errore
 				return res.status(403).send({
 					successo: false,

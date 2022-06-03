@@ -7,8 +7,8 @@ const app = express();
 /**
  * Importa il file piattos.js, in cui sono caricare le api "piattos"
  */
-global.ilMioRistoranteID= '628a612bbe71304869cfb0fc'
-global.ilMioTavoloID= '628a612bbe71304869cfb0fb'
+global.ilMioRistoranteID= '6295011922da57ae0fee2718'
+global.ilMioTavoloID= '62851b2a52eb0521667e79db'
 
 //variabile globale in cui salviamo i dati dell'utente che ha fatto login con successo
 global.loggedUser = {

@@ -18,6 +18,7 @@ a:link, a:visited {
   background-color: white;
   color: black;
   border: 2px solid #FF7617;
+  border-radius: 20px;
   padding: 10px 40px;
   font-size: 20px;
   text-align: center;
@@ -27,10 +28,15 @@ a:link, a:visited {
   box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2)
 }
 
-a:hover, a:active {
-  
-  background-color: #FF7617;
+a.active{
+  background-image: linear-gradient(to right, #F9881F , #FF774C);
   color: white;
+  border-color: transparent;
+}
+a:hover, a:active {
+  background-color: #555;
+  color: white;
+  border-color: transparent;
 }
 
 a.tavolo{
@@ -59,6 +65,18 @@ li.tavolo{
 /**************************************************
    GESTIONE ELEMENTI DI TESTO COME NOME STATO ECC
 ***************************************************/
+.box {
+  display: inline-block;
+  color: rgb(0, 0, 0);
+  width: 30%;
+  text-align: center;
+  margin: 20px;
+  padding: 20px;
+  border-radius: 20px;
+  background-color: white;
+  box-shadow: 0px 20px 20px #aaaaaa18 ;
+}
+
 nome { 
 
   display: block;
@@ -202,6 +220,7 @@ button {
   background-color: white; 
   color: #FF7617; 
   border: 2px solid #FF7617;
+  border-radius: 20px;
   font-family: Arial, Helvetica, sans-serif;
 
 }

@@ -8,10 +8,14 @@ var nomeTavolo = 'tav1'; //indica il tavolo a cui modifico tutto
     let li1 = document.createElement('li');
     let span1 = document.createElement('span');
     let inviaOrdine = document.createElement('button');
+    let costo = document.createElement('h3');
     inviaOrdine.type = 'button'
     inviaOrdine.value = 'inviaOrd'
     inviaOrdine.onclick = () => daMenuAOrdine();
-    inviaOrdine.textContent = 'INVIA ORDINE ALLA CUCINA';   
+    inviaOrdine.textContent = 'INVIA ORDINE ALLA CUCINA'; 
+    inviaOrdine.style="display: inline-block";
+    costo.style="margin: 0; margin-left: 10px; padding: 10px; width: auto; color: #FE554A;";
+    costo.classList="box";
     const chiama= document.getElementById('chiamaCameriere');
     var x = document.getElementById("fraseCameriere");
     fetch('../api/v1/tavoliCliente/ilMioTavolo') //perndo i piatti dal db
@@ -30,8 +34,10 @@ var nomeTavolo = 'tav1'; //indica il tavolo a cui modifico tutto
 
     })
     span1.append(inviaOrdine);
+    span1.append(costo);
     li1.appendChild(span1);
     ul.appendChild(li1);
+    var cost=0;
     fetch('../api/v1/tavoliCliente/mostraCarrello')
     .then((resp) => resp.json()) // Transform the data into json
     .then(function(data) { // Here you get the data to modify as you please
@@ -105,6 +111,8 @@ var nomeTavolo = 'tav1'; //indica il tavolo a cui modifico tutto
          li.appendChild(plate);
          ul.appendChild(li);
  
+         cost=cost+piatto.prezzo;
+         costo.innerHTML="Il totale del carrello è : "+cost+" €";
      });        
     })
     .catch( error => console.error(error) );// If there is any error you will catch them here

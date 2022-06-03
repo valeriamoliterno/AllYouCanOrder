@@ -13,7 +13,8 @@ router.get('', async (req, res) => {
         return { // Ritorna l'id e il nome per ogni tavolo
             self: '/api/v1/tavoliRisto/'+ tavolo._id,
             id: tavolo._id,
-            nome: tavolo.nome
+            nome: tavolo.nome,
+            chiamato: tavolo.chiamato
         };
     }))
     .then(function(tavol) {
@@ -46,6 +47,23 @@ router.post('', async (req, res) => {
     let tavoloId = tavolo.nome;
     console.log('Tavolo salvato');
     res.location("/api/v1/tavoliRisto/" + tavoloId).status(201).send();
+});
+ /*************************************************************
+ * Questa post serve per settare tavolo.chiamato=false se il cameriere 
+ * preme il pulsante "rispondiChiamata"
+ * presente nel file scriptC.js
+ *************************************************************/ 
+
+router.post('/rispondiChiamata', async (req, res) => {
+    console.log('------------- risponsi chiamata -----------');
+    console.log('//////////// id Tavolo /////////');
+    console.log(req.body.id);
+    let tavolo= await Tavolo.findOne({_id: req.body.id}).exec();
+    console.log('//////////// Tavolo /////////');
+    console.log(tavolo);
+    tavolo.chiamato= false; 
+    await tavolo.save();
+   res.location("/api/v1/tavoliRisto/rispondiChiamata/" ).status(201).send();
 });
 
 

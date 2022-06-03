@@ -21,6 +21,13 @@ const Tavolo = require('./models/tavolo');
 router.get('', async(req,res)=> {
     let ristorantes = await Ristorante.findOne({ _id: ilMioRistoranteID}); 
     let menu = await ristorantes.menu; 
+    
+     //Controllo che esista il ristorante
+     if(!ristorantes){
+        res.status(404).json(ristorantes);  
+        console.log("ristorante non trovato"); 
+        return; 
+    }
     menu.forEach(piatto => {
         return{
             self: '/api/v1/piattosCliente/'+ piatto.id,

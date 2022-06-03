@@ -33,6 +33,13 @@ router.get('/svuotaCarrello', async(req,res)=> {
  *************************************************************/
 router.delete('/svuotaCarrello', async (req, res) => { 
     let ristorante = await Ristorante.findOne({_id: ilMioRistoranteID}).exec(); 
+   
+     //Controllo che esista il ristorante
+     if(!ristorante){
+        res.status(404).json(ristorante);  
+        console.log("ristorante non trovato"); 
+        return; 
+    }
   let tavolo= Tavolo.update({_id:ilMioTavoloID}, { $set: { carrello: [] }}, function(err, affected){ //cerco il tavolo in questione ed elimino tutti gli elementi in carrello 
         console.log('affected: ', affected);
     });
@@ -48,6 +55,13 @@ router.delete('/svuotaCarrello', async (req, res) => {
 
 router.get('/ordine', async(req,res)=> {  
         let tavolo= await Tavolo.findOne({_id: ilMioTavoloID}).exec(); //cercoil tavolo che mi serve
+        //controllo che esista il tavolo
+        if(!tavolo){
+            res.status(404).json(tavolo);  
+            console.log("tavolo non trovato"); 
+            return; 
+        }
+        
         tavolo.ordine.forEach(element => {
         return{
             self: '/api/v1/tavoliCliente/ordine/'+ element._id, 
@@ -65,6 +79,18 @@ router.get('/ordine', async(req,res)=> {
 router.post('/ordine', async (req, res) => {
         let ristorante = await Ristorante.findOne({_id: ilMioRistoranteID}).exec(); //per il ristorante che mi serve
         let tavolo= await Tavolo.findOne({_id: ilMioTavoloID}).exec(); //per il tavolo che mi serve
+        //controllo che esista il tavolo
+        if(!tavolo){
+            res.status(404).json(tavolo);  
+            console.log("tavolo non trovato"); 
+            return; 
+        }
+         //Controllo che esista il ristorante
+         if(!ristorante){
+            res.status(404).json(ristorante);  
+            console.log("ristorante non trovato"); 
+            return; 
+        }
         //salvo nella variabile piatto gli elementi  passati
         let piatto = new Piatto({
             nome: req.body.nome,
@@ -88,6 +114,12 @@ router.post('/ordine', async (req, res) => {
 
     router.get('/mostraCarrello', async(req,res)=> {  
         let tavolo= await Tavolo.findOne({_id: ilMioTavoloID}).exec();
+        //Controllo che esista il tavolo
+        if(!tavolo){
+            res.status(404).json(tavolo);  
+            console.log("tavolo non trovato"); 
+            return; 
+        }
         console.log("get mostraCarrello: "+ilMioTavoloID);
         tavolo.carrello.forEach(element => {
         return{
@@ -106,6 +138,18 @@ router.post('/ordine', async (req, res) => {
     router.post('/mostraCarrello/', async (req, res) => { //prima era post
         let ristorante = await Ristorante.findOne({_id: ilMioRistoranteID}).exec(); //seleziono il mio ristorante
         let tavolo= await Tavolo.findOne({_id: ilMioTavoloID}).exec(); //seleziono il tavolo 
+         //Controllo che esista il tavolo
+         if(!tavolo){
+            res.status(404).json(tavolo);  
+            console.log("tavolo non trovato"); 
+            return; 
+        }
+         //Controllo che esista il ristorante
+         if(!ristorante){
+            res.status(404).json(ristorante);  
+            console.log("ristorante non trovato"); 
+            return; 
+        }
         //salvo nella variabile piatto gli elementi 
         let piatto = new Piatto({
             nome: req.body.nome,
@@ -126,7 +170,13 @@ router.post('/ordine', async (req, res) => {
  *************************************************************/ 
     router.delete('/mostraCarrello', async (req, res) => {
      //   let ristorante = await Ristorante.findOne({_id: ilMioRistoranteID}).exec(); 
-        let tavolo= await Tavolo.findOne({_id: ilMioTavoloID}).exec();    
+        let tavolo= await Tavolo.findOne({_id: ilMioTavoloID}).exec();  
+        if(!tavolo){
+            res.status(404).json(tavolo);  
+            console.log("tavolo non trovato"); 
+            return; 
+        }
+        
         tavolo.carrello.pull(req.body.id); //elimino il piatto il cui id è passatto
         await tavolo.save();  
      //   await ristorante.save(); 
@@ -140,6 +190,12 @@ router.post('/ordine', async (req, res) => {
 
     router.get('/ilMioTavolo', async(req,res)=> {  
         let tavolo= await Tavolo.findOne({_id: ilMioTavoloID}).exec();
+        if(!tavolo){
+            res.status(404).json(tavolo);  
+            console.log("tavolo non trovato"); 
+            return; 
+        }
+       
       
         self: '/api/v1/tavoliCliente/ilMioTavolo/',
             

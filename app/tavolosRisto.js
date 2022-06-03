@@ -32,7 +32,7 @@ router.delete('/eliminaTavolo', async (req, res) => {
     res.location("/api/v1/tavoliRisto/eliminaTavolo/" + id).status(204).send();
 });
 
-router.post('', async (req, res) => {
+router.post('/inserisciTavolo', async (req, res) => {
     let ristorante = await Ristorante.findOne({_id: ilMioRistoranteID});
   let tavolo = new Tavolo({
         nome: req.body.nome,

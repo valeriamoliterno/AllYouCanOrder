@@ -46,10 +46,7 @@ function listaTavoli() {
            
             let elimina = document.createElement('button');
             elimina.onclick = ()=>eliminaTavolo(tavolo.id);
-            /*function elimina(){ 
-             let TavoloId = tavolo._id; 
-                eliminaTavolo(tavolo._id);
-            }*/
+            
             elimina.textContent = 'Elimina'; 
             
             span.appendChild(nome);    
@@ -65,7 +62,7 @@ function listaTavoli() {
 
 //questa funzione mi consente di eliminare un tavolo preseente nella lista
 async function eliminaTavolo(tavoloId){
-    console.log("elimino tavolo"+ tavoloId)
+    console.log("elimino tavolo "+ tavoloId)
     var uriAPI = '../api/v1/tavoliRisto/eliminaTavolo'
     fetch(uriAPI, {
         method: 'DELETE',

@@ -6,7 +6,7 @@ const Piatto = require('./models/piatto');
 
 
 router.get('', async (req, res) => {
-    let ristorante = await Ristorante.findOne({_id: ilMioRistoranteID});
+    let ristorante = await Ristorante.findOne({mail:loggedUser.mail});
     let tavoli = await ristorante.tavoli;
    await Promise.all(tavoli.map( async (t) => {
         var tavolo = await Tavolo.findOne({_id: t._id});
@@ -24,7 +24,7 @@ router.get('', async (req, res) => {
 
 router.delete('/eliminaTavolo', async (req, res) => {
     const  id  = req.body.id;
-    let ristorante = await Ristorante.findOne({_id: ilMioRistoranteID}).exec(); 
+    let ristorante = await Ristorante.findOne({mail:loggedUser.mail}).exec(); 
     let tavolo= await Tavolo.findById(req.body.id).exec(); 
    
     ristorante.tavoli.pull(req.body.id); 
@@ -35,7 +35,7 @@ router.delete('/eliminaTavolo', async (req, res) => {
 });
 
 router.post('', async (req, res) => {
-    let ristorante = await Ristorante.findOne({_id: ilMioRistoranteID});
+    let ristorante = await Ristorante.findOne({mail:loggedUser.mail});
   let tavolo = new Tavolo({
         nome: req.body.nome,
         chiamato:false

@@ -83,18 +83,27 @@ router.post('/cambiaStato', async (req, res) =>{
     let idP= req.body.idP; // Recupero dal body l'id del Piatto
     let idT=req.body.idT; // Recupero dal body l'id del Tavolo
     let stato = req.body.stato; // Recupero dal body lo stato in cui cambiare
-    console.log("----- idP: "+idP+" ----- idT: "+idT+"------ Stato: "+stato+"---------------");
+    console.log("!!!!!!!!!!!!!!!!!!ID P= "+idP+" !!!!!!!!!!!!!")
+    console.log("!!!!!!!!!!!!!!!!!!ID T= "+idT+" !!!!!!!!!!!!!")
+    console.log("!!!!!!!!!!!!!!!!!!stato= "+stato+" !!!!!!!!!!!!!")
+  //  console.log("----- idP: "+idP+" ----- idT: "+idT+"------ Stato: "+stato+"---------------");
     let tavolo = await Tavolo.findOne({_id: idT}); // Trovo il tavolo 
-    console.log("----- Tavolo --------------------------");
-    console.log(tavolo);
+    if(!tavolo){
+        res.status(405).send()
+        //stampa di controllo
+        console.log('tavolo non trovato')
+        return; 
+    }
+   // console.log("----- Tavolo --------------------------");
+  //  console.log(tavolo);
     let ordine = await tavolo.ordine; // Trovo l'ordine
-    console.log("----- Ordine --------------------------");
-    console.log(ordine);
+   // console.log("----- Ordine --------------------------");
+    //console.log(ordine);
     ordine = ordine.map( (piatto) => {
-        console.log("----- Piatto --------------------------");
-        console.log(piatto);
+       // console.log("----- Piatto --------------------------");
+      //  console.log(piatto);
         if(idP.localeCompare(piatto._id) === 0){ // Se l'id del piatto è uguale
-            console.log("||||||||||||||||  SI  ||||||||||||||||||||");
+            //console.log("||||||||||||||||  SI  ||||||||||||||||||||");
             piatto.stato=stato; // Cambio lo stato
         }
     });
@@ -107,27 +116,29 @@ router.post('/cambiaStato', async (req, res) =>{
  * Questo metodo DELETE elimina dal databse il piatto con id passato
  * nel body della response
  */
-router.delete('/eliminaPiatto', async (req, res) => {
+router.delete('/eliminaPiatto/:id', async (req, res) => {
+    let idP=req.body.id;
     let ristorante = await Ristorante.findOne({mail: loggedUser.mail}).exec(); 
-    let piatto= await Piatto.findById(req.body.id).exec(); 
-    if(!piatto){
-        res.status(404).send()
-        //stampa di controllo
-        console.log('piatto non trovato')
-        return; 
-    }
+    let piatto= await Piatto.findById(req.params.id); 
+    console.log("!!!!!!!!!!!!!!!!!!req.params.id= "+req.params.id+" !!!!!!!!!!!!!")
     if(!ristorante){
         res.status(404).send()
         //stampa di controllo
         console.log('Ristorante non trovato')
         return; 
     }
-    ristorante.menu.pull(req.body.id); 
+    if(!piatto){
+        res.status(404).send()
+        //stampa di controllo
+        console.log('piatto non trovato')
+        return; 
+    }
+    ristorante.menu.pull(req.params.id); 
     await Piatto.deleteOne(piatto).exec()
     await ristorante.save(); 
     //stampa di controllo correttezza dell'operazione
     console.log('CONTROLLO: piatto eliminato : ' + piatto.nome);
-    res.location('/api/v1/piattosRisto/eliminaPiatto').status(204).send();
+    res.location('/api/v1/piattosRisto/eliminaPiatto/'+req.params.id).status(204).send();
 
 });
 

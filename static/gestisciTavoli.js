@@ -104,11 +104,10 @@ function listaTavoli() {
 //questa funzione mi consente di eliminare un tavolo preseente nella lista
 async function eliminaTavolo(tavoloId){
     console.log("elimino tavolo"+ tavoloId)
-    var uriAPI = '../api/v1/tavoliRisto/eliminaTavolo'
+    var uriAPI = '../api/v1/tavoliRisto/eliminaTavolo/' + tavoloId
     fetch(uriAPI, {
         method: 'DELETE',
         headers: { 'Content-Type': 'application/json', 'x-access-token': loggedUser.token}, //passiamo il token al metodo },
-        body: JSON.stringify( { id : tavoloId } ),
     })
     .then((resp) => {
         console.log(resp);

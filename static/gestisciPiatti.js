@@ -135,11 +135,10 @@ async function mostraMenu() {
 async function deletePiatto(idPiatto){
     console.log("deletePiatto ID")
     console.log(idPiatto); 
-    var uriAPI = '../api/v1/piattosRisto/eliminaPiatto'
+    var uriAPI = '../api/v1/piattosRisto/eliminaPiatto/' + idPiatto
     fetch(uriAPI, {
         method: 'DELETE',
         headers: { 'Content-Type': 'application/json', 'x-access-token': loggedUser.token},//passiamo il token al metodo
-        body: JSON.stringify( { id : idPiatto } ),
     })
     .then((resp) => {
         //stampa di controllo

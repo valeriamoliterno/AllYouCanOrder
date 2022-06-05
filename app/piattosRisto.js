@@ -117,7 +117,6 @@ router.post('/cambiaStato', async (req, res) =>{
  * nel body della response
  */
 router.delete('/eliminaPiatto/:id', async (req, res) => {
-    let idP=req.body.id;
     let ristorante = await Ristorante.findOne({mail: loggedUser.mail}).exec(); 
     let piatto= await Piatto.findById(req.params.id); 
     console.log("!!!!!!!!!!!!!!!!!!req.params.id= "+req.params.id+" !!!!!!!!!!!!!")

@@ -22,12 +22,12 @@ router.get('', async (req, res) => {
     })
 });
 
-router.delete('/eliminaTavolo', async (req, res) => {
-    const  id  = req.body.id;
+router.delete('/eliminaTavolo/:id', async (req, res) => {
+    const  id  = req.params.id;
     let ristorante = await Ristorante.findOne({mail:loggedUser.mail}).exec(); 
-    let tavolo= await Tavolo.findById(req.body.id).exec(); 
+    let tavolo= await Tavolo.findById(req.params.id).exec(); 
    
-    ristorante.tavoli.pull(req.body.id); 
+    ristorante.tavoli.pull(req.params.id); 
     await Tavolo.deleteOne(tavolo).exec()
     await ristorante.save(); 
 

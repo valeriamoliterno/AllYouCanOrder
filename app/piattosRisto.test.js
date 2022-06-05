@@ -131,6 +131,7 @@ describe('GET /api/v1/piattosRisto', () => {
     //expect.assertions(1);
    const response= await request(app)
     .get('/api/v1/piattosRisto')
+    .send({ mailUser: 'vivaLaPasta@carbonara.com'})
     .set('x-access-token', token)
     .set('Accept', 'application/json')
     expect(response.statusCode).toBe(200);

@@ -156,21 +156,29 @@ router.post('/aggiungiPiatto', async (req, res) => {
         console.log('Ristorante non trovato')
         return; 
     }
-	let piatto = new Piatto({
-        nome: req.body.nome,
-        prezzo: req.body.prezzo,
-        descrizione: req.body.descrizione, 
-        foto: req.body.foto, //percorso  
-        stato: '',
-    });
-    piatto = await piatto.save();
-    ristorante.menu.push(piatto);
-    await ristorante.save(); 
+    if(req.body.nome===''){
+        res.status(400).send();
+        return;
+    } else if(req.body.prezzo===''){
+        res.status(400).send();
+        return;
+    } else {
+	    let piatto = new Piatto({
+            nome: req.body.nome,
+            prezzo: req.body.prezzo,
+            descrizione: req.body.descrizione, 
+            foto: req.body.foto, //percorso  
+            stato: '',
+        });
+        piatto = await piatto.save();
+        ristorante.menu.push(piatto);
+        await ristorante.save(); 
 
-    //Stampa di controllo per salvataggio di un nuovo piatto
-    console.log('Piatto Salvato:' + piatto._id);
+        //Stampa di controllo per salvataggio di un nuovo piatto
+        console.log('Piatto Salvato:' + piatto._id);
 
-    res.location("/api/v1/piattosRisto/aggiungiPiatto/" + piatto._id).status(201).json(piatto);
+        res.location("/api/v1/piattosRisto/aggiungiPiatto/" + piatto._id).status(201).json(piatto);
+    }
 });
 
 module.exports = router;

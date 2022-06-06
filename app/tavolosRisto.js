@@ -26,7 +26,12 @@ router.delete('/eliminaTavolo/:id', async (req, res) => {
     const  id  = req.params.id;
     let ristorante = await Ristorante.findOne({mail:loggedUser.mail}).exec(); 
     let tavolo= await Tavolo.findById(req.params.id).exec(); 
-   
+    if(!tavolo){
+        res.status(404).send();
+        //stampa di controllo
+        console.log('Tavolo non trovato')
+        return; 
+    }
     ristorante.tavoli.pull(req.params.id); 
     await Tavolo.deleteOne(tavolo).exec()
     await ristorante.save(); 
@@ -38,7 +43,7 @@ router.post('', async (req, res) => {
     let ristorante = await Ristorante.findOne({mail:loggedUser.mail});
   let tavolo = new Tavolo({
         nome: req.body.nome,
-        chiamato:false
+        chiamato: false
     });
     
   tavolo = await tavolo.save();

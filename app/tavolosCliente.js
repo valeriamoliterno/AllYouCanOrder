@@ -138,23 +138,28 @@ router.post('/ordine', async (req, res) => {
         let ristorante = await Ristorante.findOne({_id: ilMioRistoranteID}).exec(); //seleziono il mio ristorante
         let tavolo= await Tavolo.findOne({_id: ilMioTavoloID}).exec(); //seleziono il tavolo 
            //Controllo che esista il ristorante
-     if(!ristorante){
-        res.status(404).json(ristorante);  
-        console.log("ristorante non trovato"); 
-        return; 
-    }
+        if(!ristorante){
+            res.status(404).json(ristorante);  
+            console.log("ristorante non trovato"); 
+            return; 
+        }
         //Controllo che esista il tavolo
         if(!tavolo){
             res.status(404).json(tavolo);  
             console.log("tavolo non trovato"); 
             return; 
         }
+        var nome= req.body.nome;
+        var prezzo= req.body.prezzo;
+        var descrizione= req.body.descrizione; 
+        var foto= req.body.foto;
+
         //salvo nella variabile piatto gli elementi 
         let piatto = new Piatto({
-            nome: req.body.nome,
-            prezzo: req.body.prezzo,
-            descrizione: req.body.descrizione, 
-            foto: req.body.foto,
+            nome: nome,
+            prezzo: prezzo,
+            descrizione: descrizione, 
+            foto: foto,
             stato: '',
         }); //creo il nuovo piatto
         tavolo.carrello.push(piatto); //lo aggiungo in tavolo.carrello
@@ -167,7 +172,7 @@ router.post('/ordine', async (req, res) => {
  * Questa delete serve per eliminare l'elemento selezionato in tavolo.carrello dall'array
  * tavolo.carrello  viene chiamata in carrello.js
  *************************************************************/ 
-    router.delete('/mostraCarrello', async (req, res) => {
+    router.delete('/mostraCarrello/:id', async (req, res) => {
      //   let ristorante = await Ristorante.findOne({_id: ilMioRistoranteID}).exec(); 
         let tavolo= await Tavolo.findOne({_id: ilMioTavoloID}).exec();  
            //Controllo che esista il ristorante
@@ -178,10 +183,9 @@ router.post('/ordine', async (req, res) => {
             console.log("tavolo non trovato"); 
             return; 
         }  
-        tavolo.carrello.pull(req.body.id); //elimino il piatto il cui id è passatto
+        tavolo.carrello.pull(req.params.id); //elimino il piatto il cui id è passatto
         await tavolo.save();  
-     //   await ristorante.save(); 
-        res.location("/api/v1/tavoliCliente/mostraCarrello/" + req.body.id).status(201).send();
+        res.location("/api/v1/tavoliCliente/mostraCarrello/" + req.params.id).status(201).send();
     })
  /*************************************************************
  * Questa get serve per poter accedere al tavolo corretto e verificare in ordine.js
@@ -211,30 +215,29 @@ router.post('/ordine', async (req, res) => {
  * presente nei files ordine.js, carrello.js e menu.js 
  *************************************************************/ 
 
-    router.post('/chiamaCameriere', async (req, res) => { //prima era post
+    router.post('/chiamaCameriere', async (req, res) => {
         let ristorante = await Ristorante.findOne({_id: ilMioRistoranteID}).exec(); 
         
-        let tavolo= await Tavolo.findOne({_id: ilMioTavoloID}).exec(); ///tav1/i
+        let tavolo= await Tavolo.findOne({_id: ilMioTavoloID}).exec();
 
-           //Controllo che esista il ristorante
-     if(!ristorante){
-        res.status(404).json(ristorante);  
-        console.log("ristorante non trovato"); 
-        return; 
-    }
+        //Controllo che esista il ristorante
+        if(!ristorante){
+            res.status(404).json(ristorante);  
+            console.log("ristorante non trovato"); 
+            return; 
+        }
         //Controllo che esista il tavolo
         if(!tavolo){
             res.status(404).json(tavolo);  
             console.log("tavolo non trovato"); 
             return; 
         }
-
         
         //salvo nella variabile piatto gli elementi 
-        tavolo.chiamato= true; 
+        tavolo.chiamato=true; 
         await tavolo.save();
         await ristorante.save(); 
-       res.location("/api/v1/tavoliCliente/chiamaCameriere/" ).status(201).send();
+        res.location("/api/v1/tavoliCliente/chiamaCameriere/" ).status(201).send();
     });
     
 

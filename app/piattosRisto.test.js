@@ -178,9 +178,20 @@ describe('Gestione metodi piattos risto', () => {
   });
 
 
+    //test post per cambiare stato con token del test case 10.3 
+    test('POST /api/v1/piattosRisto/cambiaStato change plate state, not existing table, should return 405 ', async()=>{
+      const response = await request(app)
+      .post('/api/v1/piattosRisto/cambiaStato/')
+      .send({ idP: '629a07f875dcac56c4243a46', idT: '6293a6f9271b12fcf4efbe83' ,stato: 'in consegna'})
+      .set('x-access-token', token)
+      .set('Accept', 'application/json')
+      expect(response.statusCode).toBe(405);
+  
+    });
+
 
   //test post per cambiare stato con token del test case 10.3 
-  test('POST /api/v1/piattosRisto/cambiaStato change plate state, should return 20 ', async()=>{
+  test('POST /api/v1/piattosRisto/cambiaStato change plate state, should return 201 ', async()=>{
     const response = await request(app)
     .post('/api/v1/piattosRisto/cambiaStato/')
     .send({ idP: '629a07f875dcac56c4243a46', idT: '6293a6f9271b1efce4efbe82' ,stato: 'in consegna'})

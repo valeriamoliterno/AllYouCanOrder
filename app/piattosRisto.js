@@ -64,6 +64,18 @@ router.get('', async(req,res)=> {
  router.get('/ordineTavolo/:id', async (req, res) => {
     let idT = req.params.id; 
     let tavolo = await Tavolo.findOne({_id: idT}); // Trovo il tavolo 
+    //Controllo che esista il tavolo
+    if(!tavolo){
+        res.status(404).json(tavolo);  
+        console.log("tavolo non trovato"); 
+        return; 
+    }
+    //Controllo che esista l'ordine
+    if(!tavolo.ordine){
+        res.status(404).json(tavolo.ordine);  
+        console.log("ordine non trovato"); 
+        return; 
+    }
     let ordine = await tavolo.ordine; // Trovo l'ordine
     ordine = ordine.map( (piatto) => {
         return { // Restituisco l'id, il nome, la foto, e lo stato di ogni piatto

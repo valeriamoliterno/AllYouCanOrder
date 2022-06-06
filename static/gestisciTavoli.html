@@ -5,9 +5,6 @@
         <link rel="stylesheet" href="./template.css">
     </head>
 
-<head>
-</head>
-
 <body>
   <h1>AllYouCanOrder</h1>
 
@@ -16,15 +13,18 @@
 <form action="api/v1/tavoliRisto" method="post" name="tavolo" id="tavolo">
   <input name="nome" value="nome" id="tableName"/>
   <button type="button" onclick="inserisciTavolo()">Inserisci</button>
+
 </form>
 
 
 <h2>Lista tavoli:</h2>
 <ul id="tavoli"></ul>
-</br>
+
   <script src="gestisciTavoli.js"></script> 
+  <script src="pwdManager.js"></script> 
+
+
+
 </body>
-
-
 
 </html>

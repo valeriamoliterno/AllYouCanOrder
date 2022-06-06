@@ -4,11 +4,26 @@ const Ristorante = require('./models/ristorante');
 const Tavolo = require('./models/tavolo'); // get our mongoose model
 const Piatto = require('./models/piatto');
 
-
+/*************************************************************
+ * Questa get serve per mostrare tutti gli elementi nell'array
+ * ristorante.tavoli e viene chiamata in scriprC.js
+ *************************************************************/
 router.get('', async (req, res) => {
     let ristorante = await Ristorante.findOne({mail:loggedUser.mail});
+    //Controllo che esista il ristorante
+    if(!ristorante){
+        res.status(404).json(ristorante);  
+        console.log("ristorante non trovato"); 
+        return; 
+    }
+    //Controllo che esistano i tavoli
+    if(!ristorante.tavoli){
+        res.status(404).json(ristorante.tavoli);  
+        console.log("tavoli non trovati"); 
+        return; 
+    }
     let tavoli = await ristorante.tavoli;
-   await Promise.all(tavoli.map( async (t) => {
+    await Promise.all(tavoli.map( async (t) => {
         var tavolo = await Tavolo.findOne({_id: t._id});
         return { // Ritorna l'id e il nome per ogni tavolo
             self: '/api/v1/tavoliRisto/'+ tavolo._id,

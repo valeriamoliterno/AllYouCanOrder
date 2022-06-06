@@ -229,7 +229,7 @@ router.post('/ordine', async (req, res) => {
             return; 
         }
 
-        
+       
         //salvo nella variabile piatto gli elementi 
         tavolo.chiamato= true; 
         await tavolo.save();

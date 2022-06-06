@@ -107,9 +107,9 @@ router.post('/cambiaStato', async (req, res) =>{
  * Questo metodo DELETE elimina dal databse il piatto con id passato
  * nel body della response
  */
-router.delete('/eliminaPiatto', async (req, res) => {
+router.delete('/eliminaPiatto/:id', async (req, res) => {
     let ristorante = await Ristorante.findOne({mail: loggedUser.mail}).exec(); 
-    let piatto= await Piatto.findById(req.body.id).exec(); 
+    let piatto= await Piatto.findById(req.params.id).exec(); 
     if(!piatto){
         res.status(404).send()
         //stampa di controllo
@@ -122,12 +122,12 @@ router.delete('/eliminaPiatto', async (req, res) => {
         console.log('Ristorante non trovato')
         return; 
     }
-    ristorante.menu.pull(req.body.id); 
+    ristorante.menu.pull(req.params.id); 
     await Piatto.deleteOne(piatto).exec()
     await ristorante.save(); 
     //stampa di controllo correttezza dell'operazione
     console.log('CONTROLLO: piatto eliminato : ' + piatto.nome);
-    res.location('/api/v1/piattosRisto/eliminaPiatto').status(204).send();
+    res.location('/api/v1/piattosRisto/eliminaPiatto/'+req.params.id).status(204).send();
 
 });
 

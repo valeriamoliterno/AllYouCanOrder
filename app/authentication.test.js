@@ -9,9 +9,9 @@ describe('POST /api/v1/auth', () => {
   let connection;
 
   beforeAll( async () => {
-    jest.setTimeout(8000);
+    jest.setTimeout(80000);
     jest.unmock('mongoose');
-    connection = await  mongoose.connect('mongodb+srv://AllYouCanOrder:AliValeGiuMa@cluster0.dxwja.mongodb.net/AllYouCanOrder?retryWrites=true&w=majority', {useNewUrlParser: true, useUnifiedTopology: true});
+    connection = mongoose.connect('mongodb+srv://AllYouCanOrder:AliValeGiuMa@cluster0.dxwja.mongodb.net/AllYouCanOrder?retryWrites=true&w=majority');
     console.log('Database connected!');
   });
 
@@ -25,7 +25,7 @@ describe('POST /api/v1/auth', () => {
         return request(app)
             .post('/api/v1/auth')
             .set('Accept', "application/json")
-            .send({ mail: "risto@sushi.com", password: stringToHash("password errata") })
+            .send({ mail: "risto@sushi.com", password: '1234' })
             .expect(200, { successo: false, messaggio: 'La password che hai inserito non è corretta' });
     });
 

@@ -10,7 +10,7 @@ describe('test delle api: /api/v1/ristoranti', () => {
     beforeAll( async () => {
         jest.setTimeout(50000000000);
         jest.unmock('mongoose');
-        connection = await  mongoose.connect('mongodb+srv://AllYouCanOrder:AliValeGiuMa@cluster0.dxwja.mongodb.net/AllYouCanOrder?retryWrites=true&w=majority', {useNewUrlParser: true, useUnifiedTopology: true});
+        connection = await  mongoose.connect('mongodb+srv://AllYouCanOrder:AliValeGiuMa@cluster0.dxwja.mongodb.net/AllYouCanOrder?retryWrites=true&w=majority');
         console.log('Database connected!');
         var bool = true;
         var ristorante= Ristorante.findOne({mail: 'risto@mail.it'});

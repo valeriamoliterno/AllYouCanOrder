@@ -11,7 +11,7 @@ describe('Test di piattosCliente', () => {
   beforeAll( async()=> {
     jest.setTimeout(60000);
     jest.unmock('mongoose');
-    connection = await  mongoose.connect('mongodb+srv://AllYouCanOrder:AliValeGiuMa@cluster0.dxwja.mongodb.net/AllYouCanOrder?retryWrites=true&w=majority', {useNewUrlParser: true, useUnifiedTopology: true});
+    connection = mongoose.connect('mongodb+srv://AllYouCanOrder:AliValeGiuMa@cluster0.dxwja.mongodb.net/AllYouCanOrder?retryWrites=true&w=majority');
     console.log('Database connected!');
     var ristorante= await Ristorante.findOne({mail: 'test@carrello.it'});
     ilMioRistoranteID = ristorante._id;

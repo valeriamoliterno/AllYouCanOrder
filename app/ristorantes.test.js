@@ -62,16 +62,16 @@ describe('test delle api: /api/v1/ristoranti', () => {
     test('Tenta di creare un nuovo account ma con campo password vuoto => error 400', async()=>{
         const response = await request(app)
         .post('/api/v1/ristoranti/')
-        .send({ mail: 'ristorant@mail.it', password: '', passwordManager: 'passwordManager'})
+        .send({ mail: 'risto@mail.it', password: '', passwordManager: 'passwordManager'})
         .set('Accept', 'application/json')
         expect(response.statusCode).toBe(400, { error: 'La password non può essere vuota' });
         });
 
-    // Test 19.5: registrazionecon campo password manager vuoto
+    // Test 19.5: registrazione con campo password manager vuoto
     test('Tenta di creare un nuovo account ma con campo password Manager vuoto => error 400', async()=>{
         const response = await request(app)
         .post('/api/v1/ristoranti/')
-        .send({ mail: 'ristorant@mail.it', password: 'password', passwordManager: ''})
+        .send({ mail: 'risto@mail.it', password: 'password', passwordManager: ''})
         .set('Accept', 'application/json')
         expect(response.statusCode).toBe(400, { error: 'La password manager non può essere vuota' });
         });

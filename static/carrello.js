@@ -124,11 +124,10 @@ mostraCarrello();
  *   FUNZIONE PER RIMUOVERE PIATTI DAL CARRELLO   *
  **************************************************/
  function rimuoviPiatto(piattoDaRimuovere){
-    var id= piattoDaRimuovere.id; 
-    fetch('../api/v1/tavoliCliente/mostraCarrello', {
+    var url= '../api/v1/tavoliCliente/mostraCarrello/'+ piattoDaRimuovere.id; 
+    fetch(url, {
         method: 'DELETE',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify( { id: id} ),
     })
     .then((resp) => {
         mostraCarrello();

@@ -5,36 +5,52 @@ const Ristorante = require('./models/ristorante'); // get our mongoose model
 
 
 router.post('', async (req, res) => {
-    
-	let ristorante = new Ristorante({
-        mail: req.body.mail,
-        passwordHash: stringToHash(req.body.password),
-        passwordManagerHash: stringToHash(req.body.passwordManager),
-        tavoli: []
-    });
+    var mail= req.body.mail;
+    var password =req.body.password;
+    var passwordManager = req.body.passwordManager;
+    let ristoranteEsistente= await Ristorante.findOne({mail : mail});
+    console.log(ristoranteEsistente + '1234567890123456789012345678901234567890');
+    if(!ristoranteEsistente){
 
-    console.log('------ API POST Ristorante ------');
-    console.log(ristorante);
-    if (!ristorante.mail || typeof ristorante.mail != 'string' || !validateEmail(ristorante.mail)) {
-        console.log('|||||||||| Mail Error |||||||||');
-        res.status(400).json({ error: 'The field "mail" must be a non-empty string, in mail format' });
-        return;
-    }
-
-    let ristoranti= await Ristorante.find({});
-    ristoranti.map((r) => {
-        if(r.mail==ristorante.mail){
+        if (mail==='') {
             console.log('|||||||||| Mail Error |||||||||');
-            res.status(400).json({ error: 'Esiste già un ristorante con questa mail' });
+            res.status(400).json({ error: 'Il campo mail non può essere vuoto' });
             return;
         }
-    })
+        if (!validateEmail(mail)) {
+            console.log('|||||||||| Mail Error |||||||||');
+            res.status(400).json({ error: 'La mail non ha un formato valido. Inserirla del tipo a@b.c' });
+            return;
+        }
+        if (password==='') {
+            console.log('|||||||||| Password Error |||||||||');
+            res.status(400).json({ error: 'La password non può essere vuota' });
+            return;
+        }
+        if (passwordManager === '') {
+            console.log('|||||||||| Password manager Error |||||||||');
+            res.status(400).json({ error: 'La password manager non può essere vuota' });
+            return;
+        }
 
-	ristorante = await ristorante.save();
+        let ristorante = new Ristorante({
+            mail: mail,
+            passwordHash: stringToHash(password),
+            passwordManagerHash: stringToHash(passwordManager),
+            tavoli: []
+        });
+
+        console.log('------ API POST Ristorante ------');
+        console.log(ristorante);
+	    ristorante = await ristorante.save();
     
-    let ristoId = ristorante.id;
+        let ristoId = ristorante.id;
 
-    res.location("/api/v1/ristoranti/" + ristoId).status(201).send();
+        res.location("/api/v1/ristoranti/" + ristoId).status(201).send();
+    } else {
+        console.log('|||||||||| Risto esiste |||||||||');
+        res.status(400).json({ error: 'Esiste già un ristorante con questa mail' });
+    }
 });
 
 

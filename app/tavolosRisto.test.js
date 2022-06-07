@@ -8,7 +8,7 @@ const Tavolo = require('./models/tavolo');
 var idTavolo;
 var token;
 
-describe('Gestione metodi piattos risto', () => {
+describe('Gestione metodi tavolos risto', () => {
 
   let connection;
   beforeAll( async () => {
@@ -69,20 +69,13 @@ describe('Gestione metodi piattos risto', () => {
   //Test 13.3: Elimina tavolo mandando token corretto ma id errato
   test('Tentativo di eliminare tavolo mandando token corretto ma id errato => Error 404', async () => {
     const response= await request(app)
-    .delete('/api/v1/tavoliRisto/eliminaTavolo/'+ '629ddeba6f68d612bc7b26dd/admin')
+    .delete('/api/v1/tavoliRisto/eliminaTavolo/629e0ca56233e1cd00c0d57f/admin')
     .set('x-access-token', token)                                   
     .set('Accept', 'application/json')
     expect(response.statusCode).toBe(404);
   });
 
-  //Test 13.4: Elimina tavolo mandando token corretto e id corretto
-  test('Tavolo eliminato, token e id corretti => Stato 204', async () => {
-    const response= await request(app)
-    .delete('/api/v1/tavoliRisto/eliminaTavolo/'+idTavolo+'/admin')
-    .set('x-access-token', token)
-    .set('Content-Type', 'application/json')
-    expect(response.statusCode).toBe(204);
-  });
+
 
   //Test 13.5: Elimina tavolo mandando token corretto e id corretto ma password manager errata
   test('Tavolo eliminato, token e id corretti ma password manager errata => Stato 403', async () => {
@@ -94,10 +87,14 @@ describe('Gestione metodi piattos risto', () => {
   });
 
 
-
-
-
-
+    //Test 13.4: Elimina tavolo mandando token corretto e id corretto
+    test('Tavolo eliminato, token e id corretti => Stato 204', async () => {
+      const response= await request(app)
+      .delete('/api/v1/tavoliRisto/eliminaTavolo/'+idTavolo+'/admin')
+      .set('x-access-token', token)
+      .set('Content-Type', 'application/json')
+      expect(response.statusCode).toBe(204);
+    });
 
 
 

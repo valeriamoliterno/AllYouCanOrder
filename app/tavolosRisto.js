@@ -20,24 +20,7 @@ const Ristorante = require('./models/ristorante');
 const Tavolo = require('./models/tavolo'); // get our mongoose model
 const Piatto = require('./models/piatto');
 
-/********************************************************************
-*  mi serve per fare l'hash della password del manager per poterla  * 
-*  confrontare con quella che ho nel db                             *
-*********************************************************************/
-function stringToHash(string) {
-                  
-    var hash = 0;
-      
-    if (string.length == 0) return hash;
-      
-    for (i = 0; i < string.length; i++) {
-        char = string.charCodeAt(i);
-        hash = ((hash << 5) - hash) + char;
-        hash = hash & hash;
-    }
-      
-    return hash;
-}
+
 
 
 /*************************************************************
@@ -78,21 +61,12 @@ router.delete('/eliminaTavolo/:id/:managerpwd', async (req, res) => {
     let ristorante = await Ristorante.findOne({mail:loggedUser.mail}).exec(); 
    
     //posso usare il metodo solo se inserisco la password del manager
-    if(stringToHash(req.body.managerpwd)!=ristorante.passwordManagerHash)
-    {
-        //accesso negato
-        res.location("/api/v1/tavoliRisto/eliminaTavolo/").status(403).send();
-        return;
-    }
-
-
-    let tavolo= await Tavolo.findById(req.params.id).exec(); 
-    //posso usare il metodo solo se inserisco la password del manager
     if(stringToHash(req.params.managerpwd)!=ristorante.passwordManagerHash){
         //accesso negato
         res.location("/api/v1/tavoliRisto/inserisciTavolo/" + id +'/'+ req.params.managerpwd).status(403).send();
         return;
     }
+    let tavolo= await Tavolo.findById(req.params.id).exec(); 
     if(!tavolo){
         res.status(404).send();
         //stampa di controllo
@@ -165,6 +139,10 @@ router.post('/aggiungiTavolo/:nome/:managerpwd', async (req, res) => {
 });
 
 
+/********************************************************************
+*  mi serve per fare l'hash della password del manager per poterla  * 
+*  confrontare con quella che ho nel db                             *
+*********************************************************************/
 function stringToHash(string) {
                   
     var hash = 0;

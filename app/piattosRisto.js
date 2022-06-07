@@ -33,24 +33,8 @@ const Ristorante = require('./models/ristorante'); // prendo il modello mongoose
 const Piatto = require('./models/piatto');
 const Tavolo = require('./models/tavolo');
 
-/********************************************************************
-*  mi serve per fare l'hash della password del manager per poterla  * 
-*  confrontare con quella che ho nel db                             *
-*********************************************************************/
-function stringToHash(string) {
-                  
-    var hash = 0;
-      
-    if (string.length == 0) return hash;
-      
-    for (i = 0; i < string.length; i++) {
-        char = string.charCodeAt(i);
-        hash = ((hash << 5) - hash) + char;
-        hash = hash & hash;
-    }
-      
-    return hash;
-}
+
+
 
 router.get('', async(req,res)=> {
     console.log('sono nella get')
@@ -241,6 +225,11 @@ router.post('/aggiungiPiatto', async (req, res) => {
         res.location("/api/v1/piattosRisto/aggiungiPiatto/" + piatto._id).status(201).json(piatto);
     }
 });
+
+/********************************************************************
+*  mi serve per fare l'hash della password del manager per poterla  * 
+*  confrontare con quella che ho nel db                             *
+*********************************************************************/
 
 function stringToHash(string) {
                   

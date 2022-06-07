@@ -65,7 +65,7 @@ router.delete('/eliminaTavolo/:id', async (req, res) => {
     if(stringToHash(req.body.managerpwd)!=ristorante.passwordManagerHash)
     {
         //accesso negato
-        res.location("/api/v1/tavoliRisto/eliminaTavolo/" + id).status(403).send();
+        res.location("/api/v1/tavoliRisto/eliminaTavolo/").status(403).send();
         return;
     }
 
@@ -87,7 +87,7 @@ router.post('', async (req, res) => {
     if(stringToHash(req.body.managerpwd)!=ristorante.passwordManagerHash)
     {
         //accesso negato
-        res.location("/api/v1/tavoliRisto/inserisciTavolo/" + id).status(403).send();
+        res.location("/api/v1/tavoliRisto/inserisciTavolo/").status(403).send();
         return;
     }
     

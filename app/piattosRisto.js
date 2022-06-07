@@ -33,23 +33,6 @@ const Ristorante = require('./models/ristorante'); // prendo il modello mongoose
 const Piatto = require('./models/piatto');
 const Tavolo = require('./models/tavolo');
 
-
-function stringToHash(string) {
-                  
-    var hash = 0;
-      
-    if (string.length == 0) return hash;
-      
-    for (i = 0; i < string.length; i++) {
-        char = string.charCodeAt(i);
-        hash = ((hash << 5) - hash) + char;
-        hash = hash & hash;
-    }
-      
-    return hash;
-}
-
-
 router.get('', async(req,res)=> {
     console.log('sono nella get')
     console.log(loggedUser.mail)
@@ -81,6 +64,18 @@ router.get('', async(req,res)=> {
  router.get('/ordineTavolo/:id', async (req, res) => {
     let idT = req.params.id; 
     let tavolo = await Tavolo.findOne({_id: idT}); // Trovo il tavolo 
+    //Controllo che esista il tavolo
+    if(!tavolo){
+        res.status(404).json(tavolo);  
+        console.log("tavolo non trovato"); 
+        return; 
+    }
+    //Controllo che esista l'ordine
+    if(!tavolo.ordine){
+        res.status(404).json(tavolo.ordine);  
+        console.log("ordine non trovato"); 
+        return; 
+    }
     let ordine = await tavolo.ordine; // Trovo l'ordine
     ordine = ordine.map( (piatto) => {
         return { // Restituisco l'id, il nome, la foto, e lo stato di ogni piatto
@@ -135,11 +130,12 @@ router.post('/cambiaStato', async (req, res) =>{
  */
 router.delete('/eliminaPiatto/:id', async (req, res) => {
     let ristorante = await Ristorante.findOne({mail: loggedUser.mail}).exec(); 
+    
      //posso usare il metodo solo se inserisco la password del manager
      if(stringToHash(req.body.managerpwd)!=ristorante.passwordManagerHash)
      {
          //accesso negato
-         res.location("/api/v1/piattosRisto/eliminaPiatto/" + req.params.id).status(403).send();
+         res.location("/api/v1/tavoliRisto/eliminaPiatto/").status(403).send();
          return;
      }
     let piatto= await Piatto.findById(req.params.id); 
@@ -180,28 +176,42 @@ router.post('/aggiungiPiatto', async (req, res) => {
         console.log('Ristorante non trovato')
         return; 
     }
-     //posso usare il metodo solo se inserisco la password del manager
-     if(stringToHash(req.body.managerpwd)!=ristorante.passwordManagerHash)
-     {
-         //accesso negato
-         res.location("/api/v1/piattosRisto/aggiungiPiatto/" + id).status(403).send();
-         return;
-     }
-	let piatto = new Piatto({
-        nome: req.body.nome,
-        prezzo: req.body.prezzo,
-        descrizione: req.body.descrizione, 
-        foto: req.body.foto, //percorso  
-        stato: '',
-    });
-    piatto = await piatto.save();
-    ristorante.menu.push(piatto);
-    await ristorante.save(); 
+    //posso usare il metodo solo se inserisco la password del manager
+    if(stringToHash(req.body.managerpwd)!=ristorante.passwordManagerHash)
+    {
+        //accesso negato
+        res.location("/api/v1/piattosRisto/aggiungiPiatto/").status(403).send();
+        return;
+    }
+    if(req.body.nome===''){
+        res.status(400).send();
+        return;
+    } 
+    if(req.body.prezzo===''){
+        res.status(400).send();
+        return;
+    }
+    if(isNaN(req.body.prezzo)){
+        res.status(400).send();
+        return;
+    }  
+    else {
+	    let piatto = new Piatto({
+            nome: req.body.nome,
+            prezzo: req.body.prezzo,
+            descrizione: req.body.descrizione, 
+            foto: req.body.foto, //percorso  
+            stato: '',
+        });
+        piatto = await piatto.save();
+        ristorante.menu.push(piatto);
+        await ristorante.save(); 
 
-    //Stampa di controllo per salvataggio di un nuovo piatto
-    console.log('Piatto Salvato:' + piatto._id);
+        //Stampa di controllo per salvataggio di un nuovo piatto
+        console.log('Piatto Salvato:' + piatto._id);
 
-    res.location("/api/v1/piattosRisto/aggiungiPiatto/" + piatto._id).status(201).json(piatto);
+        res.location("/api/v1/piattosRisto/aggiungiPiatto/" + piatto._id).status(201).json(piatto);
+    }
 });
 
 module.exports = router;

@@ -74,46 +74,7 @@ router.post('/aggiungiTavolo/:nome/:managerpwd', async (req, res) => {
     res.location("/api/v1/tavoliRisto/aggiungiTavolo" + tavoloId).status(201).send();
 });
 
-/*
-router.post('/aggiungiTavolo', async (req, res) => {
-    let ristorante = await Ristorante.findOne({mail:loggedUser.mail});
-    let pM = req.body.managerpwd; 
-    let name = req.body.nome; 
 
-    console.log("1234333 PasswordMANAGER= "+ pM + " nome= "+ name)
-    if(!ristorante){
-        res.status(404).json(ristorante);  
-        console.log("ristorante non trovato"); 
-        return; 
-    }
-   
-    if(name===''){
-        res.status(404).json(name);  
-        console.log("nome non trovato"); 
-        return; 
-    }
-    //posso usare il metodo solo se inserisco la password del manager
-    if(stringToHash(pM)!=ristorante.passwordManagerHash)
-    {
-        //accesso negato
-        res.location("/api/v1/tavoliRisto/").status(403).send();
-        return;
-    }else{
-    
-
-  let tavolo = new Tavolo({
-        nome: name,
-        chiamato:false
-    });
-    
-  tavolo = await tavolo.save();
-    ristorante.tavoli.push(tavolo);
-    await ristorante.save(); 
-    let tavoloId = tavolo.nome;
-    console.log('Tavolo salvato');
-    res.location("/api/v1/tavoliRisto/" + tavoloId).status(201).send();
-}
-});*/
 
  /*************************************************************
  * Questa post serve per settare tavolo.chiamato=false se il cameriere 
@@ -121,7 +82,7 @@ router.post('/aggiungiTavolo', async (req, res) => {
  * presente nel file scriptC.js
  *************************************************************/ 
 
-router.post('/rispondiChiamata', async (req, res) => {
+  router.post('/rispondiChiamata', async (req, res) => {
     console.log('------------- risponsi chiamata -----------');
     console.log('//////////// id Tavolo /////////');
     console.log(req.body.id);

@@ -38,4 +38,3 @@ nuovoTav.save().then(()=> console.log('Ho inserito', nuovoTav.nome));
  
 */
 module.exports = Tavolo;
-

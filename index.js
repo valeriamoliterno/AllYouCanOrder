@@ -1,7 +1,7 @@
 const app = require('./app/app.js');
 const mongoose = require('mongoose');
 
-const port = 3000;
+const port = 3001;
 
 
 mongoose.connect('mongodb+srv://AllYouCanOrder:AliValeGiuMa@cluster0.dxwja.mongodb.net/AllYouCanOrder?retryWrites=true&w=majority')

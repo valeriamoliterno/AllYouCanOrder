@@ -1,11 +1,9 @@
-/**
- *  Per chiamare il framework EXPRESS
+/*  Per chiamare il framework EXPRESS
  */
 const express = require('express');
 const app = express();
 
-/**
- * Importa il file piattos.js, in cui sono caricare le api "piattos"
+/* Importa il file piattos.js, in cui sono caricare le api "piattos"
  */
 global.ilMioRistoranteID= '6295011922da57ae0fee2718'
 global.ilMioTavoloID= '629715ffe86e996e2f47ff5c'
@@ -31,8 +29,7 @@ const impostaRistorante = require('./impostoRistorante')
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-/**
- * Carica la pagina index.html all'apertura
+/* Carica la pagina index.html all'apertura
  */
 app.use('/', express.static('static'));
 app.use('/',express.static('img'));
@@ -43,8 +40,7 @@ app.use((req,res,next) => {
     next()
 })
 
-/**
- *  le API utilizzate
+/*  le API utilizzate
  */
 
 //queste API sono libere da vincolo di login

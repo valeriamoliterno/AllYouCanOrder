@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <link rel="stylesheet" href="./template.css">
+    </head>
+
+<body>
+  <h1>AllYouCanOrder</h1>
+
+  <h2>Inserisci un nuovo tavolo:</h2>
+
+<form action="api/v1/tavoliRisto" method="post" name="tavolo" id="tavolo">
+  <input name="nome" value="nome" id="tableName"/>
+  <button type="button" onclick="inserisciTavolo()">Inserisci</button>
+
+</form>
+
+
+<h2>Lista tavoli:</h2>
+<ul id="tavoli"></ul>
+
+  <script src="gestisciTavoli.js"></script> 
+  <script src="pwdManager.js"></script> 
+
+
+
+</body>
+
+</html>

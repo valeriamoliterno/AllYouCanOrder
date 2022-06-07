@@ -33,6 +33,23 @@ const Ristorante = require('./models/ristorante'); // prendo il modello mongoose
 const Piatto = require('./models/piatto');
 const Tavolo = require('./models/tavolo');
 
+
+function stringToHash(string) {
+                  
+    var hash = 0;
+      
+    if (string.length == 0) return hash;
+      
+    for (i = 0; i < string.length; i++) {
+        char = string.charCodeAt(i);
+        hash = ((hash << 5) - hash) + char;
+        hash = hash & hash;
+    }
+      
+    return hash;
+}
+
+
 router.get('', async(req,res)=> {
     console.log('sono nella get')
     console.log(loggedUser.mail)
@@ -118,6 +135,13 @@ router.post('/cambiaStato', async (req, res) =>{
  */
 router.delete('/eliminaPiatto/:id', async (req, res) => {
     let ristorante = await Ristorante.findOne({mail: loggedUser.mail}).exec(); 
+     //posso usare il metodo solo se inserisco la password del manager
+     if(stringToHash(req.body.managerpwd)!=ristorante.passwordManagerHash)
+     {
+         //accesso negato
+         res.location("/api/v1/piattosRisto/eliminaPiatto/" + req.params.id).status(403).send();
+         return;
+     }
     let piatto= await Piatto.findById(req.params.id); 
     console.log("!!!!!!!!!!!!!!!!!!req.params.id= "+req.params.id+" !!!!!!!!!!!!!")
     if(!ristorante){
@@ -156,6 +180,13 @@ router.post('/aggiungiPiatto', async (req, res) => {
         console.log('Ristorante non trovato')
         return; 
     }
+     //posso usare il metodo solo se inserisco la password del manager
+     if(stringToHash(req.body.managerpwd)!=ristorante.passwordManagerHash)
+     {
+         //accesso negato
+         res.location("/api/v1/piattosRisto/aggiungiPiatto/" + id).status(403).send();
+         return;
+     }
 	let piatto = new Piatto({
         nome: req.body.nome,
         prezzo: req.body.prezzo,

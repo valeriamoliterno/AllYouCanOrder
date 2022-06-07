@@ -1,8 +1,43 @@
+/**************************************************************************
+ * In questo file, gestisco tutto ciò che ha a che fare con tavolo.       *
+ * In particolare,                                                        *
+ *                                                                        *
+ * router.get mi serve per mostrare gli elementi presenti in tavolos nel  *
+ *  db, e quindi la uso per mostrare la lista dei tavoli                  *
+ *                                                                        *
+ *                                                                        *
+ * router.post, invece, viene usata per aggiungere gli elementi           *
+ * nel database, viene usata nella sezione "manager" per aggiungere       *
+ * un tavolo.                                                             *
+ *                                                                        *
+ * router.delete mi serve per cancellare i tavoli e viene usata anch'essa *
+ * per eliminare i tavoli nella sezione manager                           *       
+***************************************************************************/
+
 const express = require('express');
 const router = express.Router();
 const Ristorante = require('./models/ristorante');
 const Tavolo = require('./models/tavolo'); // get our mongoose model
 const Piatto = require('./models/piatto');
+
+/********************************************************************
+*  mi serve per fare l'hash della password del manager per poterla  * 
+*  confrontare con quella che ho nel db                             *
+*********************************************************************/
+function stringToHash(string) {
+                  
+    var hash = 0;
+      
+    if (string.length == 0) return hash;
+      
+    for (i = 0; i < string.length; i++) {
+        char = string.charCodeAt(i);
+        hash = ((hash << 5) - hash) + char;
+        hash = hash & hash;
+    }
+      
+    return hash;
+}
 
 
 router.get('', async (req, res) => {
@@ -25,6 +60,16 @@ router.get('', async (req, res) => {
 router.delete('/eliminaTavolo/:id', async (req, res) => {
     const  id  = req.params.id;
     let ristorante = await Ristorante.findOne({mail:loggedUser.mail}).exec(); 
+   
+    //posso usare il metodo solo se inserisco la password del manager
+    if(stringToHash(req.body.managerpwd)!=ristorante.passwordManagerHash)
+    {
+        //accesso negato
+        res.location("/api/v1/tavoliRisto/eliminaTavolo/" + id).status(403).send();
+        return;
+    }
+
+
     let tavolo= await Tavolo.findById(req.params.id).exec(); 
    
     ristorante.tavoli.pull(req.params.id); 
@@ -36,6 +81,17 @@ router.delete('/eliminaTavolo/:id', async (req, res) => {
 
 router.post('', async (req, res) => {
     let ristorante = await Ristorante.findOne({mail:loggedUser.mail});
+   
+    
+    //posso usare il metodo solo se inserisco la password del manager
+    if(stringToHash(req.body.managerpwd)!=ristorante.passwordManagerHash)
+    {
+        //accesso negato
+        res.location("/api/v1/tavoliRisto/inserisciTavolo/" + id).status(403).send();
+        return;
+    }
+    
+
   let tavolo = new Tavolo({
         nome: req.body.nome,
         chiamato:false
@@ -48,6 +104,7 @@ router.post('', async (req, res) => {
     console.log('Tavolo salvato');
     res.location("/api/v1/tavoliRisto/" + tavoloId).status(201).send();
 });
+
  /*************************************************************
  * Questa post serve per settare tavolo.chiamato=false se il cameriere 
  * preme il pulsante "rispondiChiamata"

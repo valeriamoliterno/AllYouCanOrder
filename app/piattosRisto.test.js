@@ -49,6 +49,8 @@ describe('Test di piattosRisto', () => {
   });
 
   afterAll( async() => {
+    var piatto = await Piatto.findOne({nome: 'xy'});
+    await Piatto.deleteOne(piatto).exec();
     mongoose.connection.close(true);
     console.log("Database connection closed");
   });

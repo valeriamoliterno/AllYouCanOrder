@@ -39,7 +39,9 @@ describe('Gestione metodi tavolos risto', () => {
     token = jwt.sign(payload, "ChiaveDiCodifica", options);
   });
 
-  afterAll( () => {
+  afterAll( async () => {
+    var tavolo = await Tavolo.findOne({nome: 'tavoloTesting'});
+    await Tavolo.deleteOne(tavolo).exec();
     mongoose.connection.close(true);
     console.log("Database connection closed");
   });
@@ -95,19 +97,6 @@ describe('Gestione metodi tavolos risto', () => {
       .set('Content-Type', 'application/json')
       expect(response.statusCode).toBe(204);
     });
-
-
-
-
-
-
-
-
-
-
-
-
-
 
    /**********************************
   * TEST CON TOKEN NON ESISTENTE

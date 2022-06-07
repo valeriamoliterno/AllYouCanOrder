@@ -100,7 +100,7 @@
             }
              
             cost=cost+piatto.prezzo;
-            costo.innerHTML="Il totale dell'ordine è : "+cost+" €";
+            costo.innerHTML="Il totale dell'ordine è : "+cost.toFixed(2)+" €";
       });  
       
      

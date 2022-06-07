@@ -112,7 +112,7 @@ var nomeTavolo = 'tav1'; //indica il tavolo a cui modifico tutto
          ul.appendChild(li);
  
          cost=cost+piatto.prezzo;
-         costo.innerHTML="Il totale del carrello è : "+cost+" €";
+         costo.innerHTML="Il totale del carrello è : "+cost.toFixed(2)+" €";
      });        
     })
     .catch( error => console.error(error) );// If there is any error you will catch them here

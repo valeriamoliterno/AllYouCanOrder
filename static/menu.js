@@ -25,10 +25,10 @@
     .then(function(dataC) {
     const tvNum= document.getElementById('tvNum');
     tvNum.textContent=dataC.nome;  //segno il nome del tavolo ch uso
-        if(dataC.chiamato==true){
+        if(dataC.chiamato===true){
             chiama.disabled='true'; 
             x.style.display = "block";
-        }else{
+        } else {
             chiama.enable='true';
             x.style.display = "none";
         }

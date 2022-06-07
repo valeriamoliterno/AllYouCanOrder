@@ -3,7 +3,7 @@ const app      = require('./app');
 const jwt      = require('jsonwebtoken'); // used to create, sign, and verify tokens
 const mongoose = require('mongoose');
 
-var idTavolo='6293a6f9271b1efce4efbe82';
+var idTavolo='629e0d4b6233e1cd00c0d5ab';
 var token;
 
 describe('Test delle api: /api/v1/piattosRisto', () => {
@@ -15,11 +15,11 @@ describe('Test delle api: /api/v1/piattosRisto', () => {
     jest.unmock('mongoose');
     connection = await  mongoose.connect('mongodb+srv://AllYouCanOrder:AliValeGiuMa@cluster0.dxwja.mongodb.net/AllYouCanOrder?retryWrites=true&w=majority', {useNewUrlParser: true, useUnifiedTopology: true});
     console.log('Database connected!');
-    loggedUser.mail='vivaLaPasta@carbonara.com';
+    loggedUser.mail='sushi@risto.it';
     // Creo un token
     var payload = {
       mail: loggedUser.mail,
-      id: '62971bf5f6d21ae1a617eecd'
+      id: '629e0ca56233e1cd00c0d57f'
     }
     var options = {
     expiresIn: 86400 // scade dopo 24 ore
@@ -56,7 +56,7 @@ describe('Test delle api: /api/v1/piattosRisto', () => {
   test('Stampa la pagina dei Camerieri con token corretto => Stato 200', async () => {
     const response= await request(app)
     .get('/api/v1/piattosRisto/ordineTavolo/'+ idTavolo)
-    .send({ mailRisto: 'vivaLaPasta@carbonara.com'})
+    .send({ mailRisto: 'sushi@risto.it'})
     .set('x-access-token', token)
     .set('Accept', 'application/json')
     expect(response.statusCode).toBe(200);
@@ -73,7 +73,7 @@ describe('Test delle api: /api/v1/piattosRisto', () => {
   test('Tentitativo di segnalare un piatto come "consegnato", ma non viene passato token => Error 401', async()=>{
       const response= await request(app)
       .post('/api/v1/piattosRisto/cambiaStato/')
-      .send({ idP: '629a07f975dcac56c4243a4e', idT: idTavolo, stato: 'consegnato'})
+      .send({ idP: '629f0b35ced5bd770fae199e', idT: idTavolo, stato: 'consegnato'})
       .set('Accept', 'application/json')
       expect(response.statusCode).toBe(401);
   });
@@ -82,7 +82,7 @@ describe('Test delle api: /api/v1/piattosRisto', () => {
   test('Tentitativo di segnalare un piatto come "consegnato", ma passato token errato => Error 403', async()=>{
     const response= await request(app)
     .post('/api/v1/piattosRisto/cambiaStato/')
-    .send({ idP: '629a07f975dcac56c4243a4e', idT: idTavolo, stato: 'consegnato'})
+    .send({ idP: '629f0b35ced5bd770fae199e', idT: idTavolo, stato: 'consegnato'})
     .set('x-access-token', '1234')
     .set('Accept', 'application/json')
     expect(response.statusCode).toBe(403);
@@ -93,7 +93,7 @@ describe('Test delle api: /api/v1/piattosRisto', () => {
   test('Stato del piatto diventa "Consegnato", token passato correttamente => Stato 201', async()=>{
     const response = await request(app)
     .post('/api/v1/piattosRisto/cambiaStato/')
-    .send({ idP: '629a07f875dcac56c4243a46', idT: idTavolo, stato: 'consegnato'})
+    .send({ idP: '629f0b35ced5bd770fae199e', idT: idTavolo, stato: 'consegnato'})
     .set('x-access-token', token)
     .set('Accept', 'application/json')
     expect(response.statusCode).toBe(201);

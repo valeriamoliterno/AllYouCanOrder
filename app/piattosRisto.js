@@ -160,37 +160,74 @@ router.delete('/eliminaPiatto/:id', async (req, res) => {
  * Questo metodo POST inserisce nel database un piatto le
  * cui proprietà sono passate nel body della response
  */
-router.post('/aggiungiPiatto', async (req, res) => {
-    let ristorante = await Ristorante.findOne({mail: loggedUser.mail}).exec(); 
-    if(!ristorante){
-        res.status(404).send()
-        //stampa di controllo
-        console.log('Ristorante non trovato')
+ router.post('/aggiungiPiatto', async (req, res) => { 
+    var nome=req.body.nome; 
+    var prezzo=req.body.prezzo; 
+    var descrizione=req.body.descrizione; 
+    var foto=req.body.foto; 
+    var managerpwd=req.body.managerpwd; 
+    console.log('dati piatto'+' '+nome+' '+prezzo+' '+descrizione+' '+foto+' '+managerpwd); 
+    let ristorante = await Ristorante.findOne({mail: loggedUser.mail}).exec();  
+    if(!ristorante){ 
+        res.status(404).send() 
+        //stampa di controllo 
+        console.log('Ristorante non trovato') 
+        return;  
+    } 
+    //posso usare il metodo solo se inserisco la password del manager 
+    if(stringToHash(managerpwd)!=ristorante.passwordManagerHash) 
+    { 
+        //accesso negato 
+        res.location("/api/v1/piattosRisto/aggiungiPiatto/").status(403).send(); 
         return; 
-    }
-    if(req.body.nome===''){
-        res.status(400).send();
-        return;
-    } else if(req.body.prezzo===''){
-        res.status(400).send();
-        return;
-    } else {
-	    let piatto = new Piatto({
-            nome: req.body.nome,
-            prezzo: req.body.prezzo,
-            descrizione: req.body.descrizione, 
-            foto: req.body.foto, //percorso  
-            stato: '',
-        });
-        piatto = await piatto.save();
-        ristorante.menu.push(piatto);
-        await ristorante.save(); 
-
-        //Stampa di controllo per salvataggio di un nuovo piatto
-        console.log('Piatto Salvato:' + piatto._id);
-
-        res.location("/api/v1/piattosRisto/aggiungiPiatto/" + piatto._id).status(201).json(piatto);
-    }
+    } 
+    if(nome===''){ 
+        res.status(400).send(); 
+        return; 
+    }  
+    if(prezzo===''){ 
+        res.status(400).send(); 
+        return; 
+    } 
+    if(isNaN(prezzo)){ 
+        res.status(400).send(); 
+        return; 
+    }   
+    else { 
+     let piatto = new Piatto({ 
+            nome: nome, 
+            prezzo: prezzo, 
+            descrizione: descrizione,  
+            foto: foto, //percorso   
+            stato: '', 
+        }); 
+        console.log('!!!!!!'); 
+        console.log(piatto); 
+        piatto = await piatto.save(); 
+        ristorante.menu.push(piatto); 
+        await ristorante.save();  
+ 
+        //Stampa di controllo per salvataggio di un nuovo piatto 
+        console.log('Piatto Salvato:' + piatto._id); 
+ 
+        res.location("/api/v1/piattosRisto/aggiungiPiatto/" + piatto._id).status(201).json(piatto); 
+    } 
 });
+
+function stringToHash(string) {
+                  
+    var hash = 0;
+      
+    if (string.length == 0) return hash;
+      
+    for (i = 0; i < string.length; i++) {
+        char = string.charCodeAt(i);
+        hash = ((hash << 5) - hash) + char;
+        hash = hash & hash;
+    }
+      
+    return hash;
+}
+
 
 module.exports = router;

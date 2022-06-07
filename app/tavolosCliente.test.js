@@ -3,8 +3,10 @@ const app      = require('./app');
 const mongoose = require('mongoose');
 const Ristorante = require('./models/ristorante');
 const Tavolo = require('./models/tavolo');
+const Piatto = require('./models/tavolo');
 
 var tavolo;
+var piatto;
 
 describe('Test delle api: /api/v1/tavoliCliente', () => {
 
@@ -17,13 +19,13 @@ describe('Test delle api: /api/v1/tavoliCliente', () => {
     console.log('Database connected!');
     var ristorante= await Ristorante.findOne({mail: 'ristorante@email.com'});
     ilMioRistoranteID = ristorante._id;
-    //ilMioTavoloID = '6293a6f9271b1efce4efbe82'
     ilMioTavoloID = '629c942235d25884204e0938'
     tavolo = await Tavolo.findById(ilMioTavoloID);
     if(tavolo.chiamato){
       tavolo.chiamato=false;
       await tavolo.save();
     }
+    piatto = tavolo.ordine[0];
   });
 
   afterAll( () => {
@@ -31,12 +33,14 @@ describe('Test delle api: /api/v1/tavoliCliente', () => {
     console.log("Database connection closed");
   });
 
+
+
   /**
   *      User Story 6: Assistenza
   */
 
   // Test 6.1: Chiamata di cameriere da Tavolo
-  test('Chiama un cameriere => tavolo.chiamato=true', async()=>{
+  test('Chiama un cameriere => tavolo.chiamato = true', async()=>{
     const response= await request(app)
     .post('/api/v1/tavoliCliente/chiamaCameriere/')
     .set('Accept', 'application/json')
@@ -68,7 +72,7 @@ describe('Test delle api: /api/v1/tavoliCliente', () => {
   //Test 16.1: Rimozione di un piatto dal carrello
   test('Rimuovi un piatto dal Carrello => Stato 201', async () => {
     const response= await request(app)
-    .delete('/api/v1/tavoliCliente/mostraCarrello/629d12640ca4b045aae60d0b')
+    .delete('/api/v1/tavoliCliente/mostraCarrello/'+piatto._id)
     .set('Accept', 'application/json')
     expect(response.statusCode).toBe(201);
   });

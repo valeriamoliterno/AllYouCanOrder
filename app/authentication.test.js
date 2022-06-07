@@ -41,7 +41,7 @@ describe('POST /api/v1/auth', () => {
         return request(app)
             .post('/api/v1/auth')
             .set('Accept', "application/json")
-            .send({ mail: "risto@sushi.com", password: stringToHash("sushi123") })
+            .send({ mail: "risto@sushi.com", password: stringToHash("password") })
             .expect(201, {
 				successo: true,
 				messaggio: 'Log in effettuato con successo!',

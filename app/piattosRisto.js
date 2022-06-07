@@ -103,10 +103,6 @@ router.post('/cambiaStato', async (req, res) =>{
     let idP= req.body.idP; // Recupero dal body l'id del Piatto
     let idT=req.body.idT; // Recupero dal body l'id del Tavolo
     let stato = req.body.stato; // Recupero dal body lo stato in cui cambiare
-    console.log("!!!!!!!!!!!!!!!!!!ID P= "+idP+" !!!!!!!!!!!!!")
-    console.log("!!!!!!!!!!!!!!!!!!ID T= "+idT+" !!!!!!!!!!!!!")
-    console.log("!!!!!!!!!!!!!!!!!!stato= "+stato+" !!!!!!!!!!!!!")
-  //  console.log("----- idP: "+idP+" ----- idT: "+idT+"------ Stato: "+stato+"---------------");
     let tavolo = await Tavolo.findOne({_id: idT}); // Trovo il tavolo 
     if(!tavolo){
         res.status(405).send()
@@ -123,7 +119,6 @@ router.post('/cambiaStato', async (req, res) =>{
        // console.log("----- Piatto --------------------------");
       //  console.log(piatto);
         if(idP.localeCompare(piatto._id) === 0){ // Se l'id del piatto è uguale
-            //console.log("||||||||||||||||  SI  ||||||||||||||||||||");
             piatto.stato=stato; // Cambio lo stato
         }
     });
@@ -136,7 +131,7 @@ router.post('/cambiaStato', async (req, res) =>{
  * Questo metodo DELETE elimina dal databse il piatto con id passato
  * nel body della response
  */
-router.delete('/eliminaPiatto/:id', async (req, res) => {
+router.delete('/eliminaPiatto', async (req, res) => {
     let ristorante = await Ristorante.findOne({mail: loggedUser.mail}).exec(); 
      //posso usare il metodo solo se inserisco la password del manager
      if(stringToHash(req.body.managerpwd)!=ristorante.passwordManagerHash)
@@ -146,7 +141,6 @@ router.delete('/eliminaPiatto/:id', async (req, res) => {
          return;
      }
     let piatto= await Piatto.findById(req.params.id); 
-    console.log("!!!!!!!!!!!!!!!!!!req.params.id= "+req.params.id+" !!!!!!!!!!!!!")
     if(!ristorante){
         res.status(404).send()
         //stampa di controllo

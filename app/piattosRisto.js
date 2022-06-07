@@ -188,6 +188,12 @@ router.delete('/eliminaPiatto/:id', async (req, res) => {
  * cui proprietà sono passate nel body della response
  */
 router.post('/aggiungiPiatto', async (req, res) => {
+    var nome=req.body.nome;
+    var prezzo=req.body.prezzo;
+    var descrizione=req.body.descrizione;
+    var foto=req.body.foto;
+    var managerpwd=req.body.managerpwd;
+    console.log('dati piatto'+' '+nome+' '+prezzo+' '+descrizione+' '+foto+' '+managerpwd);
     let ristorante = await Ristorante.findOne({mail: loggedUser.mail}).exec(); 
     if(!ristorante){
         res.status(404).send()
@@ -196,32 +202,34 @@ router.post('/aggiungiPiatto', async (req, res) => {
         return; 
     }
     //posso usare il metodo solo se inserisco la password del manager
-    if(stringToHash(req.body.managerpwd)!=ristorante.passwordManagerHash)
+    if(stringToHash(managerpwd)!=ristorante.passwordManagerHash)
     {
         //accesso negato
         res.location("/api/v1/piattosRisto/aggiungiPiatto/").status(403).send();
         return;
     }
-    if(req.body.nome===''){
+    if(nome===''){
         res.status(400).send();
         return;
     } 
-    if(req.body.prezzo===''){
+    if(prezzo===''){
         res.status(400).send();
         return;
     }
-    if(isNaN(req.body.prezzo)){
+    if(isNaN(prezzo)){
         res.status(400).send();
         return;
     }  
     else {
 	    let piatto = new Piatto({
-            nome: req.body.nome,
-            prezzo: req.body.prezzo,
-            descrizione: req.body.descrizione, 
-            foto: req.body.foto, //percorso  
+            nome: nome,
+            prezzo: prezzo,
+            descrizione: descrizione, 
+            foto: foto, //percorso  
             stato: '',
         });
+        console.log('!!!!!!');
+        console.log(piatto);
         piatto = await piatto.save();
         ristorante.menu.push(piatto);
         await ristorante.save(); 

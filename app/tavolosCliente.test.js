@@ -13,7 +13,7 @@ describe('Test delle api: /api/v1/tavoliCliente', () => {
   let connection;
 
   beforeAll( async () => {
-    jest.setTimeout(50000);
+    jest.setTimeout(500000);
     jest.unmock('mongoose');
     connection = await  mongoose.connect('mongodb+srv://AllYouCanOrder:AliValeGiuMa@cluster0.dxwja.mongodb.net/AllYouCanOrder?retryWrites=true&w=majority', {useNewUrlParser: true, useUnifiedTopology: true});
     console.log('Database connected!');

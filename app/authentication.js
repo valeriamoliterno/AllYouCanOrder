@@ -64,7 +64,7 @@ router.post('', async function(req, res) {
 
 			//stampe di controllo del token
 			console.log('Dalla post auth: '+token)
-
+			console.log(ristorante._id);
 			res.location('/api/v1/auth/' + ristorante._id).status(201).json({
 				successo: true,
 				messaggio: 'Log in effettuato con successo!',

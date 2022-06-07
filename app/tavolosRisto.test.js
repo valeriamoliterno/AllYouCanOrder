@@ -165,12 +165,39 @@ describe('Gestione metodi tavolos risto', () => {
 
    //test post per aggiungere tavolo con nome inserito con token del test case 12.4 e password manager corretta
    test('POST /api/v1/tavoliRisto/ add table, should return 201', async()=>{
-     const response = await request(app)
-      .post('/api/v1/tavoliRisto/aggiungiTavolo/tavoloTesting/admin')
-     .set('x-access-token', token)
-     .set('Accept', 'application/json')
-     expect(response.statusCode).toBe(201);
+    const response = await request(app)
+    .post('/api/v1/tavoliRisto/aggiungiTavolo/tavoloTesting/admin')
+    .set('x-access-token', token)
+    .set('Accept', 'application/json')
+    expect(response.statusCode).toBe(201);
    
-     });
+  });
+
+  test('3: GET /api/v1/tavoliCliente/ordine', () => {
+    return request(app)
+    .get('/api/v1/tavoliCliente/ordine')
+    .set('Accept', "application/json")
+    .expect(200)
+  });
+
+  test('17: GET /api/v1/tavoliCliente/mostraCarrello', () => {
+    return request(app)
+    .get('/api/v1/tavoliCliente/mostraCarrello')
+    .set('Accept', "application/json")
+    .expect(200);
+  });
+  test('17: POST /api/v1/tavoliCliente/ordine', () => {
+    return request(app)
+    .post('/api/v1/tavoliCliente/ordine')
+    .set('Accept', "application/json")
+    .send({ nome: 'Onigiri tonno', descrizione: "Palline di riso con dentro tonno e maionese, 2pz", prezzo: 0, foto: "https://shop.itticabrianza.com/media/Foto_Prodotti/700701-3051-2_onigiri_cotto_tonno_e_salmone_4.jpg" })
+    .expect(201);
+  });
+  test('17: DELETE /api/v1/tavoliCliente/svuotaCarrello', () => {
+    return request(app)
+    .delete('/api/v1/tavoliCliente/svuotaCarrello')
+    .set('Accept', "application/json")
+    .expect(201);
+  })
 
 });

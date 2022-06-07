@@ -15,7 +15,7 @@ describe('Gestione metodi piattos risto', () => {
     jest.unmock('mongoose');
     connection = await  mongoose.connect('mongodb+srv://AllYouCanOrder:AliValeGiuMa@cluster0.dxwja.mongodb.net/AllYouCanOrder?retryWrites=true&w=majority', {useNewUrlParser: true, useUnifiedTopology: true});
     console.log('Database connected!');
-    loggedUser.mail='vivaLaPasta@carbonara.com';
+    loggedUser.mail='sushi@risto.it';
     var ristorante= await Ristorante.findOne({mail: loggedUser.mail});
     var menu = await ristorante.menu; // Trovo l'ordine
     var piatto = await Piatto.findOne({nome: 'Mozzarella'});
@@ -75,7 +75,7 @@ describe('Gestione metodi piattos risto', () => {
        test('POST /api/v1/piattosRisto/cambiaStato change plate state, not existing token, should return 401 ', async()=>{
          const response= await request(app)
           .post('/api/v1/piattosRisto/cambiaStato/')
-          .send({ idP: '629a07f975dcac56c4243a4e', idT: '6293a6f9271b1efce4efbe82' ,stato: 'in consegna'})
+          .send({ idP: '629efc45ebe5ff552cf4c109', idT: '629e0d476233e1cd00c0d5a4' ,stato: 'in consegna'})
       
           .set('Accept', 'application/json')
           expect(response.statusCode).toBe(401);
@@ -123,7 +123,7 @@ describe('Gestione metodi piattos risto', () => {
   test('POST /api/v1/piattosRisto/cambiaStato change plate state, invalid token, should return 403 ', async()=>{
     const response= await request(app)
     .post('/api/v1/piattosRisto/cambiaStato/')
-    .send({ idP: '629a07f975dcac56c4243a4e', idT: '6293a6f9271b1efce4efbe82' ,stato: 'in consegna'})
+    .send({ idP: '629efc45ebe5ff552cf4c109', idT: '629e0d476233e1cd00c0d5a4' ,stato: 'in consegna'})
     .set('x-access-token', 1234)
     .set('Accept', 'application/json')
     expect(response.statusCode).toBe(403);
@@ -136,7 +136,7 @@ describe('Gestione metodi piattos risto', () => {
   // create a valid token
   var payload = {
     mail: loggedUser.mail,
-    id: '62971bf5f6d21ae1a617eecd'
+    id: '629e0ca56233e1cd00c0d57f'
     }
     var options = {
     expiresIn: 86400 // scade dopo 24 ore
@@ -160,29 +160,39 @@ describe('Gestione metodi piattos risto', () => {
   //test delete piatto di piatto non esistente
   test('DELETE /api/v1/piattosRisto/eliminaPiatto/id existing dish should return 405 --> dish not found', async () => {
     const response= await request(app)
-    .delete('/api/v1/piattosRisto/eliminaPiatto/734b14f975dcac56c4243f5b')
+    .delete('/api/v1/piattosRisto/eliminaPiatto/734b14f975dcac56c4243f5b/admin')
     .set('x-access-token', token)
     .set('Accept', 'application/json')
     expect(response.statusCode).toBe(404);
   });
 
+  //test delete piatto di piatto esistente e token corretto e password errata
+  test('DELETE /api/v1/piattosRisto/eliminaPiatto existing dish  but wrong password manager should return 403--> NOT deleted dish', async () => {
+    const response= await request(app)
+    .delete('/api/v1/piattosRisto/eliminaPiatto/'+ idPiatto +'/nimda')
+    .set('x-access-token', token)
+    .set('Content-Type', 'application/json')
+    expect(response.statusCode).toBe(403);
+  });
 
-
- //test delete piatto di piatto esistente e token corretto
+ //test delete piatto di piatto esistente e token corretto e password corretta
   test('DELETE /api/v1/piattosRisto/eliminaPiatto existing dish should return 204 --> deleted dish', async () => {
     const response= await request(app)
-    .delete('/api/v1/piattosRisto/eliminaPiatto/'+idPiatto)
+    .delete('/api/v1/piattosRisto/eliminaPiatto/'+idPiatto+'/admin')
     .set('x-access-token', token)
     .set('Content-Type', 'application/json')
     expect(response.statusCode).toBe(204);
   });
 
 
+
+
+
     //test post per cambiare stato con token del test case 10.3 
     test('POST /api/v1/piattosRisto/cambiaStato change plate state, not existing table, should return 405 ', async()=>{
       const response = await request(app)
       .post('/api/v1/piattosRisto/cambiaStato/')
-      .send({ idP: '629a07f875dcac56c4243a46', idT: '6293a6f9271b12fcf4efbe83' ,stato: 'in consegna'})
+      .send({ idP: '629efc45ebe5ff552cf4c109', idT: '629e0d476233e1cd00c0d5a5' ,stato: 'in consegna'})
       .set('x-access-token', token)
       .set('Accept', 'application/json')
       expect(response.statusCode).toBe(405);
@@ -194,7 +204,7 @@ describe('Gestione metodi piattos risto', () => {
   test('POST /api/v1/piattosRisto/cambiaStato change plate state, should return 201 ', async()=>{
     const response = await request(app)
     .post('/api/v1/piattosRisto/cambiaStato/')
-    .send({ idP: '629a07f875dcac56c4243a46', idT: '6293a6f9271b1efce4efbe82' ,stato: 'in consegna'})
+    .send({ idP: '629efc45ebe5ff552cf4c109', idT: '629e0d476233e1cd00c0d5a4' ,stato: 'in consegna'})
     .set('x-access-token', token)
     .set('Accept', 'application/json')
     expect(response.statusCode).toBe(201);

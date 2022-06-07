@@ -304,13 +304,6 @@ test('Tentativo di aggiungere piatti con password manager errata" => Stato 403',
     expect(response.statusCode).toBe(401);
   });
 
-  //test delete piatto di piatto non esistente, token non esistente  User story 9.1
-  test('DELETE /api/v1/piattosRisto/eliminaPiatto/id not existing dish and token --> should return 401', async () => {
-    const response= await request(app)
-    .delete('/api/v1/piattosRisto/eliminaPiatto/12345')
-    .set('Accept', 'application/json')
-    expect(response.statusCode).toBe(401);
-  });
 
  //test delete piatto di piatto esistente e token non esistente user story 9.1
   test('DELETE /api/v1/piattosRisto/eliminaPiatto/id existing dish, not existing token should return 401 ', async () => {
@@ -321,16 +314,16 @@ test('Tentativo di aggiungere piatti con password manager errata" => Stato 403',
   });
 
 
-       //test post per cambiare stato con token del test case 10.3 
-       test('POST /api/v1/piattosRisto/cambiaStato change plate state, not existing token, should return 401 ', async()=>{
-         const response= await request(app)
-          .post('/api/v1/piattosRisto/cambiaStato/')
-          .send({ idP: '629efc45ebe5ff552cf4c109', idT: '629e0d476233e1cd00c0d5a4' ,stato: 'in consegna'})
-      
-          .set('Accept', 'application/json')
-          expect(response.statusCode).toBe(401);
-      
-        });
+  //test post per cambiare stato con token del test case 10.3 
+  test('POST /api/v1/piattosRisto/cambiaStato change plate state, not existing token, should return 401 ', async()=>{
+    const response= await request(app)
+    .post('/api/v1/piattosRisto/cambiaStato/')
+    .send({ idP: '629efc45ebe5ff552cf4c109', idT: '629e0d476233e1cd00c0d5a4' ,stato: 'in consegna'})
+
+    .set('Accept', 'application/json')
+    expect(response.statusCode).toBe(401);
+
+  });
 
 
    /**********************************
@@ -345,18 +338,6 @@ test('Tentativo di aggiungere piatti con password manager errata" => Stato 403',
     .set('Accept', 'application/json')
     expect(response.statusCode).toBe(403);
   });
-
-
-    //test delete piatto di piatto non esistente roken non valido User story 9.2
-    test('DELETE /api/v1/piattosRisto/eliminaPiatto/id not existing dish, invalid token should return 403 ', async () => {
-    
-      //expect.assertions(1);
-     const response=  await request(app)
-      .delete('/api/v1/piattosRisto/eliminaPiatto/12345')
-      .set('x-access-token', '123345')
-      .set('Accept', 'application/json')
-      expect(response.statusCode).toBe(403);
-    });
   
    //test delete piatto di piatto esistente e token non valido User story 9.2
     test('DELETE /api/v1/piattosRisto/eliminaPiatto/id existing dish, invalid token', async () => {
@@ -395,7 +376,7 @@ test('Tentativo di aggiungere piatti con password manager errata" => Stato 403',
 
 
   //test delete piatto di piatto non esistente
-  test('DELETE /api/v1/piattosRisto/eliminaPiatto/id existing dish should return 405 --> dish not found', async () => {
+  test('DELETE /api/v1/piattosRisto/eliminaPiatto/id not existing dish should return 405 --> dish not found', async () => {
     const response= await request(app)
     .delete('/api/v1/piattosRisto/eliminaPiatto/734b14f975dcac56c4243f5b/admin')
     .set('x-access-token', token)

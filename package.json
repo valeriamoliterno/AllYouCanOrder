@@ -314,14 +314,8 @@
     "z-schema": "^4.2.4"
   },
   "scripts": {
-<<<<<<< HEAD
-    "start": "node index.js", 
-    "dev": "node -r dotenv/config index.js", 
-    "test": "jest --setupFiles dotenv/config" 
-=======
     "test": "jest",
     "start": "node index.js"
->>>>>>> dd42b55931e3611eba8ad6b8a59eeadd79f5b133
   },
   "repository": {
     "type": "git",
@@ -333,8 +327,6 @@
     "url": "https://github.com/valeriamoliterno/AllYouCanOrder/issues"
   },
   "homepage": "https://github.com/valeriamoliterno/AllYouCanOrder#readme",
-<<<<<<< HEAD
-=======
   "jest": {
     "verbose": true,
     "collectCoverage": true
@@ -346,7 +338,6 @@
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.3.5"
   },
->>>>>>> dd42b55931e3611eba8ad6b8a59eeadd79f5b133
   "devDependencies": {
     "jest": "^28.1.1",
     "supertest": "^6.2.3"

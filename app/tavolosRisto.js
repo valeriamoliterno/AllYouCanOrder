@@ -57,7 +57,7 @@ router.get('', async (req, res) => {
     })
 });
 
-router.delete('/eliminaTavolo/:id', async (req, res) => {
+router.delete('/eliminaTavolo', async (req, res) => {
     const  id  = req.params.id;
     let ristorante = await Ristorante.findOne({mail:loggedUser.mail}).exec(); 
    

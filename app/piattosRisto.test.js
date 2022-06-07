@@ -34,8 +34,6 @@ describe('Test di piattosRisto', () => {
     } else {
       idPiatto= piatto._id;
     }
-
-
     
     // Creo un token
     var payload = {
@@ -48,9 +46,7 @@ describe('Test di piattosRisto', () => {
     token = jwt.sign(payload, process.env.SUPER_SECRET, options);
   });
 
-  afterAll( async() => {
-    var piatto = await Piatto.findOne({nome: 'xy'});
-    await Piatto.deleteOne(piatto).exec();
+  afterAll( () => {
     mongoose.connection.close(true);
     console.log("Database connection closed");
   });

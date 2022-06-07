@@ -39,9 +39,7 @@ describe('Gestione metodi tavolos risto', () => {
     token = jwt.sign(payload, process.env.SUPER_SECRET, options);
   });
 
-  afterAll( async () => {
-    var tavolo = await Tavolo.findOne({nome: 'tavoloTesting'});
-    await Tavolo.deleteOne(tavolo).exec();
+  afterAll(() => {
     mongoose.connection.close(true);
     console.log("Database connection closed");
   });

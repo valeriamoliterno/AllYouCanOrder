@@ -314,7 +314,8 @@
     "z-schema": "^4.2.4"
   },
   "scripts": {
-    "test": "jest",
+    "dev": "node -r dotenv/config index.js",
+    "test": "jest --setupFiles dotenv/config" ,
     "start": "node index.js"
   },
   "repository": {

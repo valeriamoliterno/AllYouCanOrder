@@ -19,7 +19,7 @@ global.loggedUser = {
 const piattosRisto= require('./piattosRisto.js');
 const piattosCliente= require('./piattosCliente.js');
 const tavolosCliente = require ('./tavolosCliente.js');
-const tavolosRisto = require ('./tavolosRisto.js');
+const tavolosRisto = require ('./tavolosRisto');
 const rist = require('./ristorantes')
 const auth = require ('./authentication.js');
 const tokenChecker = require ('./tokenChecker.js');
@@ -60,7 +60,7 @@ app.use('/api/v1/impostaTavolo', idTav);
 app.use('', tokenChecker);
 
 app.use('/api/v1/piattosRisto/', piattosRisto);
-app.use('/api/v1/tavoliRisto', tavolosRisto);
+app.use('/api/v1/tavoliRisto/', tavolosRisto);
 
 /**
  * gestisce i casi di errore

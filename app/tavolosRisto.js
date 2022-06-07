@@ -54,11 +54,36 @@ router.delete('/eliminaTavolo/:id', async (req, res) => {
     res.location("/api/v1/tavoliRisto/eliminaTavolo/" + id).status(204).send();
 });
 
-router.post('', async (req, res) => {
+router.post('/aggiungiTavolo/:nome/:managerpwd', async (req, res) => {
     let ristorante = await Ristorante.findOne({mail:loggedUser.mail});
+    if(!ristorante){
+        res.status(404).json(ristorante);  
+        console.log("ristorante non trovato"); 
+        return; 
+    }
+    
+    let name = req.params.nome; 
+    console.log("AVV NAME POST: "+name); 
+    if(name===''){
+        res.status(404).json(name);  
+        console.log("nome non trovato"); 
+        return; 
+    }
+    let pM= req.params.managerpwd;
+
+
+    console.log("||||||" +pM+" =Password manager")
+    console.log("||||||" +stringToHash(pM)+" =Password manager HASH")
+    console.log("||||||" +ristorante.passwordManagerHash+" =Password manager HASH nel DB")
+    if(stringToHash(pM)!=ristorante.passwordManagerHash)
+    {
+        //accesso negato
+        res.location("/api/v1/tavoliRisto/").status(403).send();
+        return;
+    }
   let tavolo = new Tavolo({
-        nome: req.body.nome,
-        chiamato: false
+        nome: name,
+        chiamato:false
     });
     
   tavolo = await tavolo.save();
@@ -66,15 +91,18 @@ router.post('', async (req, res) => {
     await ristorante.save(); 
     let tavoloId = tavolo.nome;
     console.log('Tavolo salvato');
-    res.location("/api/v1/tavoliRisto/" + tavoloId).status(201).send();
+    res.location("/api/v1/tavoliRisto/aggiungiTavolo" + tavoloId).status(201).send();
 });
+
+
+
  /*************************************************************
  * Questa post serve per settare tavolo.chiamato=false se il cameriere 
  * preme il pulsante "rispondiChiamata"
  * presente nel file scriptC.js
  *************************************************************/ 
 
-router.post('/rispondiChiamata', async (req, res) => {
+  router.post('/rispondiChiamata', async (req, res) => {
     console.log('------------- risponsi chiamata -----------');
     console.log('//////////// id Tavolo /////////');
     console.log(req.body.id);
@@ -87,4 +115,19 @@ router.post('/rispondiChiamata', async (req, res) => {
 });
 
 
+
+function stringToHash(string) {
+                  
+    var hash = 0;
+      
+    if (string.length == 0) return hash;
+      
+    for (i = 0; i < string.length; i++) {
+        char = string.charCodeAt(i);
+        hash = ((hash << 5) - hash) + char;
+        hash = hash & hash;
+    }
+      
+    return hash;
+}
 module.exports = router;

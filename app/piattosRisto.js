@@ -90,14 +90,13 @@ router.get('', async(req,res)=> {
 
 /**
  * Chiamata API in POST che dato nel body l'id del tavolo e del piatto e lo stato cambia lo stato del piatto in quello desiderato
+/**
+ * Chiamata API in POST che dato nel body l'id del tavolo e del piatto e lo stato cambia lo stato del piatto in quello desiderato
  */
-router.post('/cambiaStato', async (req, res) =>{
+ router.post('/cambiaStato', async (req, res) =>{
     let idP= req.body.idP; // Recupero dal body l'id del Piatto
     let idT=req.body.idT; // Recupero dal body l'id del Tavolo
     let stato = req.body.stato; // Recupero dal body lo stato in cui cambiare
-    console.log("!!!!!!!!!!!!!!!!!!ID P= "+idP+" !!!!!!!!!!!!!")
-    console.log("!!!!!!!!!!!!!!!!!!ID T= "+idT+" !!!!!!!!!!!!!")
-    console.log("!!!!!!!!!!!!!!!!!!stato= "+stato+" !!!!!!!!!!!!!")
   //  console.log("----- idP: "+idP+" ----- idT: "+idT+"------ Stato: "+stato+"---------------");
     let tavolo = await Tavolo.findOne({_id: idT}); // Trovo il tavolo 
     if(!tavolo){
@@ -128,28 +127,36 @@ router.post('/cambiaStato', async (req, res) =>{
  * Questo metodo DELETE elimina dal databse il piatto con id passato
  * nel body della response
  */
-router.delete('/eliminaPiatto/:id', async (req, res) => {
+router.delete('/eliminaPiatto/:id/:managerpwd', async (req, res) => {
     let ristorante = await Ristorante.findOne({mail: loggedUser.mail}).exec(); 
-    let piatto= await Piatto.findById(req.params.id); 
-    console.log("!!!!!!!!!!!!!!!!!!req.params.id= "+req.params.id+" !!!!!!!!!!!!!")
-    if(!ristorante){
-        res.status(404).send()
-        //stampa di controllo
-        console.log('Ristorante non trovato')
-        return; 
-    }
+    let piatto= await Piatto.findById(req.params.id).exec(); 
+    let passwordManager=req.params.managerpwd; 
+    console.log("DELETE: Password MANAGER: "+passwordManager); 
     if(!piatto){
         res.status(404).send()
         //stampa di controllo
         console.log('piatto non trovato')
         return; 
     }
+    if(!ristorante){
+        res.status(404).send()
+        //stampa di controllo
+        console.log('Ristorante non trovato')
+        return; 
+    }
+    if(stringToHash(passwordManager)!=ristorante.passwordManagerHash)
+    {
+        //accesso negato
+        res.location("/api/v1/tavoliRisto/inserisciTavolo/").status(403).send();
+        return;
+    }
+    
     ristorante.menu.pull(req.params.id); 
     await Piatto.deleteOne(piatto).exec()
     await ristorante.save(); 
     //stampa di controllo correttezza dell'operazione
     console.log('CONTROLLO: piatto eliminato : ' + piatto.nome);
-    res.location('/api/v1/piattosRisto/eliminaPiatto/'+req.params.id).status(204).send();
+    res.location('/api/v1/piattosRisto/eliminaPiatto/'+req.params.id+"/"+passwordManager).status(204).send();
 
 });
 
@@ -192,5 +199,22 @@ router.post('/aggiungiPiatto', async (req, res) => {
         res.location("/api/v1/piattosRisto/aggiungiPiatto/" + piatto._id).status(201).json(piatto);
     }
 });
+
+
+
+function stringToHash(string) {
+                  
+    var hash = 0;
+      
+    if (string.length == 0) return hash;
+      
+    for (i = 0; i < string.length; i++) {
+        char = string.charCodeAt(i);
+        hash = ((hash << 5) - hash) + char;
+        hash = hash & hash;
+    }
+      
+    return hash;
+}
 
 module.exports = router;

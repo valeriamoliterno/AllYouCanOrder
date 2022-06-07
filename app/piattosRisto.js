@@ -33,7 +33,10 @@ const Ristorante = require('./models/ristorante'); // prendo il modello mongoose
 const Piatto = require('./models/piatto');
 const Tavolo = require('./models/tavolo');
 
-
+/********************************************************************
+*  mi serve per fare l'hash della password del manager per poterla  * 
+*  confrontare con quella che ho nel db                             *
+*********************************************************************/
 function stringToHash(string) {
                   
     var hash = 0;
@@ -139,7 +142,7 @@ router.delete('/eliminaPiatto/:id', async (req, res) => {
      if(stringToHash(req.body.managerpwd)!=ristorante.passwordManagerHash)
      {
          //accesso negato
-         res.location("/api/v1/piattosRisto/eliminaPiatto/" + req.params.id).status(403).send();
+         res.location("/api/v1/piattosRisto/eliminaPiatto/").status(403).send();
          return;
      }
     let piatto= await Piatto.findById(req.params.id); 
@@ -184,7 +187,7 @@ router.post('/aggiungiPiatto', async (req, res) => {
      if(stringToHash(req.body.managerpwd)!=ristorante.passwordManagerHash)
      {
          //accesso negato
-         res.location("/api/v1/piattosRisto/aggiungiPiatto/" + id).status(403).send();
+         res.location("/api/v1/piattosRisto/aggiungiPiatto/").status(403).send();
          return;
      }
 	let piatto = new Piatto({

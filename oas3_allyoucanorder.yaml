@@ -1,0 +1,1044 @@
+openapi: 3.0.0
+info:
+  version: '1.0'
+  title: "AllYouCanOrder"
+  description: API for managing restaurant orders.
+  license:
+    name: MIT
+servers:
+  - url: http://localhost:3000/api/v1
+    description: Localhost
+paths:
+
+#SEZIONE RISTORSNTE
+  /piattosRisto:
+    get:
+      description: >-
+          Gets the list of dishes on the menu of a specific restaurant. 
+      summary: View all dishes
+      parameters:
+        - name: x-access-token
+          in: header
+          description: an authorization header
+          required: true
+          schema:
+            type: string 
+          example: token.esempio.prova
+      responses:
+        '200':
+          description: 'Collection of dishes'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Piatto'
+              example:
+                  - nome: 'Gamberi fritti'
+                    prezzo: 2.49
+                    descrizione: '5 pezzi. Ingredienti: gamberi'
+                    foto: 'www.gamberifritti.images.com'
+                    stato: 'consegnato'
+                  - nome: 'California Roll'
+                    prezzo: 2.79
+                    descrizione: '5 pezzi. Ingredienti: riso, salmone crudo, philadelphia'
+                    foto: 'www.gamberifritti.images.com'
+                    stato: 'consegnato'
+        '404':
+          description: 'Error message: We could not find the dishes you were looking for'
+                
+  /piattosRisto/aggiungiPiatto:
+    post:
+      description: >-
+        Creates a new dish in the system.
+      summary: Add a new dish in a restaurant's menu
+      parameters:
+        - name: x-access-token
+          in: header
+          description: an authorization header
+          required: true
+          schema:
+            type: string 
+          example: token.esempio.prova
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - nome
+                - prezzo
+              properties:
+                nome:
+                  type: string
+                  description: 'Name of the dish'
+                prezzo: 
+                  type: number
+                  description: 'Price of the dish'
+                descrizione: 
+                  type: string
+                  description: 'Brief description of the dish (quantities, ingredients, etc)'
+                foto: 
+                  type: string
+                  description: 'Path to the photo (may be local or online)'
+                managerpwd:
+                  type: string
+                  description: 'Input from the manager needed to authenticate the manager'
+            example:
+              nome: 'Nigiri di Tonno'  
+              prezzo: 3.99
+              descrizione: '8 pezzi. Ingredienti: riso, tonno crudo'
+              foto: 'www.fotoDelPiatto.com'
+              managerpwd: 'admin'
+      responses:
+        '201':
+          description: 'Dish created. Link in the Location header'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Piatto'
+              example:
+                nome: 'Nigiri di Tonno'  
+                prezzo: 3.99
+                descrizione: '8 pezzi. Ingredienti: riso, tonno crudo'
+                foto: 'www.fotoDelPiatto.com'
+        '400':
+          description: 'Name was submitted empty'
+        '400':
+          description: 'Price was submitted empty'
+        '400':
+          description: 'Price was NaN'
+        '403':
+          description: 'Manager authentication failed'
+        '404':
+          description: 'Restaurant not found'
+              
+  /piattosRisto/eliminaPiatto/{id}/{managerpwd}:
+    delete:
+      description: >-
+          Delete a dish from the menu of a specific restaurant. 
+      summary: Delete a dish
+      parameters:
+        - name: x-access-token
+          in: header
+          description: an authorization header
+          required: true
+          schema:
+            type: string 
+          example: token.esempio.prova
+        - name: id
+          in: path
+          required: true
+          description: the ID of the dish to delete
+          schema:
+            type: string
+          example: 'bagwr253678er9oidjhu7'
+        - name: managerpwd
+          in: path
+          required: true
+          description: the password of the manager
+          schema:
+            type: string
+          example: 'admin'
+      responses:
+        '204':
+          description: 'No content'
+        '403':
+          description: 'Manager authentication failed'
+        '404':
+          description: 'Error: could not find the restaurant'
+        '404':
+          description: 'Error: could not find the dish you are trying to eliminate'
+          
+  /piattosRisto/ordineTavolo/{idTavolo}:
+    get:
+      description: >-
+          Chiamata API in GET che dato nei parametri l'id di un tavolo restituisce la lista dei piatti nell'ordine del tavolo
+      summary: Mostra ordine tavolo
+      parameters:
+        - name: idTavolo
+          in: path
+          description: Id del tavolo
+          required: true
+          schema:
+            type: string
+          example: '629a4cb56815e55554e7d7ae'
+        - name: x-access-token
+          in: header
+          description: an authorization header
+          required: true
+          schema:
+            type: string
+          example: token.esempio.prova
+      responses:
+        '201':
+          description: 'Ordine del tavolo'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                      description: 'Id del piatto'
+                    nome:
+                      type: string
+                      description: 'Nome del piatto'
+                    foto:
+                      type: string
+                      description: 'link alla foto del piatto'
+                    stato:
+                      type: string
+                      description: 'Stato del tavolo'
+              example:
+                  - id: '629a4cb56815e55554e7d7ae'
+                    nome: 'Nigiti al salmone'
+                    foto: 'www.foto.it'
+                    stato: 'in consegna'
+                  - id: '629715ffe86e996e2f47ff5c'
+                    nome: 'Nigiti al tonno'
+                    foto: 'www.foto.it'
+                    stato: 'consegnato'
+        '404':
+            description: 'Tavolo non trovato'
+        '404':
+            description: 'Ordine non trovato'
+                    
+  /piattosRisto/cambiaStato:
+    post:
+      description: >-
+          Chiamata API in POST che dato nel body l'id del tavolo e del piatto e lo stato cambia lo stato del piatto in quello desiderato
+      summary: Cambia stato di un piatto
+      requestBody:
+        content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - idT
+                  - idP
+                  - stato
+                properties:
+                  idT:
+                    type: string
+                    description: 'Id del Tavolo'
+                  idP:
+                    type: number
+                    description: 'Id del piatto'
+                  stato:
+                    type: string
+                    description: 'Nuovo stato del piatto'
+              example:
+                  idT: '629a4cb56815e55554e7d7ae'
+                  idP: '629715ffe86e996e2f47ff5c'
+                  stato: 'consegnato'
+      responses:
+        '201':
+          description: 'Stato cambiato al piatto'
+        '405':
+            description: 'Tavolo non trovato'
+                  
+
+
+  /tavoliRisto:
+    get:
+      description: >-
+          Questa post serve per inserire l'elemento selezionato in ristorante.menu nell'array tavolo.carrello viene chiamata in menu.js
+      summary: Mostra tavoli
+      parameters:
+        - name: x-access-token
+          in: header
+          description: an authorization header
+          required: true
+          schema:
+            type: string
+          example: token.esempio.prova
+      responses:
+        '201':
+          description: 'Lista di tavoli'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    self:
+                      type: string
+                      description: 'Link al tavolo'
+                    id:
+                      type: string
+                      description: 'Id del tavolo'
+                    nome:
+                      type: string
+                      description: 'Nome del tavolo'
+                    chiamato:
+                      type: boolean
+                      description: 'Indica se il cameriere è stato chiamato'
+              example:
+                  - self: '/api/v1/tavoliRisto/629a4cb56815e55554e7d7ae'
+                    id: '629a4cb56815e55554e7d7ae'
+                    nome: 'Tavolo 01'
+                    chiamato: false
+                  - self: '/api/v1/tavoliRisto/629715ffe86e996e2f47ff5c'
+                    id: '629715ffe86e996e2f47ff5c'
+                    nome: 'Tavolo 02'
+                    chiamato: true
+        '404':
+          description: 'Ristorante non trovato'
+        '404':
+          description: 'Tavoli non trovati'
+
+  /tavoliRisto/aggiungiTavoli:
+    post:
+      description: >-
+        Creates a new tavolo in the system.
+      summary: Register a new table
+      parameters:
+        - name: x-access-token
+          in: header
+          description: an authorization header
+          required: true
+          schema:
+            type: string 
+          example: token.esempio.prova
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - nome
+              properties:
+                nome:
+                  type: string
+                  description: 'Name of the table'
+                managerpwd: 
+                  type: string
+                  description: 'Input from the manager needed to authenticate the manager'
+            example:
+                nome: 'Tavolo 1'  
+                managerpwd: 'admin'
+      responses:
+        '201':
+          description: 'Table created. Link in the Location header'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Tavolo'
+              example:
+                nome: 'Tavolo 1'  
+        '400':
+          description: 'Name was submitted empty'
+        '403':
+          description: 'Manager authentication failed'
+        '404':
+          description: 'Restaurant not found'
+
+  /tavoliRisto/eliminaTavoli/{id}/{managerpwd}:
+    delete:
+      description: >-
+          Delete a table from the list. 
+      summary: Delete a table
+      parameters:
+        - name: x-access-token
+          in: header
+          description: an authorization header
+          required: true
+          schema:
+            type: string 
+          example: token.esempio.prova
+        - name: id
+          in: path
+          required: true
+          description: the ID of the table to delete
+          schema:
+            type: string
+          example: 'idDelTavolo1'
+        - name: managerpwd
+          in: path
+          required: true
+          description: the password of the manager
+          schema:
+            type: string
+          example: 'admin'
+      responses:
+        '204':
+          description: 'No content'
+        '403':
+          description: 'Manager authentication failed'
+        '404':
+          description: 'Error: could not find the restaurant'
+        '404':
+          description: 'Error: could not find the table you are trying to eliminate'
+          
+  /tavoliRisto/rispondiChiamata:
+    post:
+      description: >-
+        Questa post serve per settare tavolo.chiamato=false se il cameriere preme il pulsante "rispondiChiamata" presente nel file scriptC.js
+      summary: Rispondi alla chiamata del tavolo
+      requestBody:
+        content:
+            application/json:
+                schema:
+                  type: object
+                  required:
+                    - id
+                  properties:
+                    id:
+                      type: string
+                      description: 'Id del Tavolo'
+                example:
+                    id: '629a4cb56815e55554e7d7ae'
+      responses:
+        '201':
+          description: 'Chiamata impostata a false'
+
+  /ristoranti:
+    post:
+      description: >-
+          Questa post serve a creare un nuovo ristorante e viene chiamata in scriptRistorante.js nel metodo "aggiungiRistorante";  
+      summary: Crea un nuovo ristorante
+      requestBody:
+        content:
+            application/json:
+                schema:
+                  type: object
+                  required:
+                    - mail
+                    - password
+                    - passwordManager
+                  properties:
+                    mail:
+                      type: string
+                      description: 'Mail del nuovo ristorante'
+                    password:
+                      type: number
+                      description: 'Password del nuovo ristorante'
+                    passwordManager:
+                      type: string
+                      description: 'Password del manager del nuovo ristorante'
+                example:
+                    mail: 'risto@sushi.com'
+                    password: 'sushi123'
+                    passwordManager: 'admin'
+      responses:
+        '201':
+          description: 'Creato nuovo ristorante'
+        '400':
+            description: 'Mail vuota'
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    error: 
+                      type: string
+                      description: 'Testo dell errore'
+                example:
+                  error: 'Il campo mail non può essere vuoto'
+        '400':
+            description: 'Mail formato errato'
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    error: 
+                      type: string
+                      description: 'Testo dell errore'
+                example:
+                  error: 'La mail non ha un formato valido. Inserirla del tipo a@b.c'
+        '400':
+            description: 'Password vuota'
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    error: 
+                      type: string
+                      description: 'Testo dell errore'
+                example:
+                  error: 'La password non può essere vuota'
+        '400':
+            description: 'Password manager vuota'
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    error: 
+                      type: string
+                      description: 'Testo dell errore'
+                example:
+                  error: 'La password manager non può essere vuota'
+        '400':
+            description: 'Ristorante già esistente'
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    error: 
+                      type: string
+                      description: 'Testo dell errore'
+                example:
+                  error: 'Esiste già un ristorante con questa mail'
+                  
+#APIS DEDICATE ALLA SEZIONE CLIENTE: 
+  /piattosCliente:
+    get:
+      description: >-
+          Gets the list of dishes on the menu of a specific restaurant. 
+      summary: View all dishes
+      responses:
+        '200':
+          description: 'Collection of dishes'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Piatto'
+              example:
+                - nome: 'Gamberi fritti'
+                  prezzo: 2.49
+                  descrizione: '5 pezzi. Ingredienti: gamberi'
+                  foto: 'www.gamberifritti.images.com'
+                  stato: 'consegnato'
+                - nome: 'California Roll'
+                  prezzo: 2.79
+                  descrizione: '5 pezzi. Ingredienti: riso, salmone crudo, philadelphia'
+                  foto: 'www.gamberifritti.images.com'
+                  stato: 'consegnato' 
+        '404':
+            description: 'restaurant not found'
+
+  /tavoliCliente/ordine:
+    get:
+      description: >-
+          Gets the list of dishes on the array "ordine" of a specific "tavolo". 
+      summary: View all dishes in the array ordine
+      responses:
+        '200':
+          description: 'Collection of dishes'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Piatto'
+              example:
+                - nome: 'Gamberi fritti'
+                  prezzo: 2.49
+                  descrizione: '5 pezzi. Ingredienti: gamberi'
+                  foto: 'www.gamberifritti.images.com'
+                  stato: 'in consegna'
+                - nome: 'California Roll'
+                  prezzo: 2.79
+                  descrizione: '5 pezzi. Ingredienti: riso, salmone crudo, philadelphia'
+                  foto: 'www.gamberifritti.images.com'
+                  stato: 'in peparazione' 
+        '404':
+            description: 'table not found'
+    post:
+      description: >-
+          Questa post serve per inserire tutti gli elementi in tavolo.carrello nell'array tavolo.ordine e viene chiamata in carrello.js nel metodo "svuotaCarrello"
+      summary: Sposta piatti da carrello a ordine
+      requestBody:
+        content:
+            application/json:
+                schema:
+                  type: object
+                  required:
+                    - nome
+                    - prezzo
+                  properties:
+                    nome:
+                      type: string
+                      description: 'Nome del piatto'
+                    prezzo:
+                      type: number
+                      description: 'Prezzo del piatto'
+                    descrizione:
+                      type: string
+                      description: 'Descrizione del piatto'
+                    foto:
+                      type: string
+                      description: 'Indirizzo alla foto del piatto'
+                example:
+                    nome: 'Nigiri al salmone'
+                    prezzo: 0
+                    descrizione: 'Ingredienti: salmone e riso'
+                    foto: 'www.foto.com'
+      responses:
+        '201':
+          description: 'Piatto aggiunto all ordine'
+        '404':
+            description: 'Ristorante non trovato'
+        '404':
+            description: 'Tavolo non trovato'
+  /tavoliCliente/ilMioTavolo:
+    get:
+      description: >-
+          Gets the table which id is the one selected in the test section. This api is used for example for the state of the button "chiama cameriere"
+      summary: View the selected table 
+      responses:
+        '200':
+          description: 'get the selected table'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Tavolo'
+              example:
+                - nome: 'tavolo 1'
+                  ordine: 
+                  - nome: 'Nigiri di Tonno'  
+                    prezzo: 3.99
+                    descrizione: '8 pezzi. Ingredienti: riso, tonno crudo'
+                    foto: 'www.fotoDelPiatto.com'
+                    stato: 'in preparazione'
+                  - nome: 'Nigiri di salmone'  
+                    prezzo: 3.99
+                    descrizione: '8 pezzi. Ingredienti: riso, salmone crudo'
+                    foto: 'www.fotoDelPiatto2.com'
+                    stato: 'in consegna'
+                  carrello: 
+                  - nome: 'Temaki salmone'  
+                    prezzo: 3.99
+                    descrizione: '1 pezzo. Ingredienti: riso, salmone crudo'
+                    foto: 'www.foto.com'
+                  chiamato: false
+        '404':
+            description: 'table not found'
+
+  /tavoliCliente/chiamaCameriere:          
+    post:
+      description: >-
+        Sets tavolo.chiamato = true 
+      summary: set tavolo.chiamato = true
+      responses:
+        '200':
+          description: 'Table chiamato is modified. Link in the Location header'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tavolo'
+              example:
+                nome: 'Tavolo1'  
+                chiamato: true
+        '404':
+            description: 'tavolo not found' 
+        '404':
+            description: 'ristorante not found'
+            
+  /tavoliCliente/mostraCarrello:
+    get:
+      description: >-
+          Questa get serve per mostrare tutti gli elementi nell'array tavolo.carrello e viene chiamata in carrello.js nel metodo "mostraCarrello()"
+      summary: 'Mostra i piatti nel carrello'
+      responses:
+        '201':
+          description: 'Lista dei piatti nel carrello'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tavolo'
+        '404':
+            description: 'Tavolo non trovato'
+            content:
+              application/json:
+                schema:
+                 $ref: '#/components/schemas/Tavolo'
+    post:
+      description: >-
+        Inserts the selected dish in the menu section to the cart
+      summary: Add a new dish in the cart
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - nome
+                - prezzo
+              properties:
+                nome:
+                  type: string
+                  description: 'Name of the dish'
+                prezzo: 
+                  type: number
+                  description: 'Price of the dish'
+                descrizione: 
+                  type: string
+                  description: 'Description of the dish'
+                foto: 
+                  type: string
+                  description: 'Path to the photo of the dish'
+            example:
+              nome: 'Sashimi salmone'  
+              prezzo: 0.00
+              descrizione: '5 pz'
+              foto: 'https://example.com/photo.jpg'
+      responses:
+        '200':
+          description: 'Dish added to the cart. Link in the Location header'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Piatto'
+              example:
+                nome: 'Nigiri di Tonno'  
+                prezzo: 3.99
+                descrizione: '8 pezzi. Ingredienti: riso, tonno crudo'
+                foto: 'www.fotoDelPiatto.com'
+        '404':
+            description: 'table not found'  
+  /tavoliCliente/mostraCarrello/{idPiatto}:
+    delete:
+      description: >-
+          Questa delete serve per eliminare l'elemento selezionato in tavolo.carrello dall'array tavolo.carrello viene chiamata in carrello.js
+      summary: Elimina piatto da carrello
+      parameters:
+        - name: idPiatto
+          in: path
+          description: Id del piatto
+          required: true
+          schema:
+            type: string
+          example: '629a4cb56815e55554e7d7ae'
+      responses:
+        '201':
+          description: 'Piatto rimosso dal carrello'
+        '404':
+          description: 'Tavolo non trovato'
+  
+  /tavoliCliente/SvuotaCarrello:
+    delete:
+      description: >-
+          Questa delete serve per eliminare tutti gli elementi nell'array tavolo.carrello e viene chiamata in carrello.js nel metodo "svuotaCarrello"
+      summary: Svuota il carrello
+      responses:
+        '201':
+          description: 'Tutti i piatti rimossi dal carrello'
+        '404':
+            description: 'Ristorante non trovato'
+          
+
+
+
+
+
+
+
+
+
+#GESTIONE AUTENTICAZIONE
+  /token:
+    get:
+      description: Returns data of the user currently logged 
+      summary: Gets the logged users' data
+      responses:
+        '200':
+          description: 'Collection of dishes'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  self:
+                    type: string
+                    description: 'Location of the API'
+                  token:
+                    type: string
+                    description: 'Token of the current logged user'
+                  ristoMail:
+                    type: string
+                    description: 'Email of the current logged user'
+                  ristoId:
+                    type: string
+                    description: 'Id number of the current logged user'
+                  RistoSelf:
+                    type: string
+                    description: 'Location of the current logged user'
+              example:
+                self: '/api/v1/token'
+                token: 'token.esempio.prova'
+                ristoMail: 'risto@sushi.com'
+                ristoId: '6295011922da57ae0fee2718'
+                RistoSelf: 'api/v1/auth/6295011922da57ae0fee2718'
+
+
+  /auth:
+    post:
+      description: >-
+        Generates a token if the login fields are successful and sets the properties 
+        of the loggedUser variable
+      summary: Create token
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - mail
+                - password
+              properties:
+                mail:
+                  type: string
+                  description: 'Mail of the restaurant'
+                password: 
+                  type: number
+                  description: 'Password for the account'
+            example:
+              mail: 'risto@sushi.com'  
+              password: sushi123 #this password needs to be crypted before passing
+      responses:
+        '201':
+          description: 'Token Created'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  successo: 
+                    type: boolean
+                    description: 'Tell whether the authentication was successful or not'
+                  messaggio: 
+                    type: string
+                    description: 'Explains the success (or lack of there of) of the authentication '
+                  self:
+                    type: string
+                    description: 'The location where the authenticated user is stored'
+              example:
+                successo: true  
+                messaggio: 'Log in effettuato con successo!'
+                self: 'api/v1/auth/6295011922da57ae0fee2718'
+        '200':
+          description: 'Wrong password, could not generate token'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  successo: 
+                    type: boolean
+                    description: 'Tell whether the authentication was successful or not'
+                  messaggio: 
+                    type: string
+                    description: 'Explains the success (or lack of there of) of the authentication '
+              example:
+                successo: false  
+                messaggio: 'La password che hai inserito non è corretta'
+        '404':
+          description: 'Wrong email, could not find restaurant in the database'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  successo: 
+                    type: boolean
+                    description: 'Tell whether the authentication was successful or not'
+                  messaggio: 
+                    type: string
+                    description: 'Explains the success (or lack of there of) of the authentication '
+              example:
+                successo: false  
+                messaggio: 'La mail che hai inserito non è corretta'     
+
+
+
+#ELENCO APIS UTILIZZATE PER SEZIONE DI TEST
+
+  /impostaRistorante:
+    get: 
+      description: >-
+          USED ONLY IN THE TEST SECTION: Gets the list of all restaurants in the DB. 
+      summary: TEST SECTION -- View all restaurants
+      responses:
+        '200':
+          description: 'Collection of restaurants'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Ristorante'
+              example:
+                - mail: 'risto@sushi.com'
+                  passwordHash: '-12345667'
+                  passowrdManagerHash: '-123456'
+                - mail: 'carbonara@love.com'
+                  passwordHash: '-1234467'
+                  passowrdManagerHash: '-123406'
+                  tavoli: 
+                    nome: 'tavolo 1'
+                  menu: 
+                    nome: 'carbonara'
+                    prezzo: '15.30'
+    post: 
+      description: >-
+        USED ONLY IN THE TEST SECTION: Set the global variable ilMioRistoranteID with the value of the selected restaurant's id. 
+      summary: TEST SECTION -- Set the ilMioRistoranteID
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - id
+              properties:
+                id:
+                  type: string
+                  description: 'id of the selected restaurant'
+            example:
+              id: '6295011922da57ae0fee2718'  
+      responses:
+        '200':
+          description: 'Value saved'
+  /tavoliCliente/listaTavoli:
+    get: 
+      description: >-
+          USED ONLY IN THE TEST SECTION: Gets the list of all tables in the DB. 
+      summary: TEST SECTION -- View all tables in the selected restaurant
+      responses:
+        '200':
+          description: 'Collection of tables'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Tavolo'
+              example:
+                - nome: 'tavolo 1'
+                  ordine: 
+                  - nome: 'Nigiri di Tonno'  
+                    prezzo: 3.99
+                    descrizione: '8 pezzi. Ingredienti: riso, tonno crudo'
+                    foto: 'www.fotoDelPiatto.com'
+                    stato: 'in preparazione'
+                  - nome: 'Nigiri di salmone'  
+                    prezzo: 3.99
+                    descrizione: '8 pezzi. Ingredienti: riso, salmone crudo'
+                    foto: 'www.fotoDelPiatto2.com'
+                    stato: 'in consegna'
+                  carrello: 
+                  - nome: 'Temaki salmone'  
+                    prezzo: 3.99
+                    descrizione: '1 pezzo. Ingredienti: riso, salmone crudo'
+                    foto: 'www.foto.com'
+  /impostaTavolo:
+    post: 
+      description: >-
+        USED ONLY IN THE TEST SECTION: Set the global variable ilMioTavoloID with the value of the selected table's id. 
+      summary: TEST SECTION -- Set the ilMioTavoloID
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - id
+              properties:
+                id:
+                  type: string
+                  description: 'id of the selected table'
+            example:
+              id: '6245011922da57ab1cff2729'  
+      responses:
+        '200':
+          description: 'Value saved'
+          
+          
+components:
+  schemas:
+    Piatto:
+      type: object
+      required: 
+      - nome
+      - prezzo
+      properties: 
+        nome: 
+          type: string
+          description: 'Name of the dish'
+        prezzo: 
+          type: number
+          description: 'Price of the dish'
+        descrizione: 
+          type: string
+          description: 'Description of the dish'
+        foto: 
+          type: string
+          description: 'path to the photo of the dish'
+        stato: 
+          type: string
+          description: 'status of the dish (in preparazione/consegnato/in consegna)'
+      description: 'dishes in the database'
+
+    Tavolo:
+      type: array
+      items: 
+        type: object
+        required:
+        - nome
+        properties:
+          nome:
+            type: string
+            description: 'Table s name'
+          ordine:
+            type: array
+            items: 
+              $ref: '#/components/schemas/Piatto'
+            description: 'Table s order'
+          chiamato:
+            type: string
+            description: 'Table has call the waiter'
+          carrello:
+            type: array
+            items: 
+              $ref: '#/components/schemas/Piatto'
+            description: 'piatti in the cart'
+        description: 'Table s in database'
+
+    Ristorante:
+      type: object
+      required:
+      - mail
+      - passwordHash
+      - passowrdManagerHash
+      properties:
+        mail:
+          type: string
+          description: 'E-mail of the restaurant'
+        passwordHash:
+          type: string
+          description: 'Restaurant s password'
+        tavoli:
+          type: array
+          items: 
+            $ref: '#/components/schemas/Tavolo'
+          description: 'Restaurant s table'
+        menu: 
+          type: array
+          items: 
+            $ref: '#/components/schemas/Piatto'
+          description: 'Restaurant s menu'
+        passwordManagerHash: 
+          type: string
+          description: 'manager s password'
+      description: 'restaurants in the database' 
+
+

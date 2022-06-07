@@ -69,13 +69,13 @@ router.get('', async(req,res)=> {
     let tavolo = await Tavolo.findOne({_id: idT}); // Trovo il tavolo 
     //Controllo che esista il tavolo
     if(!tavolo){
-        res.status(404).json(tavolo);  
+        res.status(404).json();  
         console.log("tavolo non trovato"); 
         return; 
     }
     //Controllo che esista l'ordine
     if(!tavolo.ordine){
-        res.status(404).json(tavolo.ordine);  
+        res.status(404).json();  
         console.log("ordine non trovato"); 
         return; 
     }

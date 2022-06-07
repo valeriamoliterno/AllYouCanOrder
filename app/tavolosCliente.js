@@ -56,7 +56,7 @@ router.get('/ordine', async(req,res)=> {
         let tavolo= await Tavolo.findOne({_id: ilMioTavoloID}).exec(); //cercoil tavolo che mi serve
           //Controllo che esista il tavolo
      if(!tavolo){
-        res.status(404).json(tavolo);  
+        res.status(404).json();  
         console.log("tavolo non trovato"); 
         return; 
     }
@@ -79,13 +79,13 @@ router.post('/ordine', async (req, res) => {
         let tavolo= await Tavolo.findOne({_id: ilMioTavoloID}).exec(); //per il tavolo che mi serve
        //Controllo che esista il ristorante
      if(!ristorante){
-        res.status(404).json(ristorante);  
+        res.status(404).json();  
         console.log("ristorante non trovato"); 
         return; 
     }
         //Controllo che esista il tavolo
         if(!tavolo){
-            res.status(404).json(tavolo);  
+            res.status(404).json();  
             console.log("tavolo non trovato"); 
             return; 
         }
@@ -115,7 +115,7 @@ router.post('/ordine', async (req, res) => {
    
         //Controllo che esista il tavolo
         if(!tavolo){
-            res.status(404).json(tavolo);  
+            res.status(404).json();  
             console.log("tavolo non trovato"); 
             return; 
         }
@@ -139,13 +139,13 @@ router.post('/ordine', async (req, res) => {
         let tavolo= await Tavolo.findOne({_id: ilMioTavoloID}).exec(); //seleziono il tavolo 
            //Controllo che esista il ristorante
         if(!ristorante){
-            res.status(404).json(ristorante);  
+            res.status(404).json();  
             console.log("ristorante non trovato"); 
             return; 
         }
         //Controllo che esista il tavolo
         if(!tavolo){
-            res.status(404).json(tavolo);  
+            res.status(404).json();  
             console.log("tavolo non trovato"); 
             return; 
         }
@@ -173,13 +173,11 @@ router.post('/ordine', async (req, res) => {
  * tavolo.carrello  viene chiamata in carrello.js
  *************************************************************/ 
     router.delete('/mostraCarrello/:id', async (req, res) => {
-     //   let ristorante = await Ristorante.findOne({_id: ilMioRistoranteID}).exec(); 
         let tavolo= await Tavolo.findOne({_id: ilMioTavoloID}).exec();  
-           //Controllo che esista il ristorante
-   
+ 
         //Controllo che esista il tavolo
         if(!tavolo){
-            res.status(404).json(tavolo);  
+            res.status(404).json();  
             console.log("tavolo non trovato"); 
             return; 
         }  
@@ -199,7 +197,7 @@ router.post('/ordine', async (req, res) => {
   
         //Controllo che esista il tavolo
         if(!tavolo){
-            res.status(404).json(tavolo);  
+            res.status(404).json();  
             console.log("tavolo non trovato"); 
             return; 
         }
@@ -222,13 +220,13 @@ router.post('/ordine', async (req, res) => {
 
         //Controllo che esista il ristorante
         if(!ristorante){
-            res.status(404).json(ristorante);  
+            res.status(404).json();  
             console.log("ristorante non trovato"); 
             return; 
         }
         //Controllo che esista il tavolo
         if(!tavolo){
-            res.status(404).json(tavolo);  
+            res.status(404).json();  
             console.log("tavolo non trovato"); 
             return; 
         }

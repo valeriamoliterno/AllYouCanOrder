@@ -31,13 +31,13 @@ router.get('', async (req, res) => {
     let ristorante = await Ristorante.findOne({mail:loggedUser.mail});
     //Controllo che esista il ristorante
     if(!ristorante){
-        res.status(404).json(ristorante);  
+        res.status(404).json();  
         console.log("ristorante non trovato"); 
         return; 
     }
     //Controllo che esistano i tavoli
     if(!ristorante.tavoli){
-        res.status(404).json(ristorante.tavoli);  
+        res.status(404).json();  
         console.log("tavoli non trovati"); 
         return; 
     }
@@ -83,7 +83,7 @@ router.delete('/eliminaTavolo/:id/:managerpwd', async (req, res) => {
 router.post('/aggiungiTavolo/:nome/:managerpwd', async (req, res) => {
     let ristorante = await Ristorante.findOne({mail:loggedUser.mail});
     if(!ristorante){
-        res.status(404).json(ristorante);  
+        res.status(404).json();  
         console.log("ristorante non trovato"); 
         return; 
     }
@@ -91,7 +91,7 @@ router.post('/aggiungiTavolo/:nome/:managerpwd', async (req, res) => {
     let name = req.params.nome; 
     console.log("AVV NAME POST: "+name); 
     if(name===''){
-        res.status(404).json(name);  
+        res.status(404).json();  
         console.log("nome non trovato"); 
         return; 
     }
@@ -127,11 +127,8 @@ router.post('/aggiungiTavolo/:nome/:managerpwd', async (req, res) => {
  *************************************************************/ 
 
   router.post('/rispondiChiamata', async (req, res) => {
-    console.log('------------- risponsi chiamata -----------');
-    console.log('//////////// id Tavolo /////////');
     console.log(req.body.id);
     let tavolo= await Tavolo.findOne({_id: req.body.id}).exec();
-    console.log('//////////// Tavolo /////////');
     console.log(tavolo);
     tavolo.chiamato= false; 
     await tavolo.save();

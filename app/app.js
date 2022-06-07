@@ -31,8 +31,11 @@ app.use(express.urlencoded({ extended: true }));
 
 /* Carica la pagina index.html all'apertura
  */
+
+// Serving frontend files from process.env.FRONTEND
+app.use('/', express.static(process.env.FRONTEND || 'static'));
+// If request not handled, try in ./static
 app.use('/', express.static('static'));
-app.use('/',express.static('img'));
 
 
 app.use((req,res,next) => {

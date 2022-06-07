@@ -54,7 +54,7 @@ router.post('', async function(req, res) {
 			var options = {
 			expiresIn: 86400 // scade dopo 24 ore
 			}
-			var token = jwt.sign(payload, "ChiaveDiCodifica", options);
+			var token = jwt.sign(payload, process.env.SUPER_SECRET, options);
 
 			//salvo nella variabile locale logggedUser i dati associati al ristorante
 			loggedUser.mail= ristorante.mail;

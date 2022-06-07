@@ -37,7 +37,6 @@ describe('GET e POST /api/v1/tavoliCliente', () => {
         .set('Accept', "application/json")
         .expect(200);
     });
-/*
     test('17: POST /api/v1/tavoliCliente/ordine', () => {
         return request(app)
         .post('/api/v1/tavoliCliente/ordine')
@@ -45,7 +44,6 @@ describe('GET e POST /api/v1/tavoliCliente', () => {
         .send({ nome: 'Onigiri tonno', descrizione: "Palline di riso con dentro tonno e maionese, 2pz", prezzo: 0, foto: "https://shop.itticabrianza.com/media/Foto_Prodotti/700701-3051-2_onigiri_cotto_tonno_e_salmone_4.jpg" })
         .expect(201);
     });
-*/
     test('17: DELETE /api/v1/tavoliCliente/svuotaCarrello', () => {
         return request(app)
         .delete('/api/v1/tavoliCliente/svuotaCarrello')

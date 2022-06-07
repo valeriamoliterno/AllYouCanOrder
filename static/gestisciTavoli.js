@@ -45,10 +45,9 @@ var loggedUser={}
      var pwmanager = VerificaPwd();
      let msg=document.getElementById("messaggio");
  
-     fetch("../api/v1/tavoliRisto", {
+     fetch("../api/v1/tavoliRisto/aggiungiTavolo/" + tableName + '/' + pwmanager, {
          method: 'POST',
          headers: { 'Content-Type': 'application/json', 'x-access-token': loggedUser.token}, //facciamo il controllo del token
-         body: JSON.stringify( { nome: tableName, managerpwd: pwmanager } ),
      })
      .then((resp) => {
         status=resp.status; //salviamo lo stato della reponse per un controllo successivo
@@ -119,12 +118,11 @@ function listaTavoli() {
 //questa funzione mi consente di eliminare un tavolo presente nella lista
 async function eliminaTavolo(tavoloId){
     console.log("elimino tavolo"+ tavoloId)
-    var uriAPI = '../api/v1/tavoliRisto/eliminaTavolo/' + tavoloId
     var pwmanager=VerificaPwd();
+    var uriAPI = '../api/v1/tavoliRisto/eliminaTavolo/' + tavoloId + '/' + pwmanager;
     fetch(uriAPI, {
         method: 'DELETE',
         headers: { 'Content-Type': 'application/json', 'x-access-token': loggedUser.token}, //passiamo il token al metodo },
-        body: JSON.stringify( { managerpwd: pwmanager } ),
     })
     .then((resp) => {
         console.log(resp);

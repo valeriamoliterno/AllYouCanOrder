@@ -229,11 +229,10 @@ async function deletePiatto(idPiatto){
    console.log("deletePiatto ID")
    console.log(idPiatto); 
    var pwmanager=VerificaPwd();
-   var uriAPI = '../api/v1/piattosRisto/eliminaPiatto/' + idPiatto
+   var uriAPI = '../api/v1/piattosRisto/eliminaPiatto/' + idPiatto + '/' + pwmanager;
    fetch(uriAPI, {
        method: 'DELETE',
        headers: { 'Content-Type': 'application/json', 'x-access-token': loggedUser.token},//passiamo il token al metodo
-       body: JSON.stringify( { managerpwd: pwmanager } ),
     })
    .then((resp) => {
        //stampa di controllo

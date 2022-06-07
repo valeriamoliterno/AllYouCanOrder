@@ -21,6 +21,8 @@ const Tavolo = require('./models/tavolo'); // get our mongoose model
 const Piatto = require('./models/piatto');
 
 
+
+
 /*************************************************************
  * Questa get serve per mostrare tutti gli elementi nell'array
  * ristorante.tavoli e viene chiamata in scriprC.js
@@ -59,21 +61,12 @@ router.delete('/eliminaTavolo/:id/:managerpwd', async (req, res) => {
     let ristorante = await Ristorante.findOne({mail:loggedUser.mail}).exec(); 
    
     //posso usare il metodo solo se inserisco la password del manager
-    if(stringToHash(req.body.managerpwd)!=ristorante.passwordManagerHash)
-    {
-        //accesso negato
-        res.location("/api/v1/tavoliRisto/eliminaTavolo/").status(403).send();
-        return;
-    }
-
-
-    let tavolo= await Tavolo.findById(req.params.id).exec(); 
-    //posso usare il metodo solo se inserisco la password del manager
     if(stringToHash(req.params.managerpwd)!=ristorante.passwordManagerHash){
         //accesso negato
         res.location("/api/v1/tavoliRisto/inserisciTavolo/" + id +'/'+ req.params.managerpwd).status(403).send();
         return;
     }
+    let tavolo= await Tavolo.findById(req.params.id).exec(); 
     if(!tavolo){
         res.status(404).send();
         //stampa di controllo

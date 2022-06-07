@@ -17,15 +17,15 @@ describe('Test delle api: /api/v1/tavoliCliente', () => {
     jest.unmock('mongoose');
     connection = await  mongoose.connect('mongodb+srv://AllYouCanOrder:AliValeGiuMa@cluster0.dxwja.mongodb.net/AllYouCanOrder?retryWrites=true&w=majority', {useNewUrlParser: true, useUnifiedTopology: true});
     console.log('Database connected!');
-    var ristorante= await Ristorante.findOne({mail: 'ristorante@email.com'});
+    var ristorante= await Ristorante.findOne({mail: 'test@carrello.it'});
     ilMioRistoranteID = ristorante._id;
-    ilMioTavoloID = '629c942235d25884204e0938'
+    ilMioTavoloID = '629f68e24a01e2f421c8f80f'
     tavolo = await Tavolo.findById(ilMioTavoloID);
     if(tavolo.chiamato){
       tavolo.chiamato=false;
       await tavolo.save();
     }
-    piatto = tavolo.ordine[0];
+    piatto = tavolo.carrello[0];
   });
 
   afterAll( () => {

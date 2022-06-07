@@ -33,6 +33,8 @@
      fetch('../api/v1/tavoliCliente/ordine')
      .then((resp) => resp.json()) 
      .then(function(data) {
+       console.log('-------------------- ordine');
+        console.log(data);
      var ordine= data.ordine;
      const tvNum= document.getElementById('tvNum');
      tvNum.textContent=data.nome;
@@ -98,7 +100,7 @@
             }
              
             cost=cost+piatto.prezzo;
-            costo.innerHTML="Il totale dell'ordine è : "+cost+" €";
+            costo.innerHTML="Il totale dell'ordine è : "+cost.toFixed(2)+" €";
       });  
       
      

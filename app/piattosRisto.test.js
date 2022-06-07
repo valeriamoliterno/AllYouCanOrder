@@ -45,10 +45,12 @@ describe('Test di piattosRisto', () => {
     var options = {
     expiresIn: 86400 // scade dopo 24 ore
     }
-    token = jwt.sign(payload, "ChiaveDiCodifica", options);
+    token = jwt.sign(payload, process.env.SUPER_SECRET, options);
   });
 
   afterAll( async() => {
+    var piatto = await Piatto.findOne({nome: 'xy'});
+    await Piatto.deleteOne(piatto).exec();
     mongoose.connection.close(true);
     console.log("Database connection closed");
   });
